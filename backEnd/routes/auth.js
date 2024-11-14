@@ -158,9 +158,21 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/logout', (req, res) => {
+router.post('/logout', auth, (req, res) => {
+  console.log('Token from request:', req.cookies.token); // Debug log
+  
+  if (!req.cookies.token) {
+    return res.status(401).json({
+      success: false,
+      message: 'No active session found'
+    });
+  }
+
   res.clearCookie('token');
-  res.json({ message: 'Logged out successfully' });
+  res.json({ 
+    success: true,
+    message: 'Logged out successfully' 
+  });
 });
 
 export default router;
