@@ -3,11 +3,17 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import User from '../models/User.js';
+import Role from '../models/Role.js';
 import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Google OAuth routes
+async function getRoleIdByName(roleName) {
+  const role = await Role.findOne({ name: roleName });
+  if (!role) throw new Error(`Role ${roleName} not found`);
+  return role._id;
+}
+
 router.get('/google', passport.authenticate('google', {
   scope: ['profile', 'email']
 }));
@@ -38,108 +44,123 @@ router.get('/google/callback',
   }
 );
 
-// Register
 router.post('/register', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const {
+      email,
+      password,
+      fullName,
+      userType,
+      companyName,
+      registrationNumber,
+      contactPerson,
+      phoneNumber,
+    } = req.body;
 
-    // Check if user exists
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Hash password
+    if (userType === 'company' && (!companyName || !registrationNumber || !contactPerson)) {
+      return res.status(400).json({ 
+        message: 'Company details are required for company registration' 
+      });
+    }
+
+    const roleId = await getRoleIdByName('user');
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Create user
-    user = new User({
-      name,
+    const userData = {
       email,
       password: hashedPassword,
-    });
+      fullName,
+      userType,
+      phoneNumber,
+      roleId,
+      createdAt: new Date()
+    };
 
+    if (userType === 'company') {
+      userData.companyName = companyName;
+      userData.registrationNumber = registrationNumber;
+      userData.contactPerson = contactPerson;
+    }
+
+    user = new User(userData);
     await user.save();
 
-    // Create token
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
-    // Set cookie
     res.cookie('token', token, {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       secure: process.env.NODE_ENV === 'production',
     });
 
-    res.status(201).json({ message: 'User created successfully' });
+    res.status(201).json({ 
+      message: 'User created successfully',
+      user: {
+        email: user.email,
+        fullName: user.fullName,
+        userType: user.userType,
+        createdAt: user.createdAt
+      }
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error('Registration error:', error);
+    res.status(500).json({ message: 'Server error during registration' });
   }
 });
 
-// Login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Check password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    const isValidPassword = await bcrypt.compare(password, user.password);
+    if (!isValidPassword) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Create token
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
-    // Set cookie
     res.cookie('token', token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      maxAge: 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV === 'production',
     });
 
-    res.json({ message: 'Logged in successfully' });
+    res.json({ 
+      message: 'Login successful',
+      user: {
+        email: user.email,
+        fullName: user.fullName,
+        userType: user.userType
+      }
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Server error during login' });
   }
 });
 
-// Logout
-router.post('/logout', auth, (req, res) => {
-    try {
-        if (!req.cookies.token) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "No active session found" 
-            });
-        }
-        
-        res.clearCookie('token');
-        return res.status(200).json({ 
-            success: true, 
-            message: 'Logged out successfully' 
-        });
-    } catch (error) {
-        return res.status(500).json({ 
-            success: false, 
-            message: 'Server error during logout' 
-        });
-    }
+router.post('/logout', (req, res) => {
+  res.clearCookie('token');
+  res.json({ message: 'Logged out successfully' });
 });
 
 export default router;

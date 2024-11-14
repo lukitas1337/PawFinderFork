@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import Role from '../models/Role.js';
 
 
 const auth = async (req, res, next) => {
@@ -17,7 +18,7 @@ const auth = async (req, res, next) => {
             req.user = decoded;
             next();
         } catch (error) {
-            res.clearCookie('token'); // Clear invalid token
+            res.clearCookie('token');
             return res.status(401).json({ 
                 success: false, 
                 message: "Invalid token. Please log in again." 
