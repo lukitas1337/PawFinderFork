@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  roleId: {                                  
+  roleId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Role',
     required: true,
@@ -49,6 +49,9 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   }
-});
+}, { 
+  collection: 'Users',
+  versionKey: false
+}); 
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema, 'Users');

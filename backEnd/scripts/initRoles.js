@@ -22,8 +22,10 @@ const defaultRoles = [
 
 async function initRoles() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected to MongoDB');
+    await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: process.env.DB_NAME
+    });
+    console.log(`Connected to MongoDB - ${process.env.DB_NAME} database`);
 
     for (const role of defaultRoles) {
       const existingRole = await Role.findOne({ name: role.name });

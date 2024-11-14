@@ -23,9 +23,11 @@ app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGODB_URI, {
+    dbName: process.env.DB_NAME
+  })
+    .then(() => console.log(`Connected to MongoDB - ${process.env.DB_NAME} database`))
+    .catch((err) => console.error('MongoDB connection error:', err));
 
 const PORT = process.env.PORT || 1337;
 app.listen(PORT, () => {
