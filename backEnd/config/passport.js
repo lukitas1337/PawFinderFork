@@ -15,10 +15,15 @@ const initializePassport = () => {
           let user = await User.findOne({ googleId: profile.id });
 
           if (!user) {
+            const roleId = await getRoleIdByName('user');
+            
             user = await User.create({
               googleId: profile.id,
-              name: profile.displayName,
+              fullName: profile.displayName,
               email: profile.emails[0].value,
+              userType: 'individual',
+              phoneNumber: '',
+              roleId: roleId,
             });
           }
 
