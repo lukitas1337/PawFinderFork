@@ -13,7 +13,8 @@ body {
   color: #071327;
 }
 
-.header a {
+.header a,
+.btn {
   transition: all 0.3s;
 }
 
@@ -29,4 +30,9 @@ body {
 
 .footer-icon {
   transition: all 0.3s;
+}
+
+.registerForm input:focus {
+  outline: none;
+  border-bottom-color: #ed6656;
 }
