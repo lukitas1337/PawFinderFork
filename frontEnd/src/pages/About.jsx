@@ -44,7 +44,6 @@ const About = () => {
         <p className="text-[12px] mt-2">Lorem ipsum dolor sit amet</p>
       </div>
       <div className="hidden md:block h-20 border-r-[2px] border-white opacity-30"></div>
-      {/* second*/}
       <div className="flex flex-col items-center">
         <span className="text-[50px] font-bold">
           {startCounting ? <CountUp start={0} end={10000} duration={2} /> : 0}
