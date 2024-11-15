@@ -6,20 +6,16 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Submit questionnaire and get matches
 router.post('/questionnaire', auth, async (req, res) => {
   try {
-    // Save questionnaire
     const questionnaire = new Questionnaire({
       ...req.body,
       userId: req.user.userId
     });
     await questionnaire.save();
 
-    // Get all available pets
     const pets = await Pet.find({ adopted: false });
 
-    // Prepare data for AI analysis
     const matchingPrompt = `
       As a pet matching expert, analyze the compatibility between the user's preferences and available pets.
       Calculate a matching score (0-100) for each pet based on the following criteria:
@@ -65,7 +61,6 @@ router.post('/questionnaire', auth, async (req, res) => {
       response_format: { type: "json_object" }
     });
 
-    // Parse AI response
     const matches = JSON.parse(completion.choices[0].message.content);
 
     res.json({
@@ -79,7 +74,6 @@ router.post('/questionnaire', auth, async (req, res) => {
   }
 });
 
-// Get previous questionnaire results
 router.get('/history', auth, async (req, res) => {
   try {
     const questionnaires = await Questionnaire.find({ 

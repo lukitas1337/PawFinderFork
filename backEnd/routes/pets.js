@@ -4,12 +4,11 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Create a new pet
 router.post('/', auth, async (req, res) => {
   try {
     const pet = new Pet({
       ...req.body,
-      ownerId: req.user.userId // This comes from the auth middleware
+      ownerId: req.user.userId
     });
     await pet.save();
     res.status(201).json(pet);
@@ -18,7 +17,6 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// Get all pets
 router.get('/', async (req, res) => {
   try {
     const pets = await Pet.find({ adopted: false });
@@ -28,7 +26,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get one pet
 router.get('/:id', async (req, res) => {
   try {
     const pet = await Pet.findById(req.params.id);
@@ -41,7 +38,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Update a pet
 router.patch('/:id', auth, async (req, res) => {
   try {
     const pet = await Pet.findOne({ _id: req.params.id, ownerId: req.user.userId });
@@ -57,7 +53,6 @@ router.patch('/:id', auth, async (req, res) => {
   }
 });
 
-// Delete a pet
 router.delete('/:id', auth, async (req, res) => {
   try {
     const pet = await Pet.findOne({ _id: req.params.id, ownerId: req.user.userId });

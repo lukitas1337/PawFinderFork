@@ -6,7 +6,6 @@ const questionnaireSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  // Basic preferences
   preferredAnimalType: {
     type: String,
     enum: ['cat', 'dog', 'both'],
@@ -22,7 +21,6 @@ const questionnaireSchema = new mongoose.Schema({
       required: true
     }
   },
-  // Living situation
   homeType: {
     type: String,
     enum: ['apartment', 'house', 'house_with_yard'],
