@@ -26,3 +26,7 @@ body {
   background-color: #bfcf59;
   color: #071327;
 }
+
+.footer-icon {
+  transition: all 0.3s;
+}
