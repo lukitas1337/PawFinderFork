@@ -1,4 +1,4 @@
-function AdobtSection() {
+function AdoptSection() {
   return (
     <section className="mt-[20rem]">
       <div className="flex w-[45%] mx-auto justify-between">
@@ -46,4 +46,4 @@ function AdobtSection() {
   );
 }
 
-export default AdobtSection;
+export default AdoptSection;
