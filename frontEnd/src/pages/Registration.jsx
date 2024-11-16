@@ -2,6 +2,7 @@ import { useReducer } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import axios from "axios";
 
 const initialState = {
   fullName: "",
@@ -28,9 +29,18 @@ function Registration() {
 
   const navigate = useNavigate();
 
+  async function registerUserToDataBase(user) {
+    try {
+      await axios.post(`http://localhost:8000/api/auth/register`, user);
+      console.log("user is in the data base");
+    } catch (error) {
+      console.log(error);
+    }
+  }
   function handleSubmit(e) {
     e.preventDefault();
-    const newUser = { fullName, email, password };
+    const newUser = { fullName, email, password, userType: "individual" };
+    registerUserToDataBase(newUser);
     navigate("/");
   }
   return (
