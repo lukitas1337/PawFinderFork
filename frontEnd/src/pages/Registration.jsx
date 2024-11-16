@@ -43,6 +43,15 @@ function Registration() {
     registerUserToDataBase(newUser);
     navigate("/");
   }
+
+  const handleGoogleSignUp = async () => {
+    try {
+      await axios.get("http://localhost:8000/api/auth/google/callback");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <main>
       <div className="bg-light w-[40%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
@@ -91,7 +100,10 @@ function Registration() {
           </button>
         </form>
         <h2 className="text-[2.4rem] font-bold">Or</h2>
-        <button className="btn flex items-center gap-[1rem] bg-white py-[1rem] px-[2rem] text-[1.6rem] rounded-[1.5rem] hover:bg-light hover:border-2 hover:border-dark">
+        <button
+          className="btn flex items-center gap-[1rem] bg-white py-[1rem] px-[2rem] text-[1.6rem] rounded-[1.5rem] hover:bg-light hover:border-2 hover:border-dark"
+          onClick={handleGoogleSignUp}
+        >
           <span>
             <FcGoogle className="text-[2.4rem]" />
           </span>
