@@ -1,9 +1,11 @@
+import Hero from "../components/Hero";
+
 function Home() {
-    return (
-        <div>
-            
-        </div>
-    )
+  return (
+    <main className="my-[15rem]">
+      <Hero />
+    </main>
+  );
 }
 
-export default Home
+export default Home;

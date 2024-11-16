@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FaInstagram, FaFacebookF } from "react-icons/fa";
 function Footer() {
   return (
-    <footer className="bg-dark flex flex-col gap-[5rem] justify-center items-center py-[5rem]">
+    <footer className="bg-dark flex flex-col gap-[5rem] justify-center items-center py-[5rem] w-full">
       <figure className="w-[16rem]">
         <Link to="/">
           <img src="/images/LogoGreen.png" alt="logo" />
