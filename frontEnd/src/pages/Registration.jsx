@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 
@@ -109,6 +109,12 @@ function Registration() {
           </span>
           <span>Sign up with Google</span>
         </button>
+        <h3 className="text-[1.4rem]">
+          Already a member?{" "}
+          <Link to="/login" className="font-semibold">
+            Login
+          </Link>
+        </h3>
       </div>
     </main>
   );
