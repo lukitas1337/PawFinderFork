@@ -2,15 +2,16 @@ import React from "react";
 
 const GetInTouchSection = () => {
   return (
-    <div className="relative flex flex-col-reverse lg:flex-col xl:flex-row xl:justify-between w-full items-center lg:space-y-20 md:space-y-10 sm:space-y-10">
+    <div className="relative flex flex-col-reverse lg:flex-col xl:flex-row xl:justify-between w-full items-center 
+    lg:space-y-20 md:space-y-10 sm:space-y-10">
       <div className="text-center xl:text-left xl:w-1/2 xl:pl-56 order-2 lg:order-none">
-        <h1 className="text-dark font-poppins font-black text-[30px] sm:text-[40px] lg:text-[60px] xl:mt-36 xl:text-[70px] 
+        <h1 className="text-dark font-poppins font-black text-[30px] sm:text-[40px] lg:text-[50px] xl:mt-36 xl:text-[70px] 
         leading-[40px] xl:leading-[80px] whitespace-nowrap lg:whitespace-nowrap xl:whitespace-normal relative">
           GET IN TOUCH
           <img
             src="/images/paw_icon_green_main page.png"
             alt="Overlay"
-            className="absolute hidden xl:block lg:-top-8 xl:-top-14 left-80 w-[70px] h-auto pointer-events-none"
+            className="absolute block left-48 -top-10 lg:block xl:block md:-top-14 md:left-64 sm:-top-14 sm:left-64 lg:-top-16 lg:left-80 xl:-top-14 xl:left-[200px] sm:w-[50px] md:w-[50px] xl:w-[70px] lg:w-[60px] w-[40px] h-auto pointer-events-none"
           />
         </h1>
       </div>
