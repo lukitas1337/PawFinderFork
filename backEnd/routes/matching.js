@@ -6,6 +6,7 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
+// route to submit questionnaire and get matching results, needs to be adjusted later
 router.post('/questionnaire', auth, async (req, res) => {
   try {
     const questionnaire = new Questionnaire({
@@ -16,6 +17,7 @@ router.post('/questionnaire', auth, async (req, res) => {
 
     const pets = await Pet.find({ adopted: false });
 
+    // prompt to send to openai
     const matchingPrompt = `
       As a pet matching expert, analyze the compatibility between the user's preferences and available pets.
       Calculate a matching score (0-100) for each pet based on the following criteria:
@@ -49,10 +51,12 @@ router.post('/questionnaire', auth, async (req, res) => {
     const completion = await openai.chat.completions.create({
       messages: [
         { 
+          // sets behavior of the AI
           role: "system", 
           content: "You are an expert pet matching assistant that helps match potential adopters with pets." 
         },
         { 
+          // user input to be our matching prompt
           role: "user", 
           content: matchingPrompt 
         }
@@ -60,9 +64,9 @@ router.post('/questionnaire', auth, async (req, res) => {
       model: "gpt-3.5-turbo",
       response_format: { type: "json_object" }
     });
-
+// we parse the response
     const matches = JSON.parse(completion.choices[0].message.content);
-
+// the response is made up of the questionnaire and the matches and we send it back to the user
     res.json({
       questionnaire,
       matches
