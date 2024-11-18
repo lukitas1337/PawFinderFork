@@ -6,6 +6,8 @@ import cors from 'cors';
 import passport from 'passport';
 import authRoutes from './routes/auth.js';
 import './config/passport.js';
+import petRoutes from './routes/pets.js';
+import matchingRoutes from './routes/matching.js';
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(passport.initialize());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/pets', petRoutes);
+app.use('/api/matching', matchingRoutes);
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
