@@ -1,9 +1,5 @@
 function PersonalAccount() {
-    return (
-        <div>
-            
-        </div>
-    )
+  return <div></div>;
 }
 
-export default PersonalAccount
+export default PersonalAccount;
