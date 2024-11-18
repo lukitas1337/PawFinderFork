@@ -5,7 +5,6 @@ import AboutMatchingSection from "../components/AboutMatchingSection";
 
 const About = () => (
   <div className="bg-[#FAFAF5] min-h-screen flex flex-col justify-between">
-    {/* Исправленные отступы */}
     <main>
       <AboutUsSection />
       <AboutStatistics />
