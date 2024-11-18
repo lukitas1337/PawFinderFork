@@ -1,11 +1,12 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
   password: {
     type: String,
     required: function() { return !this.googleId; },
@@ -52,6 +53,6 @@ const userSchema = new mongoose.Schema({
 }, { 
   collection: 'Users',
   versionKey: false
-}); 
+});
 
-export default mongoose.model('User', userSchema, 'Users');
+export default mongoose.model("User", userSchema, "Users");
