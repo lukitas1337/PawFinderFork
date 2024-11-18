@@ -17,7 +17,7 @@ const About = () => {
       <main className="container mx-auto px-28 mt-40">
         <section className="flex flex-col md:flex-row items-center mb-44">
           <div className="md:w-1/2">
-            <h1 className="text-dark leading-[60px] font-black text-4xl font-poppins text-[50px]  mb-4">
+            <h1 className="text-dark leading-[60px] font-black text-4xl font-poppins text-[50px] mb-4">
             PAWFINDER - <br />A PLACE TO FIND <br />YOUR PET
             </h1>
             <p className="text-dark text-[18px] mb-6 ">

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "framer-motion": "^11.11.17",
     "react-countup": "^6.5.3",
     "react-intersection-observer": "^9.13.1"
   }
