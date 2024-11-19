@@ -1,14 +1,12 @@
 import express from 'express';
 import Pet from '../models/Pet.js';
-import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/', auth, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const pet = new Pet({
       ...req.body,
-      ownerId: req.user.userId
     });
     await pet.save();
     res.status(201).json(pet);
@@ -38,11 +36,11 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.patch('/:id', auth, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const pet = await Pet.findOne({ _id: req.params.id, ownerId: req.user.userId });
+    const pet = await Pet.findById(req.params.id);
     if (!pet) {
-      return res.status(404).json({ message: 'Pet not found or unauthorized' });
+      return res.status(404).json({ message: 'Pet not found' });
     }
     
     Object.assign(pet, req.body);
@@ -53,11 +51,11 @@ router.patch('/:id', auth, async (req, res) => {
   }
 });
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    const pet = await Pet.findOne({ _id: req.params.id, ownerId: req.user.userId });
+    const pet = await Pet.findById(req.params.id);
     if (!pet) {
-      return res.status(404).json({ message: 'Pet not found or unauthorized' });
+      return res.status(404).json({ message: 'Pet not found' });
     }
     
     await pet.deleteOne();

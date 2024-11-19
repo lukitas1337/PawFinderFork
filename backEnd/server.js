@@ -6,7 +6,7 @@ import cors from 'cors';
 import passport from 'passport';
 import authRoutes from './routes/auth.js';
 import './config/passport.js';
-import petRoutes from './routes/pets.js';
+import petRoutes from './routes/petsRoutes.js';
 import matchingRoutes from './routes/matching.js';
 
 const app = express();
