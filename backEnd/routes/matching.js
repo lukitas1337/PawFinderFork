@@ -2,7 +2,7 @@ import express from 'express';
 import Questionnaire from '../models/Questionnaire.js';
 import Pet from '../models/Pet.js';
 import openai from '../config/openaiConfig.js';
-import auth from '../middleware/auth.js';
+import auth from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 

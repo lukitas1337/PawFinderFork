@@ -99,16 +99,23 @@ export const updateUser = async (req, res, next) => {
 
 // Delete user by ID
 export const deleteUser = async (req, res, next) => {
-  try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) {
-      throw new CustomError('User not found', 404);
+    try {
+      const user = await User.findByIdAndDelete(req.params.id);
+      if (!user) {
+        throw new CustomError('User not found', 404);
+      }
+      res.status(200).json({ 
+        success: true,
+        message: 'User deleted successfully',
+        deletedUser: { 
+          email: user.email, 
+          fullName: user.fullName 
+        }
+      });
+    } catch (error) {
+      next(new CustomError(error.message || 'Failed to delete user', 400));
     }
-    res.status(204).json({ message: 'User deleted successfully' });
-  } catch (error) {
-    next(new CustomError(error.message || 'Failed to delete user', 400));
-    }
-};
+  };
 
 // Login user
 export const loginUser = async (req, res, next) => {
@@ -173,36 +180,4 @@ export const checkSession = async (req, res, next) => {
       next(new CustomError('Session check failed', 500));
     }
   }
-};
-
-// Google authentication handlers
-export const googleAuth = passport.authenticate('google', {
-  scope: ['profile', 'email']
-});
-
-export const googleCallback = (req, res, next) => {
-  passport.authenticate('google', { session: false }, (err, user) => {
-    if (err) {
-      return next(new CustomError('Google authentication failed', 500));
-    }
-    
-    try {
-      const token = jwt.sign(
-        { userId: user._id },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
-      
-      res.cookie('token', token, {
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-      });
-      
-      res.redirect(process.env.FRONTEND_URL);
-    } catch (error) {
-      next(new CustomError('Failed to process Google authentication', 500));
-    }
-  })(req, res, next);
 };

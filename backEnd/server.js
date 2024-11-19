@@ -3,12 +3,13 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import passport from 'passport';
-import authRoutes from './routes/auth.js';
+import authRoutes from './routes/authRoutes.js';
 import './config/passport.js';
 import petRoutes from './routes/pets.js';
 import matchingRoutes from './routes/matching.js';
 import { errorHandler } from './utils/errorHandler.js';
 import connectDB from './db/mongoDB.js';
+import usersRouter from './routes/usersRoutes.js';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(passport.initialize());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', usersRouter);
 app.use('/api/pets', petRoutes);
 app.use('/api/matching', matchingRoutes);
 
