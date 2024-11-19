@@ -2,7 +2,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import passport from "passport";
-import User from "../models/User.js";
+import User from "../models/usersModel.js";
 import Role from "../models/Role.js";
 import auth from "../middleware/auth.js";
 

@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
-import User from '../models/User.js';
+import User from '../models/usersModel.js';
 import { CustomError } from '../utils/errorHandler.js';
 
 // Get all users
@@ -9,14 +9,10 @@ export const getUsers = async (req, res, next) => {
   try {
     const users = await User.find().select('-password');
     res.status(200).json(users);
-  } catch (error) {
-    if (error instanceof CustomError) {
-      next(error);
-    } else {
-      next(new CustomError('Failed to retrieve users', 500));
+    } catch (error) {
+        next(new CustomError('Failed to retrieve users', 404));
     }
-  }
-};
+    };
 
 // Get user by ID
 export const getUserById = async (req, res, next) => {
@@ -26,14 +22,10 @@ export const getUserById = async (req, res, next) => {
       throw new CustomError('User not found', 404);
     }
     res.status(200).json(user);
-  } catch (error) {
-    if (error instanceof CustomError) {
-      next(error);
-    } else {
-      next(new CustomError('Failed to retrieve user', 500));
+    } catch (error) {
+        next(new CustomError(error.message || 'Failed to retrieve user', 404));
     }
-  }
-};
+    };
 
 // Create new user
 export const createUser = async (req, res, next) => {
@@ -75,16 +67,12 @@ export const createUser = async (req, res, next) => {
       message: 'User created successfully',
       user: { ...user.toObject(), password: undefined }
     });
-  } catch (error) {
-    if (error instanceof CustomError) {
-      next(error);
-    } else {
-      next(new CustomError('Failed to create user', 500));
+    } catch (error) {
+        next(new CustomError(error.message || 'Failed to create user', 400));
     }
-  }
-};
+    };
 
-// Update user
+// Update user by ID
 export const updateUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -104,16 +92,12 @@ export const updateUser = async (req, res, next) => {
       message: 'User updated successfully', 
       user: { ...user.toObject(), password: undefined } 
     });
-  } catch (error) {
-    if (error instanceof CustomError) {
-      next(error);
-    } else {
-      next(new CustomError('Failed to update user', 500));
+    } catch (error) {
+        next(new CustomError(error.message || 'Failed to update user', 400));
     }
-  }
-};
+    };
 
-// Delete user
+// Delete user by ID
 export const deleteUser = async (req, res, next) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
@@ -122,12 +106,8 @@ export const deleteUser = async (req, res, next) => {
     }
     res.status(204).json({ message: 'User deleted successfully' });
   } catch (error) {
-    if (error instanceof CustomError) {
-      next(error);
-    } else {
-      next(new CustomError('Failed to delete user', 500));
+    next(new CustomError(error.message || 'Failed to delete user', 400));
     }
-  }
 };
 
 // Login user
@@ -155,7 +135,8 @@ export const loginUser = async (req, res, next) => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      path: '/',
     });
     
     res.status(200).json({ 
@@ -163,12 +144,8 @@ export const loginUser = async (req, res, next) => {
       user: { ...user.toObject(), password: undefined } 
     });
   } catch (error) {
-    if (error instanceof CustomError) {
-      next(error);
-    } else {
       next(new CustomError('Login failed', 500));
     }
-  }
 };
 
 // Logout user
