@@ -9,10 +9,10 @@ import {
 
 const petsRouter = Router();
 
-router.get('/', getPets);
-router.get('/:id', getPetById);
-router.post('/', createPet);
-router.put('/:id', updatePet);
-router.delete('/:id', deletePet);
+petsRouter.get('/', getPets);
+petsRouter.get('/:id', getPetById);
+petsRouter.post('/', createPet);
+petsRouter.put('/:id', updatePet);
+petsRouter.delete('/:id', deletePet);
 
 export default petsRouter;
