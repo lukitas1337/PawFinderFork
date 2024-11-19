@@ -1,6 +1,6 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import User from '../models/User.js';
+import User from '../models/usersModel.js';
 
 const initializePassport = () => {
   passport.use(
@@ -8,7 +8,7 @@ const initializePassport = () => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: 'http://localhost:1337/api/auth/google/callback',
+        callbackURL: `${process.env.ROOT_URL}/api/auth/google/callback`,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {

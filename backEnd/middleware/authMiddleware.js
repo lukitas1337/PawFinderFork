@@ -1,6 +1,4 @@
 import jwt from 'jsonwebtoken';
-import Role from '../models/Role.js';
-
 
 const auth = async (req, res, next) => {
     try {
@@ -15,7 +13,10 @@ const auth = async (req, res, next) => {
 
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = decoded;
+            req.user = {
+                userId: decoded.userId,
+                userType: decoded.userType
+            };
             next();
         } catch (error) {
             res.clearCookie('token');

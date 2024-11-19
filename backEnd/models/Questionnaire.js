@@ -37,14 +37,11 @@ const questionnaireSchema = new mongoose.Schema({
   hoursHome: {
     type: Number,
     required: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
 }, {
   collection: 'Questionnaires',
-  versionKey: false
+  versionKey: false,
+  timestamps: true
 });
 
 export default mongoose.model('Questionnaire', questionnaireSchema);
