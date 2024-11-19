@@ -109,15 +109,3 @@ export const deleteUser = async (req, res, next) => {
     next(new CustomError(error.message || 'Failed to delete user', 400));
   }
 };
-
-export const checkSession = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.user.userId).select('-password');
-    if (!user) {
-      throw new CustomError('User not found', 404);
-    }
-    res.json({ user });
-  } catch (error) {
-    next(new CustomError(error.message || 'Failed to check session', 400));
-  }
-};
