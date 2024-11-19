@@ -6,7 +6,7 @@ import {
   googleAuth,
   googleCallback,
   checkSession
-} from '../controllers/authController.js';
+} from '../controllers/authControllers.js';
 import auth from '../middleware/authMiddleware.js';
 
 const router = express.Router();

@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/usersModel.js';
 import { CustomError } from '../utils/errorHandler.js';
+import passport from 'passport';
 
 export const register = async (req, res, next) => {
   try {
