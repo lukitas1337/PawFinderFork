@@ -44,12 +44,17 @@ function Registration() {
     navigate("/");
   }
 
-  const handleGoogleSignUp = async () => {
+/*   const handleGoogleSignUp = async () => {
     try {
       await axios.get("http://localhost:8000/api/auth/google/callback");
     } catch (error) {
       console.log(error);
     }
+  }; */
+
+  const handleGoogleSignUp = () => {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    window.location.href = `${backendUrl}/api/auth/google`;
   };
 
   return (
