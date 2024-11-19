@@ -9,7 +9,7 @@ import './config/passport.js';
 import petRoutes from './routes/pets.js';
 import matchingRoutes from './routes/matching.js';
 import { errorHandler } from './utils/errorHandler.js';
-
+import mongoose from './db/mongoDB.js';
 
 const app = express();
 
@@ -27,13 +27,6 @@ app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 app.use('/api/pets', petRoutes);
 app.use('/api/matching', matchingRoutes);
-
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-    dbName: process.env.DB_NAME
-  })
-    .then(() => console.log(`Connected to MongoDB - ${process.env.DB_NAME} database`))
-    .catch((err) => console.error('MongoDB connection error:', err));
 
 app.use(errorHandler);
 const PORT = process.env.PORT || 1337;
