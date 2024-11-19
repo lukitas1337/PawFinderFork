@@ -7,7 +7,7 @@ import {
   deletePet
 } from '../controllers/petsControllers.js';
 
-const router = Router();
+const petsRouter = Router();
 
 router.get('/', getPets);
 router.get('/:id', getPetById);
