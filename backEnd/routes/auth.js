@@ -36,7 +36,7 @@ router.get(
         secure: process.env.NODE_ENV === "production",
       });
 
-      res.redirect("http://localhost:5173/home");
+      res.redirect(`${process.env.ROOT_URL}/login`);
     } catch (error) {
       res.status(500).json({
         success: false,

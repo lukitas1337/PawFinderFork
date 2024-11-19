@@ -8,11 +8,13 @@ import authRoutes from './routes/auth.js';
 import './config/passport.js';
 import petRoutes from './routes/pets.js';
 import matchingRoutes from './routes/matching.js';
+import { errorHandler } from './utils/errorHandler.js';
+
 
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.ROOT_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -33,7 +35,9 @@ mongoose.connect(process.env.MONGODB_URI, {
     .then(() => console.log(`Connected to MongoDB - ${process.env.DB_NAME} database`))
     .catch((err) => console.error('MongoDB connection error:', err));
 
+app.use(errorHandler);
 const PORT = process.env.PORT || 1337;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
