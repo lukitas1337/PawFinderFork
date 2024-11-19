@@ -41,14 +41,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       unique: true,
       sparse: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
     }
   }, { 
     collection: 'Users',
-    versionKey: false
+    versionKey: false,
+    timestamps: true
   }
 );
 
