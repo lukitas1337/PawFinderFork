@@ -10,7 +10,7 @@ import matchingRoutes from './routes/matching.js';
 import { errorHandler } from './utils/errorHandler.js';
 import connectDB from './db/mongoDB.js';
 import usersRouter from './routes/usersRoutes.js';
-import shelterRoutes from './routes/shelters.js';
+import shelterRoutes from './routes/sheltersRoutes.js';
 
 const app = express();
 

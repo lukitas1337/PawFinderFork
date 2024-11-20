@@ -1,6 +1,6 @@
 import express from 'express';
 // import auth from '../middleware/auth.js';
-import { getShelters, getShelterById, createShelter, updateShelter, deleteShelter } from '../controllers/controllerShelter.js';
+import { getShelters, getShelterById, createShelter, updateShelter, deleteShelter } from '../controllers/shelterControllers.js';
 
 const router = express.Router();
 

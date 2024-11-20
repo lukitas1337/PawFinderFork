@@ -1,4 +1,4 @@
-import Pet from '../models/petsModel.js';
+import Pet from '../models/PetsModel.js';
 import { CustomError } from '../utils/errorHandler.js';
 
 export const getPets = async (req, res, next) => {
