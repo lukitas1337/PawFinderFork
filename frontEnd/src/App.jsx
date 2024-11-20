@@ -27,7 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/adoption" element={<Adoption />} />
-          <Route path="/account" element={<PersonalAccount />} />
+          <Route path="/account/*" element={<PersonalAccount />} />
         </Route>
       </Routes>
     </BrowserRouter>
