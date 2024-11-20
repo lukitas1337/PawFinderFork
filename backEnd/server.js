@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.js';
 import './config/passport.js';
 import petRoutes from './routes/pets.js';
 import matchingRoutes from './routes/matching.js';
+import shelterRoutes from './routes/shelters.js';
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(passport.initialize());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/pets', petRoutes);
+app.use('/api/shelters', shelterRoutes);
 app.use('/api/matching', matchingRoutes);
 
 // MongoDB connection
