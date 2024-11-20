@@ -92,11 +92,12 @@ const petSchema = new mongoose.Schema({
   healthConditions: {
     type: [String],
     required: function() { return this.specialNeeds === true; }
-  },
+  }
 }, {
   collection: 'Pets',
   versionKey: false,
   timestamps: true
 });
 
-export default mongoose.model('Pet', petSchema);
+const Pet = mongoose.model('Pet', petSchema);
+export default Pet;
