@@ -42,15 +42,12 @@ const userSchema = new mongoose.Schema(
       ref: "Questionnaire",
     },
   ],
-  },
-  {
-    timestamps: true,
-    collection: "Users",
-    versionKey: false
-  }, { 
+},
+{
+  collection: "Users",
+  versionKey: false,
   timestamps: true,
-  collection: 'Users',
-  versionKey: false
-});
+}
+);
 
 export default mongoose.model("User", userSchema, "Users");

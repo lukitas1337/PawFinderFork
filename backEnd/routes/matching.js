@@ -1,6 +1,6 @@
 import express from 'express';
 import Questionnaire from '../models/Questionnaire.js';
-import Pet from '../models/PetsModel.js';
+import Pet from '../models/petsModel.js';
 import openai from '../config/openaiConfig.js';
 import auth from '../middleware/authMiddleware.js';
 
