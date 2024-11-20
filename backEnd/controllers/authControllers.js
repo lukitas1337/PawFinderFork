@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import User from '../models/UsersModel.js';
+import User from '../models/usersModel.js';
 import { CustomError } from '../utils/errorHandler.js';
 import passport from 'passport';
 
@@ -31,19 +31,6 @@ export const register = async (req, res, next) => {
     });
 
     await user.save();
-
-    const token = jwt.sign(
-      { userId: user._id, userType: user.userType },
-      process.env.JWT_SECRET,
-      { expiresIn: "24h" }
-    );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-    });
 
     res.status(201).json({
       message: "User created successfully",
