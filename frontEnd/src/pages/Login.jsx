@@ -22,7 +22,31 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:8000/api/auth/login`, {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
+        email,
+        password,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+      const userLoggedIn = res.data.user;
+      setUser(userLoggedIn);
+    } catch (error) {
+      alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
+    } finally {
+      navigate("/");
+    }
+  }
+
+
+/*   async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
         email,
         password,
       });
@@ -33,7 +57,7 @@ function Login() {
     } finally {
       navigate("/");
     }
-  }
+  } */
   function handleGoogleLogin() {}
 
   return (
