@@ -31,7 +31,7 @@ function Registration() {
 
 async function registerUserToDataBase(user) {
     try {
-      const response = await axios.post(`http://localhost:8000/api/auth/register`, user);
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, user);
       console.log("user is in the data base");
       alert("Registration successful! Please login to continue.");
       navigate("/login");
