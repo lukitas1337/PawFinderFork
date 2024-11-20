@@ -10,6 +10,7 @@ import matchingRoutes from './routes/matching.js';
 import { errorHandler } from './utils/errorHandler.js';
 import connectDB from './db/mongoDB.js';
 import usersRouter from './routes/usersRoutes.js';
+import shelterRoutes from './routes/sheltersRoutes.js';
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRouter);
 app.use('/api/pets', petRoutes);
+app.use('/api/shelters', shelterRoutes);
 app.use('/api/matching', matchingRoutes);
 
 app.use(errorHandler);

@@ -68,7 +68,8 @@ const petSchema = new mongoose.Schema({
     type: String
   },
   coatType: {
-    type: String
+    type: String,
+    enum: ['short', 'medium', 'long']
   },
   size: {
     type: String,
