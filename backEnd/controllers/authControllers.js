@@ -107,16 +107,20 @@ export const googleAuth = passport.authenticate('google', {
 
 export const googleCallback = [
   passport.authenticate('google', { 
-    failureRedirect: '/login',
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
     session: false 
   }),
   async (req, res, next) => {
     try {
+        console.log('Google auth successful, user:', req.user); 
+
       const token = jwt.sign(
         { userId: req.user._id, userType: req.user.userType },
         process.env.JWT_SECRET,
         { expiresIn: '24h' }
       );
+
+      console.log('JWT token created');
 
       res.cookie('token', token, {
         httpOnly: true,
@@ -125,8 +129,9 @@ export const googleCallback = [
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
       });
 
-      res.redirect(process.env.ROOT_URL);
+      res.redirect(`${process.env.FRONTEND_URL}`);
     } catch (error) {
+      console.error('Google auth error:', error); 
       next(new CustomError(error.message || 'Failed to authenticate with Google', 400));
     }
   }
