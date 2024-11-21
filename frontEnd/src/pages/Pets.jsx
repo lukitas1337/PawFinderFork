@@ -83,7 +83,7 @@ if (error) return <p>Error: {error}</p>;
                 <div className="absolute bottom-6 left-0 right-0 px-10 py-4 text-left">
                   <div className="mb-6">
                   <h2 className="text-[18px] font-bold text-dark mb-2">
-  {dog.animalType}, {dog.age}
+  {dog.name}, {dog.age} {dog.age > 1 ? 'years' : 'year'}
 </h2>
                     <div className="flex items-center gap-2">
                       <img
