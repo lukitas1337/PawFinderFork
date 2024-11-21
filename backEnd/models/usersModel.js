@@ -42,11 +42,21 @@ const userSchema = new mongoose.Schema(
       ref: "Questionnaire",
     },
   ],
+  myFavorites: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Pet",
+    },
+  ],
 },
 {
   collection: "Users",
   versionKey: false,
   timestamps: true,
+  transform: (doc, ret) => {
+    delete ret.password;
+    return ret;
+  },
 }
 );
 

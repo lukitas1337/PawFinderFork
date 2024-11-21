@@ -59,6 +59,10 @@ const shelterSchema = new mongoose.Schema(
     collection: "Shelters",
     versionKey: false,
     timestamps: true,
+    transform: (doc, ret) => {
+      delete ret.password;
+      return ret;
+    },
   }
 );
 
