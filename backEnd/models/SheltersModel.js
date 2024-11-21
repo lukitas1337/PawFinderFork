@@ -23,6 +23,12 @@ const shelterSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    userType: {
+      type: String,
+      enum: ['user', 'admin', 'shelter'],
+      default: 'shelter',
+      required: true,
+    },
     address: {
       type: String,
       required: true,
