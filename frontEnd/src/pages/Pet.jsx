@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-function Dog() {
-    return (
-        <div>
-            
-        </div>
-    )
-}
-
-export default Dog
-=======
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -98,4 +87,3 @@ function Pet() {
 }
 
 export default Pet;
->>>>>>> ac181ddd9a23cdf12342344c1498361e31d785fd
