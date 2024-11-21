@@ -17,7 +17,7 @@ function Navbar() {
             <Link to="">Find a pet</Link>
           </li>
           <li>
-            <Link to="">Get involved</Link>
+            <Link to="/dogs">Get involved</Link>
           </li>
           <li>
             <Link to="/contact">Contact</Link>
