@@ -32,6 +32,10 @@ const petSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  petStory: {
+    type: String,
+    required: true
+  },
   location: {
     type: String,
     required: true
