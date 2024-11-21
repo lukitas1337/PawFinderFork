@@ -1,5 +1,8 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import Shelter from "../models/SheltersModel.js";
 import { CustomError } from '../utils/errorHandler.js';
+
 
 export const getShelters = async (req, res, next) => {
     try {
@@ -23,16 +26,67 @@ export const getShelterById = async (req, res, next) => {
     }
 };
 
+// export const createShelter = async (req, res, next) => {
+//     const shelterData = req.body;
+//     try {
+//         const shelter = await Shelter.create(shelterData);
+//         res.status(201).json(shelter);
+
+
+
+//     } catch (error) {
+//         console.error("Error creating shelter:", error);
+//         next(new CustomError('Failed to create shelter', 500));
+//     }
+// };
+
+
+// Create new shelter
 export const createShelter = async (req, res, next) => {
-    const shelterData = req.body;
     try {
-        const shelter = await Shelter.create(shelterData);
-        res.status(201).json(shelter);
+      const { email, password, registrationNumber, userType } = req.body;
+      
+      const existingShelter = await Shelter.findOne({ email });
+      if (existingShelter) {
+        throw new CustomError('Shelter already exists', 400);
+      }
+      
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      
+      const shelter = new Shelter({
+        email,
+        password: hashedPassword,
+        registrationNumber,
+        userType,
+        ...req.body
+      });
+      
+      await shelter.save();
+      
+      const token = jwt.sign(
+        { shelterId: shelter._id },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+      
+      res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+      });
+      
+      res.status(201).json({
+        message: 'Shelter created successfully',
+        shelter: { ...shelter.toObject(), password: undefined }
+      });
     } catch (error) {
-        console.error("Error creating shelter:", error);
-        next(new CustomError('Failed to create shelter', 500));
+      next(new CustomError(error.message || 'Failed to create shelter', 400));
     }
-};
+  };
+
+
 
 export const updateShelter = async (req, res, next) => {
     const { id } = req.params;

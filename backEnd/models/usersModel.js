@@ -15,6 +15,12 @@ const userSchema = new mongoose.Schema(
     type: String,
     required: true,
   },
+  userType: {
+    type: String,
+    enum: ['user', 'admin', 'shelter'],
+    default: 'user',
+    required: true,
+  },
   phoneNumber: {
     type: String,
     required: false,
@@ -36,15 +42,22 @@ const userSchema = new mongoose.Schema(
       ref: "Questionnaire",
     },
   ],
-  },
-  {
-    timestamps: true,
-    collection: "Users",
-    versionKey: false
-  }, { 
+  myFavorites: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Pet",
+    },
+  ],
+},
+{
+  collection: "Users",
+  versionKey: false,
   timestamps: true,
-  collection: 'Users',
-  versionKey: false
-});
+  transform: (doc, ret) => {
+    delete ret.password;
+    return ret;
+  },
+}
+);
 
 export default mongoose.model("User", userSchema, "Users");

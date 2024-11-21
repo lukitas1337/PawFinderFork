@@ -23,6 +23,12 @@ const shelterSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    userType: {
+      type: String,
+      enum: ['user', 'admin', 'shelter'],
+      default: 'shelter',
+      required: true,
+    },
     address: {
       type: String,
       required: true,
@@ -45,7 +51,7 @@ const shelterSchema = new mongoose.Schema(
     availablePets: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Pets",
+        ref: "Pet",
       },
     ],
     description: {
@@ -59,6 +65,10 @@ const shelterSchema = new mongoose.Schema(
     collection: "Shelters",
     versionKey: false,
     timestamps: true,
+    transform: (doc, ret) => {
+      delete ret.password;
+      return ret;
+    },
   }
 );
 

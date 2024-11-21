@@ -29,7 +29,24 @@ function Registration() {
 
   const navigate = useNavigate();
 
-  async function registerUserToDataBase(user) {
+async function registerUserToDataBase(user) {
+    try {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, user);
+      console.log("user is in the data base");
+      alert("Registration successful! Please login to continue.");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const newUser = { fullName, email, password, userType: "individual" };
+    registerUserToDataBase(newUser);
+  }
+
+/*   async function registerUserToDataBase(user) {
     try {
       await axios.post(`http://localhost:8000/api/auth/register`, user);
       console.log("user is in the data base");
@@ -42,7 +59,7 @@ function Registration() {
     const newUser = { fullName, email, password, userType: "individual" };
     registerUserToDataBase(newUser);
     navigate("/");
-  }
+  } */
 
 /*   const handleGoogleSignUp = async () => {
     try {
