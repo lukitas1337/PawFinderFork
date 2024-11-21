@@ -8,6 +8,22 @@ html {
   font-size: 62.5%;
 }
 
+@media (max-width: 1200px) {
+  html {
+    font-size: 60%;
+  }
+}
+@media (max-width: 920px) {
+  html {
+    font-size: 60%;
+  }
+}
+@media (max-width: 640px) {
+  html {
+    font-size: 40%;
+  }
+}
+
 body {
   color: #071327;
 }
@@ -37,8 +53,6 @@ body {
 }
 
 .gifContainer {
-  width: 13rem;
-  height: 15rem;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -50,34 +64,22 @@ body {
 }
 
 .gifContainer1 {
-  background-image: url("../public/gifs/cat-kitten.gif");
-  top: 0;
-  left: 35%;
+  background-image: url("../gifs/cat-kitten.gif");
 }
 
 .gifContainer2 {
-  background-image: url("../public/gifs/365d4efaffb56d7f2b8a8165677a742d.gif");
-  top: 35%;
-  left: 32%;
+  background-image: url("../gifs/365d4efaffb56d7f2b8a8165677a742d.gif");
 }
 .gifContainer3 {
-  background-image: url("../public/gifs/357315.gif");
-  bottom: 0;
-  left: 35%;
+  background-image: url("../gifs/357315.gif");
 }
 .gifContainer4 {
-  background-image: url("../public/gifs/cat-dog.gif");
-  top: 0;
-  right: 35%;
+  background-image: url("../gifs/cat-dog.gif");
 }
 
 .gifContainer5 {
-  background-image: url("../public/gifs/image_861304152127096240685.gif");
-  top: 35%;
-  right: 32%;
+  background-image: url("../gifs/image_861304152127096240685.gif");
 }
 .gifContainer6 {
-  background-image: url("../public/gifs/really-are-you-sure.gif");
-  bottom: 0;
-  right: 35%;
+  background-image: url("../gifs/really-are-you-sure.gif");
 }
