@@ -25,7 +25,7 @@ function Navbar() {
             <Link to="/about">About us</Link>
           </li>
           <li>
-            <Link to="">Find a pet</Link>
+            <Link to="/pets">Find a pet</Link>
           </li>
           <li>
             <Link to="">Get involved</Link>

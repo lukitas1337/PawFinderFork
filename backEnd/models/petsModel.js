@@ -6,6 +6,10 @@ const petSchema = new mongoose.Schema({
     ref: 'Shelter',
     required: true
   },
+  name: {
+    type: String,
+    required: true
+  },
   animalType: {
     type: String,
     enum: ['cat', 'dog'],
@@ -25,6 +29,10 @@ const petSchema = new mongoose.Schema({
     required: true
   },
   description: {
+    type: String,
+    required: true
+  },
+  petStory: {
     type: String,
     required: true
   },
