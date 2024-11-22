@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// New Pet Preferences Schema
 const petPreferencesSchema = new mongoose.Schema({
   petType: {
     type: String,
@@ -8,18 +7,18 @@ const petPreferencesSchema = new mongoose.Schema({
     required: true
   },
   maxDistance: {
-    type: Number,  // in kilometers
+    type: Number,
     min: 0,
     required: true
   },
   ageRange: {
     min: {
-      type: Number,  // in months
+      type: Number,
       min: 0,
       required: true
     },
     max: {
-      type: Number,  // in months
+      type: Number,
       min: 0,
       required: true
     }
@@ -37,16 +36,74 @@ const petPreferencesSchema = new mongoose.Schema({
   character: [{
     type: String,
     enum: [
-      'playful_energetic',    // Happy, always ready for activities
-      'calm_gentle',          // Peaceful and easy-going
-      'shy_reserved',         // Needs time to warm up
-      'independent_confident', // Self-assured, does well alone
-      'affectionate_cuddly',  // Loves physical contact
-      'social_friendly'       // Great with other animals/people
+      'playful_energetic',
+      'calm_gentle',
+      'shy_reserved',
+      'independent_confident',
+      'affectionate_cuddly',
+      'social_friendly'
     ],
     required: true
   }]
-});
+}, { _id: false });
+
+const questionnaireSchema = new mongoose.Schema({
+  housingSituation: {
+    type: String,
+    enum: [
+      'apartment_shared_entrance',
+      'apartment_separate_entrance',
+      'house',
+      'mostly_outdoors'
+    ],
+    required: true
+  },
+  dailyAloneHours: {
+    type: Number,
+    required: true
+  },
+  workplaceAccommodation: {
+    type: String,
+    enum: ['yes', 'no', 'not_necessary'],
+    required: true
+  },
+  householdComposition: {
+    type: String,
+    required: true
+  },
+  hasPetExperience: {
+    type: Boolean,
+    required: true
+  },
+  currentPets: {
+    hasPets: {
+      type: Boolean,
+      required: true
+    },
+    petDetails: {
+      type: String,
+      required: function() { 
+        return this.currentPets.hasPets === true;
+      }
+    }
+  },
+  previousAdoption: {
+    hasAdopted: {
+      type: Boolean,
+      required: true
+    }
+  },
+  petSurrender: {
+    hasSurrendered: {
+      type: Boolean,
+      required: true
+    }
+  },
+  additionalInformation: {
+    type: String,
+    required: false
+  }
+}, { _id: false });
 
 const userSchema = new mongoose.Schema(
   {
@@ -78,17 +135,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
-    petPreferences: petPreferencesSchema,  // Added pet preferences
+    petPreferences: petPreferencesSchema,
+    questionnaire: questionnaireSchema,
     adoptionApplications: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Pet",
-      },
-    ],
-    questionnaires: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Questionnaire",
       },
     ],
     myFavorites: [
