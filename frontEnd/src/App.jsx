@@ -9,7 +9,7 @@ import Adoption from "./pages/Adoption";
 import PersonalAccount from "./pages/PersonalAccount";
 import AppLayout from "./components/AppLayout";
 import Pet from "./pages/Pet";
-import Cat from "./pages/Cat";
+// import Cat from "./pages/Cat";
 import Registration from "./pages/Registration";
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/pets" element={<Pets />} />
           <Route path="/pets/:id" element={<Pet />} />
-          <Route path="/cats/:id" element={<Cat />} />
+          {/* <Route path="/cats/:id" element={<Cat />} /> */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
