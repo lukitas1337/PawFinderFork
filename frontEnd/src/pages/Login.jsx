@@ -1,9 +1,9 @@
-import { useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import axios from "axios";
+import { useUserAuth } from "../contexts/UserAuthContext";
 
-const initialState = { email: "", password: "" };
+const localInitialState = { email: "", password: "" };
 function reducer(state, action) {
   switch (action.type) {
     case "setEmail":
@@ -15,35 +15,24 @@ function reducer(state, action) {
   }
 }
 function Login() {
-  const [{ email, password }, dispatch] = useReducer(reducer, initialState);
-  const [user, setUser] = useState(null);
+  const [{ email, password }, localDispatch] = useReducer(
+    reducer,
+    localInitialState
+  );
+  const { isAuthenticated, handleLogin } = useUserAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
-        email,
-        password,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }
-    );
-      const userLoggedIn = res.data.user;
-      setUser(userLoggedIn);
-    } catch (error) {
-      alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
-    } finally {
-      navigate("/");
-    }
+    await handleLogin(email, password);
   }
-
-
-/*   async function handleSubmit(e) {
+  useEffect(
+    function () {
+      if (isAuthenticated) navigate("/");
+    },
+    [isAuthenticated, navigate]
+  );
+  /*   async function handleSubmit(e) {
     e.preventDefault();
     try {
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
@@ -74,7 +63,7 @@ function Login() {
             placeholder="Email"
             value={email}
             onChange={(e) =>
-              dispatch({ type: "setEmail", payload: e.target.value })
+              localDispatch({ type: "setEmail", payload: e.target.value })
             }
             required
           />
@@ -84,7 +73,7 @@ function Login() {
             placeholder="Password"
             value={password}
             onChange={(e) =>
-              dispatch({ type: "setPassword", payload: e.target.value })
+              localDispatch({ type: "setPassword", payload: e.target.value })
             }
             required
           />
