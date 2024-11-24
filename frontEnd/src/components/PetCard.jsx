@@ -1,11 +1,31 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useFavorites } from "../contexts/FavoritesContext"
 
 function PetCard({ pet, index, getSvgForCard }) {
+  const navigate = useNavigate();
+
+  const { addToFavorites } = useFavorites();
+
+  const handleCardClick = () => {
+    navigate(`/pets/${pet.id}`);
+  };
+  const handleAddToFavorites = (e) => {
+    e.stopPropagation(); 
+    addToFavorites(pet);
+  };
+
+  const handleRemoveFromFavorites = (e) => {
+    e.stopPropagation();
+    removeFromFavorites(pet.id);
+    saveFavorites(favorites.filter((fav) => fav.id !== pet.id));
+  };
+
   return (
     <div
-      key={pet.id}
       className="w-[330px] relative rounded-[36px] shadow-lg overflow-hidden bg-white flex flex-col 
-                transform transition-transform duration-300 hover:scale-105 hover:rotate-2"
+                transform transition-transform duration-300 hover:scale-105 hover:rotate-2 cursor-pointer"
+      onClick={handleCardClick} 
     >
       <div className="relative w-full bg-[#FFFFFF] rounded-t-[36px] h-[400px] overflow-hidden">
         <img
@@ -40,7 +60,9 @@ function PetCard({ pet, index, getSvgForCard }) {
                     font-medium rounded-full hover:bg-[#8D9F19] transition">
               Adopt me
             </button>
-            <div className="w-16 h-16 flex items-center justify-center rounded-full border 
+            <div 
+            onClick={handleAddToFavorites}
+            className="w-16 h-16 flex items-center justify-center rounded-full border 
                     border-dark group hover:bg-dark transition">
               <img
                 src="/images/favorites.svg"
