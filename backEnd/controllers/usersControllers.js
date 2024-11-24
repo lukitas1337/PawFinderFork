@@ -29,7 +29,9 @@ export const getUserById = async (req, res, next) => {
 // Create new user
 export const createUser = async (req, res, next) => {
   try {
-    const { email, password, fullName, userType } = req.body;
+    const { email, password, fullName, userType, ...restOfBody } = req.body;
+
+    console.log('1. Original password:', password);
     
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -38,16 +40,25 @@ export const createUser = async (req, res, next) => {
     
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+
+    console.log('2. Hashed password:', hashedPassword);
+
     
     const user = new User({
       email,
       password: hashedPassword,
       fullName,
       userType,
-      ...req.body
+      ...restOfBody
     });
+
+    console.log('3. User object before save:', user);
+
     
     await user.save();
+
+    console.log('4. Saved user:', user);
+
     
     const token = jwt.sign(
       { userId: user._id },

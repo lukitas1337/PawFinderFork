@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
+import { useUserAuth } from "../contexts/UserAuthContext";
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const { user, isAuthenticated, handleLogout } = useUserAuth();
   function toggleMenu() {
     setIsMenuOpen(!isMenuOpen);
   }
@@ -28,7 +29,7 @@ function Navbar() {
             <Link to="/pets">Find a pet</Link>
           </li>
           <li>
-            <Link to="">Get involved</Link>
+            <Link to="/account">Get involved</Link>
           </li>
           <li>
             <Link to="/contact">Contact</Link>
@@ -52,15 +53,28 @@ function Navbar() {
         )}
       </nav>
       <div className="flex justify-between gap-[3.5rem] text-[1.6rem] font-semibold items-center">
-        <Link to="/login" className="login">
-          Login
-        </Link>
-        <Link
-          to="/register"
-          className="btn signup bg-dark px-[3rem] py-[5px] text-white rounded-[2.5rem]"
-        >
-          Sign up
-        </Link>
+        {isAuthenticated ? (
+          <h4>{user.fullName}</h4>
+        ) : (
+          <Link to="/login" className="login">
+            Login
+          </Link>
+        )}
+        {isAuthenticated ? (
+          <button
+            onClick={handleLogout}
+            className="btn signup bg-dark px-[3rem] py-[5px] text-white rounded-[2.5rem]"
+          >
+            Logout
+          </button>
+        ) : (
+          <Link
+            to="/register"
+            className="btn signup bg-dark px-[3rem] py-[5px] text-white rounded-[2.5rem]"
+          >
+            Sign up
+          </Link>
+        )}
       </div>
     </header>
   );

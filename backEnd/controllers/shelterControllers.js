@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import Shelter from "../models/SheltersModel.js";
 import { CustomError } from '../utils/errorHandler.js';
+import { hashPassword } from '../utils/passwordUtils.js';
 
 
 export const getShelters = async (req, res, next) => {
@@ -44,25 +45,32 @@ export const getShelterById = async (req, res, next) => {
 // Create new shelter
 export const createShelter = async (req, res, next) => {
     try {
-      const { email, password, registrationNumber, userType } = req.body;
+      const { email, password, registrationNumber, userType, ...restOfBody} = req.body;
+
+
       
       const existingShelter = await Shelter.findOne({ email });
       if (existingShelter) {
         throw new CustomError('Shelter already exists', 400);
       }
       
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+      const hashedPassword = await hashPassword(password);
       
+
+
       const shelter = new Shelter({
         email,
         password: hashedPassword,
         registrationNumber,
-        userType,
-        ...req.body
+        userType: 'shelter',
+        ...restOfBody
       });
       
+ 
+
       await shelter.save();
+
+
       
       const token = jwt.sign(
         { shelterId: shelter._id },

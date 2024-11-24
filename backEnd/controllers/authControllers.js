@@ -14,8 +14,8 @@ export const register = async (req, res, next) => {
     }
 
     const safeUserType = userType === 'shelter' ? 'shelter' : 'user';
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const hashedPassword = await hashPassword(password);
 
     const user = new User({
       email,
