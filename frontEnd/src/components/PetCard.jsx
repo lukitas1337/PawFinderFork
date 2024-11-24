@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useFavorites } from "../contexts/FavoritesContext"
+import { useFavorites } from "../contexts/FavoritesContext";
 
 function PetCard({ pet, index, getSvgForCard }) {
   const navigate = useNavigate();
@@ -17,8 +17,7 @@ function PetCard({ pet, index, getSvgForCard }) {
 
   const handleRemoveFromFavorites = (e) => {
     e.stopPropagation();
-    removeFromFavorites(pet.id);
-    saveFavorites(favorites.filter((fav) => fav.id !== pet.id));
+    removeFromFavorites(pet.id); 
   };
 
   return (
