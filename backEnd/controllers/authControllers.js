@@ -14,8 +14,8 @@ export const register = async (req, res, next) => {
     }
 
     const safeUserType = userType === 'shelter' ? 'shelter' : 'user';
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const hashedPassword = await hashPassword(password);
 
     const user = new User({
       email,
@@ -31,19 +31,6 @@ export const register = async (req, res, next) => {
     });
 
     await user.save();
-
-    const token = jwt.sign(
-      { userId: user._id, userType: user.userType },
-      process.env.JWT_SECRET,
-      { expiresIn: "24h" }
-    );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-    });
 
     res.status(201).json({
       message: "User created successfully",
@@ -120,16 +107,20 @@ export const googleAuth = passport.authenticate('google', {
 
 export const googleCallback = [
   passport.authenticate('google', { 
-    failureRedirect: '/login',
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
     session: false 
   }),
   async (req, res, next) => {
     try {
+        console.log('Google auth successful, user:', req.user); 
+
       const token = jwt.sign(
         { userId: req.user._id, userType: req.user.userType },
         process.env.JWT_SECRET,
         { expiresIn: '24h' }
       );
+
+      console.log('JWT token created');
 
       res.cookie('token', token, {
         httpOnly: true,
@@ -138,8 +129,9 @@ export const googleCallback = [
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
       });
 
-      res.redirect(process.env.ROOT_URL);
+      res.redirect(`${process.env.FRONTEND_URL}`);
     } catch (error) {
+      console.error('Google auth error:', error); 
       next(new CustomError(error.message || 'Failed to authenticate with Google', 400));
     }
   }

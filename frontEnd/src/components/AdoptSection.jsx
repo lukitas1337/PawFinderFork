@@ -1,14 +1,14 @@
 function AdoptSection() {
   return (
     <section className="mt-[20rem]">
-      <div className="flex w-[45%] mx-auto justify-between">
+      <div className="flex flex-col items-center  gap-[1rem] lg:flex-row w-full lg:w-[80%] xl:w-[45%] mx-auto justify-between">
         <div className=" relative">
-          <h2 className="text-[9rem] font-black uppercase leading-tight">
+          <h2 className="text-[8rem] lg:text-[9rem] font-black uppercase leading-tight">
             How
             <br /> To
             <br /> Adopt
           </h2>
-          <figure className="absolute bottom-[5rem] right-[-5rem] w-[9rem]">
+          <figure className="absolute  bottom-0 left-[30rem] xl:bottom-[5rem] xl:right-[-5rem] w-[9rem]">
             <img src="/images/paw_icon_green_main page.png" alt="Green Paw" />
           </figure>
         </div>

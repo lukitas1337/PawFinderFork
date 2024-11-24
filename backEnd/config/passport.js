@@ -17,8 +17,9 @@ const initializePassport = () => {
           if (!user) {
             user = await User.create({
               googleId: profile.id,
-              name: profile.displayName,
+              fullName: profile.displayName,
               email: profile.emails[0].value,
+              userType: 'user'
             });
           }
 
