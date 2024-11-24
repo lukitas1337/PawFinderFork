@@ -1,11 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function PetCard({ pet, index, getSvgForCard }) {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/pets/${pet.id}`);
+  };
+
   return (
     <div
-      key={pet.id}
       className="w-[330px] relative rounded-[36px] shadow-lg overflow-hidden bg-white flex flex-col 
-                transform transition-transform duration-300 hover:scale-105 hover:rotate-2"
+                transform transition-transform duration-300 hover:scale-105 hover:rotate-2 cursor-pointer"
+      onClick={handleCardClick} 
     >
       <div className="relative w-full bg-[#FFFFFF] rounded-t-[36px] h-[400px] overflow-hidden">
         <img

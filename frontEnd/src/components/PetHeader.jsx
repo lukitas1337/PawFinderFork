@@ -1,22 +1,33 @@
 import React from "react";
 
-function PetHeader({ toggleFilters }) {
+function PetHeader({ toggleFilters, isFilterOpen, activeFilterCount }) {
   return (
     <div className="flex justify-between items-center mb-6">
-      <h1 className="text-left text-[35px] font-black">
+      <h1 className="text-left text-[35px] font-black mt-10 mb-10">
         WHICH ONE IS YOUR BEST FRIEND?
       </h1>
       <div className="flex items-center gap-4">
         <p className="text-[16px] font-normal text-dark">Filter</p>
         <div
-          className="w-14 h-14 flex items-center justify-center rounded-full border border-dark group hover:bg-dark transition cursor-pointer"
+          className={`relative w-14 h-14 flex items-center justify-center rounded-full border border-dark group
+            ${isFilterOpen ? "bg-dark" : "hover:bg-dark"} transition cursor-pointer`}
           onClick={toggleFilters}
         >
           <img
             src="/images/filter.svg"
             alt="Filter"
-            className="w-10 h-10 transition group-hover:invert"
+            className={`w-10 h-10 transition ${
+              isFilterOpen ? "invert" : "group-hover:invert"
+            }`}
           />
+          {activeFilterCount > 0 && (
+            <div
+              className="absolute top-[-8px] right-[-8px] bg-red w-8 h-8 rounded-full text-white 
+              flex items-center justify-center text-[12px] font-medium"
+            >
+              {activeFilterCount}
+            </div>
+          )}
         </div>
       </div>
     </div>

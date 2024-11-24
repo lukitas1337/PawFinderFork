@@ -3,10 +3,59 @@ import { CustomError } from '../utils/errorHandler.js';
 
 export const getPets = async (req, res, next) => {
   try {
-    const pets = await Pet.find({ adopted: false });
+    console.log("Incoming query parameters:", req.query);
+
+    // Filters
+    const filters = { adopted: false };
+
+    // Location filters
+    if (req.query.location && req.query.location !== '') {
+      const cities = req.query.location.split(",");
+      filters.location = { $regex: cities.join("|"), $options: "i" }; 
+    }
+
+    // Age filters
+    if (req.query.age && req.query.age !== '') {
+      filters.age = { $in: req.query.age.split(",") };
+    }
+
+    // Size filters
+    if (req.query.size && req.query.size !== '') {
+      filters.size = { $in: req.query.size.split(",") };
+    }
+
+    // Gender filters
+    if (req.query.gender && req.query.gender !== '') {
+      const genderFilters = req.query.gender.split(",");
+      
+      filters.$or = genderFilters.map((gender) => {
+        if (gender === "male-neutered") {
+          return { gender: "male", neutered: true };
+        }
+        if (gender === "female-neutered") {
+          return { gender: "female", neutered: true };
+        }
+        if (gender === "male") {
+          return { gender: "male", neutered: false };
+        }
+        if (gender === "female") {
+          return { gender: "female", neutered: false };
+        }
+        return null;
+      }).filter(Boolean);
+    }
+
+    // Pet Type filters
+    if (req.query.petType && req.query.petType !== '') {
+      filters.animalType = { $in: req.query.petType.split(",") };
+    }
+
+    console.log("Constructed Filters:", filters);
+
+    const pets = await Pet.find(filters);
     res.json(pets);
   } catch (error) {
-    next(new CustomError('Failed to retrieve pets', 500));
+    next(new CustomError("Failed to retrieve pets", 500));
   }
 };
 
