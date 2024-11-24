@@ -12,10 +12,12 @@ import Pet from "./pages/Pet";
 // import Cat from "./pages/Cat";
 import Registration from "./pages/Registration";
 import { UserAuthProvider } from "./contexts/UserAuthContext";
+import { FavoritesProvider } from "./contexts/FavoritesContext";
 
 function App() {
   return (
     <UserAuthProvider>
+      <FavoritesProvider>
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout />}>
@@ -32,6 +34,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </FavoritesProvider>
     </UserAuthProvider>
   );
 }
