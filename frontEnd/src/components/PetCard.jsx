@@ -1,18 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-=======
 import { useFavorites } from "../contexts/FavoritesContext"
->>>>>>> 53c295125c12f4b2cfff9f3831607d543b59ede6
 
 function PetCard({ pet, index, getSvgForCard }) {
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-  const handleCardClick = () => {
-    navigate(`/pets/${pet.id}`);
-  };
-=======
   const { addToFavorites } = useFavorites();
 
   const handleCardClick = () => {
@@ -28,7 +20,6 @@ function PetCard({ pet, index, getSvgForCard }) {
     removeFromFavorites(pet.id);
     saveFavorites(favorites.filter((fav) => fav.id !== pet.id));
   };
->>>>>>> 53c295125c12f4b2cfff9f3831607d543b59ede6
 
   return (
     <div
