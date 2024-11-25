@@ -5,26 +5,22 @@ export const getPets = async (req, res, next) => {
   try {
     console.log("Incoming query parameters:", req.query);
 
-    // Filters
+    ///////// Filters
     const filters = { adopted: false };
 
-    // Location filters
     if (req.query.location && req.query.location !== '') {
       const cities = req.query.location.split(",");
       filters.location = { $regex: cities.join("|"), $options: "i" }; 
     }
 
-    // Age filters
     if (req.query.age && req.query.age !== '') {
       filters.age = { $in: req.query.age.split(",") };
     }
 
-    // Size filters
     if (req.query.size && req.query.size !== '') {
       filters.size = { $in: req.query.size.split(",") };
     }
 
-    // Gender filters
     if (req.query.gender && req.query.gender !== '') {
       const genderFilters = req.query.gender.split(",");
       
@@ -45,7 +41,6 @@ export const getPets = async (req, res, next) => {
       }).filter(Boolean);
     }
 
-    // Pet Type filters
     if (req.query.petType && req.query.petType !== '') {
       filters.animalType = { $in: req.query.petType.split(",") };
     }
@@ -58,6 +53,7 @@ export const getPets = async (req, res, next) => {
     next(new CustomError("Failed to retrieve pets", 500));
   }
 };
+///////////////
 
 export const getPetById = async (req, res, next) => {
   try {

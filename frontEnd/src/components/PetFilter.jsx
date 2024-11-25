@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import FilterSelect from "./FilterItem";
-import SelectedFilters from "./FilterSelected";
+import FilterSelect from "./PetFilterItem";
+import SelectedFilters from "./PetFilterSelected";
 
 const PetFilter = ({ onApplyFilters }) => {
     const [localFilters, setLocalFilters] = useState(() => {

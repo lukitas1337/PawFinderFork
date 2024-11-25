@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 
-const FilterItem = ({ options, placeholder, onChange }) => {
+const PetFilterItem = ({ options, placeholder, onChange }) => {
   return (
     <Select
       isMulti
@@ -9,33 +9,31 @@ const FilterItem = ({ options, placeholder, onChange }) => {
       placeholder={placeholder}
       onChange={onChange}
       value={null}
-      closeMenuOnSelect={true} // Закрывает меню при выборе
-      isSearchable={false} // Отключает возможность ввода текста
+      closeMenuOnSelect={true} 
+      isSearchable={false} 
       styles={{
         control: (provided, state) => ({
           ...provided,
           borderRadius: "30px",
           padding: "5px",
           backgroundColor: "#E7E7D6",
-          color: "#071327",
           fontSize: "14px",
           fontWeight: "300",
           borderColor: state.isFocused ? "#809309" : "#071327",
           boxShadow: state.isFocused ? `0 0 0 1px #809309` : "none",
-          outline: "none",
           transition:
             "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
             "&:hover": {
-    backgroundColor: "none", // Убираем hover-эффект
+    backgroundColor: "none",
 },
         }),
         input: (provided) => ({
           ...provided,
-          caretColor: "transparent", // Убираем текстовый курсор
+          caretColor: "transparent", // Remove the text cursor
         }),
         placeholder: (provided) => ({
           ...provided,
-          color: "#071327", // Цвет текста placeholder
+          color: "#071327", // text in placeholder
         }),
         dropdownIndicator: (provided) => ({
           ...provided,
@@ -85,4 +83,4 @@ const FilterItem = ({ options, placeholder, onChange }) => {
   );
 };
 
-export default FilterItem;
+export default PetFilterItem;

@@ -1,6 +1,6 @@
 import React from "react";
 
-const FilterSelected = ({ filters, optionsMap, onRemoveFilter }) => {
+const PetFilterSelected = ({ filters, optionsMap, onRemoveFilter }) => {
     return (
       <div className="mt-4 flex flex-wrap gap-2">
         {Object.keys(filters).map((filterName) =>
@@ -32,4 +32,4 @@ const FilterSelected = ({ filters, optionsMap, onRemoveFilter }) => {
     );
   };
 
-export default FilterSelected;
+export default PetFilterSelected;

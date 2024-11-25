@@ -23,7 +23,7 @@ function PetHeader({ toggleFilters, isFilterOpen, activeFilterCount }) {
           {activeFilterCount > 0 && (
             <div
               className="absolute top-[-8px] right-[-8px] bg-red w-8 h-8 rounded-full text-white 
-              flex items-center justify-center text-[12px] font-medium"
+              flex items-center justify-center text-[11px] font-medium"
             >
               {activeFilterCount}
             </div>
