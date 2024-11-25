@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import User from '../models/usersModel.js';
 import { CustomError } from '../utils/errorHandler.js';
 import passport from 'passport';
+import {hashPassword } from '../utils/passwordUtils.js';
 
 export const register = async (req, res, next) => {
   try {
@@ -78,6 +79,9 @@ export const login = async (req, res, next) => {
         email: user.email,
         fullName: user.fullName,
         userType: user.userType,
+        petPreferences: user.petPreferences,
+        questionnaire: user.questionnaire,
+        favorites: user.myFavorites
       },
     });
   } catch (error) {
