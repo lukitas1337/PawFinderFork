@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FilterSelect from "./PetFilterItem";
 import SelectedFilters from "./PetFilterSelected";
 

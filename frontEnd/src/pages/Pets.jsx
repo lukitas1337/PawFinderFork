@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import PetHeader from "../components/PetHeader";
 import PetFilter from "../components/PetFilter";
