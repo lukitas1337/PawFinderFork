@@ -3,8 +3,6 @@ import { CustomError } from '../utils/errorHandler.js';
 
 export const getPets = async (req, res, next) => {
   try {
-    console.log("Incoming query parameters:", req.query);
-
     ///////// Filters
     const filters = { adopted: false };
     if (req.query.location && req.query.location !== '') {
@@ -61,16 +59,13 @@ export const getPets = async (req, res, next) => {
     if (req.query.petType && req.query.petType !== '') {
       filters.animalType = { $in: req.query.petType.split(",") };
     }
-
-    console.log("Constructed Filters:", filters);
-
+///////////////
     const pets = await Pet.find(filters);
     res.json(pets);
   } catch (error) {
     next(new CustomError("Failed to retrieve pets", 500));
   }
 };
-///////////////
 
 export const getPetById = async (req, res, next) => {
   try {
