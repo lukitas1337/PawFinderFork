@@ -3,29 +3,38 @@ import FilterSelect from "./PetFilterItem";
 import SelectedFilters from "./PetFilterSelected";
 
 const PetFilter = ({ onApplyFilters }) => {
-    const [localFilters, setLocalFilters] = useState(() => {
-        const savedFilters = localStorage.getItem("filters");
-        return savedFilters ? JSON.parse(savedFilters) : 
-        { location: [], age: [], size: [], gender: [], petType: [] };
-      });
+  const [localFilters, setLocalFilters] = useState(() => {
+    const savedFilters = localStorage.getItem("filters");
+    return savedFilters ? JSON.parse(savedFilters) : {
+      location: [],
+      age: [],
+      size: [],
+      petType: [],
+      gender: [],
+    };
+  });
 
   const petTypeOptions = [
     { value: "all", label: "All" },
-  { value: "dog", label: "Dog" },
-  { value: "cat", label: "Cat" },
-];
+    { value: "dog", label: "Dog" },
+    { value: "cat", label: "Cat" },
+  ];
+
   const locationOptions = [
     { value: "all", label: "All" },
     { value: "Berlin", label: "Berlin" },
     { value: "Munich", label: "Munich" },
     { value: "Stuttgart", label: "Stuttgart" },
+    { value: "Frankfurt", label: "Frankfurt" },
   ];
+
   const sizeOptions = [
     { value: "all", label: "All" },
     { value: "small", label: "Small" },
     { value: "medium", label: "Medium" },
     { value: "large", label: "Large" },
   ];
+
   const genderOptions = [
     { value: "all", label: "All" },
     { value: "male", label: "Male" },
@@ -33,6 +42,7 @@ const PetFilter = ({ onApplyFilters }) => {
     { value: "female", label: "Female" },
     { value: "female-neutered", label: "Female (Neutered)" },
   ];
+
   const ageOptions = [
     { value: "all", label: "All" },
     { value: "Junior", label: "Junior" },
@@ -52,14 +62,13 @@ const PetFilter = ({ onApplyFilters }) => {
     const newValues = selectedOptions
       ? selectedOptions.map((option) => option.value)
       : [];
-  
+
     if (newValues.includes("all")) {
       setLocalFilters((prevFilters) => ({
         ...prevFilters,
         [filterName]: [],
       }));
     } else {
-
       setLocalFilters((prevFilters) => ({
         ...prevFilters,
         [filterName]: Array.from(new Set([...prevFilters[filterName], ...newValues])),
@@ -76,14 +85,14 @@ const PetFilter = ({ onApplyFilters }) => {
 
   const getPlaceholder = (baseText, filterName) => {
     const count = localFilters[filterName].length;
-    return count > 0 ? `${baseText} (${count})` : baseText; 
+    return count > 0 ? `${baseText} (${count})` : baseText;
   };
 
   const handleApplyFilters = () => {
-    console.log("Filters to be applied:", localFilters); 
-    onApplyFilters(localFilters); 
+    console.log("Filters to be applied:", localFilters);
+    onApplyFilters(localFilters);
     localStorage.setItem("filters", JSON.stringify(localFilters));
-};
+  };
 
   return (
     <div>
@@ -133,15 +142,14 @@ const PetFilter = ({ onApplyFilters }) => {
           Apply Filter
         </button>
         <button
-  className="text-dark text-[14px] hover:underline"
-  onClick={() => {
-    setLocalFilters({ size: [], gender: [], age: [], location: [], petType: [] });
-    localStorage.removeItem("filters");
-  }}
->
-  Clear all
-</button>
-
+          className="text-dark text-[14px] hover:underline"
+          onClick={() => {
+            setLocalFilters({ size: [], gender: [], age: [], location: [], petType: [] });
+            localStorage.removeItem("filters");
+          }}
+        >
+          Clear all
+        </button>
       </div>
     </div>
   );
