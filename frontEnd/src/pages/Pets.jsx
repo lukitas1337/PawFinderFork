@@ -32,13 +32,15 @@ function Pets() {
   const fetchPets = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:1337/api/pets", {
+      const response = await axios.get("http://localhost:8000/api/pets", {
         params: {
-          location: filters.location.length > 0 ? filters.location.join(",") : null,
+          location:
+            filters.location.length > 0 ? filters.location.join(",") : null,
           age: filters.age.length > 0 ? filters.age.join(",") : null,
           size: filters.size.length > 0 ? filters.size.join(",") : null,
           gender: filters.gender.length > 0 ? filters.gender.join(",") : null,
-          petType: filters.petType.length > 0 ? filters.petType.join(",") : null,
+          petType:
+            filters.petType.length > 0 ? filters.petType.join(",") : null,
         },
       });
       console.log("Pets from API:", response.data);
@@ -70,7 +72,7 @@ function Pets() {
         <PetHeader
           toggleFilters={() => setShowFilters((prev) => !prev)}
           isFilterOpen={showFilters}
-          activeFilterCount={activeFilterCount} 
+          activeFilterCount={activeFilterCount}
         />
         {showFilters && <PetFilter onApplyFilters={applyFilters} />}
         {loading ? (
