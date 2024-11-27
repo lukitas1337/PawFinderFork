@@ -17,9 +17,9 @@ export default function PersonalAccount() {
   ];
   const isValidPath = validPaths.some((path) => location.pathname.startsWith(path));
 
-  if (!isValidPath) {
-    return <Navigate to="/account/applications" />;
-  }
+  // if (!isValidPath) {
+  //   return <Navigate to="/account/applications" />;
+  // }
 
   return (
     <FavoritesProvider> 
