@@ -10,6 +10,11 @@ function reducer(state, action) {
       return { ...state, user: action.payload, isAuthenticated: true };
     case "logout":
       return { ...initialState };
+    case "addQuestionnare":
+      return {
+        ...state,
+        user: { ...state.user, questionnare: action.payload },
+      };
     default:
       return state;
   }
@@ -36,10 +41,9 @@ function UserAuthProvider({ children }) {
           },
         }
       );
-      console.log(email);
-      console.log(password);
 
       const userLoggedIn = res.data.user;
+      console.log(userLoggedIn);
       dispatch({ type: "login", payload: userLoggedIn });
     } catch (error) {
       alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
@@ -61,9 +65,10 @@ function UserAuthProvider({ children }) {
       });
   }
   console.log(user);
+
   return (
     <UserAuthContext.Provider
-      value={{ user, isAuthenticated, handleLogin, handleLogout }}
+      value={{ user, isAuthenticated, handleLogin, handleLogout, dispatch }}
     >
       {children}
     </UserAuthContext.Provider>

@@ -1,14 +1,15 @@
 import { useReducer, useState } from "react";
+import { useUserAuth } from "../contexts/UserAuthContext";
 
 const initialState = {
-  housingSituation: "apartment_shared_entrance",
-  dailyAloneHours: 0,
-  workplaceAccommodation: "yes",
+  housingSituation: "",
+  dailyAloneHours: null,
+  workplaceAccommodation: "",
   householdComposition: "",
-  hasPetExperience: false,
-  currentPets: { hasPets: true, petDetails: "dog" },
-  previousAdoption: { hasAdopted: true },
-  petSurrender: { hasSurrendered: true },
+  hasPetExperience: null,
+  currentPets: { hasPets: true, petDetails: "" },
+  previousAdoption: { hasAdopted: null },
+  petSurrender: { hasSurrendered: null },
   additionalInformation: "",
 };
 
@@ -50,7 +51,7 @@ function reducer(state, action) {
   }
 }
 
-function Questionare({ handleClose, userId }) {
+function Questionare() {
   const [
     {
       housingSituation,
@@ -63,14 +64,14 @@ function Questionare({ handleClose, userId }) {
       petSurrender,
       additionalInformation,
     },
-    dispatch,
+    localDispatch,
   ] = useReducer(reducer, initialState);
-  const [questionare, setQuestionare] = useState({});
+
+  const { dispatch } = useUserAuth();
 
   function handleSubmit(e) {
     e.preventDefault();
     const newQuestionare = {
-      userId,
       housingSituation,
       dailyAloneHours,
       workplaceAccommodation,
@@ -83,17 +84,17 @@ function Questionare({ handleClose, userId }) {
       petSurrender,
       additionalInformation,
     };
-    setQuestionare(newQuestionare);
+    dispatch({ type: "addQuestionnare", payload: newQuestionare });
   }
-  console.log(questionare);
+
   return (
-    <div className="relative bg-light w-[50%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
-      <button
+    <div className="absolute top-0 left-[25%] bg-light w-[50%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
+      {/* <button
         className="text-[1.6rem] absolute top-[5rem] right-[10rem]"
         onClick={handleClose}
       >
         X
-      </button>
+      </button> */}
       <h2 className="text-[2.4rem] font-bold">
         Please Fill out the form below
       </h2>
@@ -107,9 +108,10 @@ function Questionare({ handleClose, userId }) {
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
             value={housingSituation}
             onChange={(e) =>
-              dispatch({ type: "setHousing", payload: e.target.value })
+              localDispatch({ type: "setHousing", payload: e.target.value })
             }
           >
+            <option value="">Please Select An Option</option>
             <option value="apartment_shared_entrance">
               Apartment (shared entrance)
             </option>
@@ -126,11 +128,11 @@ function Questionare({ handleClose, userId }) {
           </label>
           <input
             className="border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            type="text"
+            type="number"
             placeholder="Please enter a number"
             value={dailyAloneHours}
             onChange={(e) =>
-              dispatch({ type: "setAloneHours", payload: e.target.value })
+              localDispatch({ type: "setAloneHours", payload: e.target.value })
             }
             id="dailyAloneHours"
             required
@@ -144,13 +146,14 @@ function Questionare({ handleClose, userId }) {
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
             value={workplaceAccommodation}
             onChange={(e) =>
-              dispatch({
+              localDispatch({
                 type: "setWorkPlace",
                 payload: e.target.value,
               })
             }
             id="workplaceAccommodation"
           >
+            <option value="">Please Select An Option</option>
             <option value="yes">Yes</option>
             <option value="no">No</option>
             <option value="not_necessary">It is not necessary</option>
@@ -167,7 +170,7 @@ function Questionare({ handleClose, userId }) {
             placeholder="Please describe your household"
             value={householdComposition}
             onChange={(e) =>
-              dispatch({ type: "setHouseHold", payload: e.target.value })
+              localDispatch({ type: "setHouseHold", payload: e.target.value })
             }
             id="houseHold"
             required
@@ -181,13 +184,14 @@ function Questionare({ handleClose, userId }) {
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
             value={hasPetExperience}
             onChange={(e) =>
-              dispatch({
+              localDispatch({
                 type: "setHasPetExperience",
                 payload: e.target.value,
               })
             }
             id="hasPetExperience"
           >
+            <option>Please Select An Option</option>
             <option value={true}>Yes</option>
             <option value={false}>No</option>
           </select>
@@ -201,13 +205,14 @@ function Questionare({ handleClose, userId }) {
               className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
               value={currentPets.petDetails}
               onChange={(e) =>
-                dispatch({
+                localDispatch({
                   type: "setCurrentPets",
                   payload: e.target.value,
                 })
               }
               id="currentPets"
             >
+              <option value="">Please Select An Option</option>
               <option value="dog">Dog</option>
               <option value="cat">Cat</option>
               <option value="other">Other</option>
@@ -220,7 +225,7 @@ function Questionare({ handleClose, userId }) {
                   placeholder="Please specify your pet"
                   value={currentPets.petDetails}
                   onChange={(e) =>
-                    dispatch({
+                    localDispatch({
                       type: "setCurrentPets",
                       payload: e.target.value,
                     })
@@ -236,13 +241,14 @@ function Questionare({ handleClose, userId }) {
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
             value={previousAdoption.hasAdopted}
             onChange={(e) =>
-              dispatch({
+              localDispatch({
                 type: "setAdoption",
                 payload: e.target.value,
               })
             }
             id="previousAdoption"
           >
+            <option value=""> Please Select An Option</option>
             <option value={true}>Yes</option>
             <option value={false}>No</option>
           </select>
@@ -255,13 +261,14 @@ function Questionare({ handleClose, userId }) {
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
             value={petSurrender.hasSurrendered}
             onChange={(e) =>
-              dispatch({
+              localDispatch({
                 type: "setPetSurrender",
                 payload: e.target.value,
               })
             }
             id="petSurrender"
           >
+            <option value="">Please Select An Option</option>
             <option value={true}>Yes</option>
             <option value={false}>No</option>
           </select>
@@ -276,7 +283,10 @@ function Questionare({ handleClose, userId }) {
             placeholder="Please Write here"
             value={additionalInformation}
             onChange={(e) =>
-              dispatch({ type: "setAdditionalInfo", payload: e.target.value })
+              localDispatch({
+                type: "setAdditionalInfo",
+                payload: e.target.value,
+              })
             }
             id="additionalInfo"
           />
