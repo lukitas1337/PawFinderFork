@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 const UserAuthContext = createContext();
 
@@ -10,6 +10,11 @@ function reducer(state, action) {
       return { ...state, user: action.payload, isAuthenticated: true };
     case "logout":
       return { ...initialState };
+    case "addQuestionnare":
+      return {
+        ...state,
+        user: { ...state.user, questionnaire: action.payload },
+      };
     default:
       return state;
   }
@@ -36,10 +41,9 @@ function UserAuthProvider({ children }) {
           },
         }
       );
-      console.log(email);
-      console.log(password);
 
       const userLoggedIn = res.data.user;
+      console.log(userLoggedIn);
       dispatch({ type: "login", payload: userLoggedIn });
     } catch (error) {
       alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
@@ -60,10 +64,44 @@ function UserAuthProvider({ children }) {
         alert("Failed to log out. Please try again.");
       });
   }
-  console.log(user);
+  useEffect(() => {
+    if (user?.userId) {
+      (async function updateUser() {
+        try {
+          await axios.put(
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
+            user
+          );
+        } catch (error) {
+          console.error("Failed to update user:", error);
+        }
+      })();
+    }
+  }, [user]);
+
+  async function addQuestionnaireToUser(newQuestionnaire) {
+    dispatch({ type: "addQuestionnare", payload: newQuestionnaire });
+
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
+        { questionnaire: newQuestionnaire }
+      );
+    } catch (error) {
+      console.error("Failed to add questionnaire:", error);
+    }
+  }
+
   return (
     <UserAuthContext.Provider
-      value={{ user, isAuthenticated, handleLogin, handleLogout }}
+      value={{
+        user,
+        isAuthenticated,
+        handleLogin,
+        handleLogout,
+        dispatch,
+        addQuestionnaireToUser,
+      }}
     >
       {children}
     </UserAuthContext.Provider>
