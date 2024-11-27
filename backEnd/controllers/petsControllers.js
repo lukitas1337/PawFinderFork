@@ -3,10 +3,67 @@ import { CustomError } from '../utils/errorHandler.js';
 
 export const getPets = async (req, res, next) => {
   try {
-    const pets = await Pet.find({ adopted: false });
+    ///////// Filters
+    const filters = { adopted: false };
+    if (req.query.location && req.query.location !== '') {
+      const cities = req.query.location.split(",");
+      filters.location = { $regex: cities.join("|"), $options: "i" }; 
+    }
+
+    if (req.query.age) {
+      const ageCategories = Array.isArray(req.query.age) ? req.query.age : [req.query.age];
+      const now = new Date();
+      const ageConditions = ageCategories.map((ageCategory) => {
+        if (ageCategory === "Junior") {
+          const oneYearAgo = new Date(now);
+          oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+          return { age: { $gte: oneYearAgo } }; // Junior
+        } else if (ageCategory === "Adult") {
+          const oneYearAgo = new Date(now);
+          const sixYearsAgo = new Date(now);
+          oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+          sixYearsAgo.setFullYear(sixYearsAgo.getFullYear() - 6);
+          return { age: { $gte: sixYearsAgo, $lt: oneYearAgo } }; // Adult
+        } else if (ageCategory === "Senior") {
+          const sixYearsAgo = new Date(now);
+          sixYearsAgo.setFullYear(sixYearsAgo.getFullYear() - 6);
+          return { age: { $lt: sixYearsAgo } }; // Senior
+        }
+      });
+      filters.$or = ageConditions;
+    }
+    
+    if (req.query.size && req.query.size !== '') {
+      filters.size = { $in: req.query.size.split(",") };
+    }
+
+    if (req.query.gender && req.query.gender !== '') {
+      const genderFilters = req.query.gender.split(",");
+      filters.$or = genderFilters.map((gender) => {
+        if (gender === "male-neutered") {
+          return { gender: "male", neutered: true };
+        }
+        if (gender === "female-neutered") {
+          return { gender: "female", neutered: true };
+        }
+        if (gender === "male") {
+          return { gender: "male", neutered: false };
+        }
+        if (gender === "female") {
+          return { gender: "female", neutered: false };
+        }
+        return null;
+      }).filter(Boolean);
+    }
+
+    if (req.query.petType && req.query.petType !== '') {
+      filters.animalType = { $in: req.query.petType.split(",") };
+    }
+///////////////
+    const pets = await Pet.find(filters);
     res.json(pets);
   } catch (error) {
-    next(new CustomError('Failed to retrieve pets', 500));
+    next(new CustomError("Failed to retrieve pets", 500));
   }
 };
 

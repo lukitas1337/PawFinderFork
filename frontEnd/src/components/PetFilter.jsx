@@ -1,322 +1,150 @@
-import React, { useState, useEffect } from "react";
-import Select from "react-select";
+import { useState } from "react";
+import FilterSelect from "./PetFilterItem";
+import SelectedFilters from "./PetFilterSelected";
 
-const PetFilter = () => {
-  // Initialize the state with data from localStorage or empty arrays
-  const [filters, setFilters] = useState(() => {
+const PetFilter = ({ onApplyFilters }) => {
+  const [localFilters, setLocalFilters] = useState(() => {
     const savedFilters = localStorage.getItem("filters");
     return savedFilters ? JSON.parse(savedFilters) : {
-      size: [],
-      gender: [],
-      age: [],
       location: [],
+      age: [],
+      size: [],
       petType: [],
+      gender: [],
     };
   });
 
   const petTypeOptions = [
-    { value: 'dog', label: 'Dog' },
-    { value: 'cat', label: 'Cat' },
+    { value: "all", label: "All" },
+    { value: "dog", label: "Dog" },
+    { value: "cat", label: "Cat" },
   ];
 
   const locationOptions = [
-    { value: 'new_york', label: 'New York' },
-    { value: 'los_angeles', label: 'Los Angeles' },
-    { value: 'chicago', label: 'Chicago' },
+    { value: "all", label: "All" },
+    { value: "Berlin", label: "Berlin" },
+    { value: "Munich", label: "Munich" },
+    { value: "Stuttgart", label: "Stuttgart" },
+    { value: "Frankfurt", label: "Frankfurt" },
   ];
 
   const sizeOptions = [
-    { value: 'small', label: 'Small' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'large', label: 'Large' },
+    { value: "all", label: "All" },
+    { value: "small", label: "Small" },
+    { value: "medium", label: "Medium" },
+    { value: "large", label: "Large" },
   ];
 
   const genderOptions = [
-    { value: 'male', label: 'Male' },
-    { value: 'female', label: 'Female' },
+    { value: "all", label: "All" },
+    { value: "male", label: "Male" },
+    { value: "male-neutered", label: "Male (Neutered)" },
+    { value: "female", label: "Female" },
+    { value: "female-neutered", label: "Female (Neutered)" },
   ];
 
   const ageOptions = [
-    { value: 'Junior', label: 'Junior' },
-    { value: 'Adult', label: 'Adult' },
-    { value: 'Senior', label: 'Senior' },
+    { value: "all", label: "All" },
+    { value: "Junior", label: "Junior" },
+    { value: "Adult", label: "Adult" },
+    { value: "Senior", label: "Senior" },
   ];
 
-  // Effect to save filters to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem("filters", JSON.stringify(filters));
-  }, [filters]);
+  const optionsMap = {
+    petType: petTypeOptions,
+    location: locationOptions,
+    size: sizeOptions,
+    gender: genderOptions,
+    age: ageOptions,
+  };
 
   const handleFilterChange = (selectedOptions, filterName) => {
-    const newValues = selectedOptions ? selectedOptions.map((option) => option.value) : [];
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterName]: Array.from(new Set([...prevFilters[filterName], ...newValues])), // Prevent duplicates
-    }));
+    const newValues = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
+
+    if (newValues.includes("all")) {
+      setLocalFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterName]: [],
+      }));
+    } else {
+      setLocalFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterName]: Array.from(new Set([...prevFilters[filterName], ...newValues])),
+      }));
+    }
   };
 
   const handleRemoveFilter = (filterName, value) => {
-    setFilters((prevFilters) => ({
+    setLocalFilters((prevFilters) => ({
       ...prevFilters,
       [filterName]: prevFilters[filterName].filter((item) => item !== value),
     }));
   };
 
   const getPlaceholder = (baseText, filterName) => {
-    const count = filters[filterName].length;
+    const count = localFilters[filterName].length;
     return count > 0 ? `${baseText} (${count})` : baseText;
+  };
+
+  const handleApplyFilters = () => {
+    console.log("Filters to be applied:", localFilters);
+    onApplyFilters(localFilters);
+    localStorage.setItem("filters", JSON.stringify(localFilters));
   };
 
   return (
     <div>
       <div className="grid grid-cols-1 gap-4">
-        <div className="w-full">
-          <Select
-            isMulti
-            options={locationOptions}
-            placeholder={getPlaceholder("Location", "location")}
-            onChange={(selected) => handleFilterChange(selected, "location")}
-            value={null}
-            closeMenuOnSelect={false}
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                borderRadius: "30px",
-                padding: "5px",
-                backgroundColor: "#E7E7D6",
-                color: "#071327",
-                fontSize: "14px",
-                fontWeight: "300",
-                borderColor: state.isFocused ? "#809309" : "#071327",
-                boxShadow: "none",
-                outline: "none",
-                cursor: "default",
-                transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
-              }),
-              placeholder: (provided) => ({
-                ...provided,
-                color: "#071327",
-              }),
-              dropdownIndicator: (provided) => ({
-                ...provided,
-                color: "#071327",
-              }),
-              singleValue: (provided) => ({
-                ...provided,
-                color: "#071327",
-              }),
-              multiValue: (provided) => ({
-                ...provided,
-                backgroundColor: "#809309",
-              }),
-              multiValueLabel: (provided) => ({
-                ...provided,
-                color: "#071327",
-              }),
-              multiValueRemove: (provided) => ({
-                ...provided,
-                color: "#FF0000",
-              }),
-            }}
-          />
-        </div>
+        <FilterSelect
+          options={locationOptions}
+          placeholder={getPlaceholder("Location", "location")}
+          onChange={(selected) => handleFilterChange(selected, "location")}
+        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Pet Type */}
-          <div>
-            <Select
-              isMulti
-              isSearchable={false}
-              options={petTypeOptions}
-              placeholder={getPlaceholder("Pet type", "petType")}
-              onChange={(selected) => handleFilterChange(selected, "petType")}
-              value={null}
-              closeMenuOnSelect={false}
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  borderRadius: "30px",
-                  padding: "5px",
-                  backgroundColor: "#E7E7D6",
-                  color: "#071327",
-                  fontSize: "14px",
-                  fontWeight: "300",
-                  borderColor: state.isFocused ? "#809309" : "#071327",
-                  boxShadow: state.isFocused ? `0 0 0 1px #809309` : "none",
-                  outline: "none",
-                  cursor: "default",
-                  transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
-                }),
-                placeholder: (provided) => ({
-                  ...provided,
-                  color: "#071327",
-                  hover: "none",
-                }),
-                dropdownIndicator: (provided) => ({
-                  ...provided,
-                  color: "#071327",
-                }),
-              }}
-            />
-          </div>
-
-          {/* Size */}
-          <div>
-            <Select
-              isMulti
-              options={sizeOptions}
-              placeholder={getPlaceholder("Size", "size")}
-              onChange={(selected) => handleFilterChange(selected, "size")}
-              value={null}
-              closeMenuOnSelect={false}
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  borderRadius: "30px",
-                  padding: "5px",
-                  backgroundColor: "#E7E7D6",
-                  color: "#071327",
-                  fontSize: "14px",
-                  fontWeight: "300",
-                  borderColor: state.isFocused ? "#809309" : "#071327",
-                  boxShadow: state.isFocused ? `0 0 0 1px #809309` : "none",
-                  outline: "none",
-                  cursor: "default",
-                  transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
-                }),
-                placeholder: (provided) => ({
-                  ...provided,
-                  color: "#071327",
-                  hover: "none",
-                }),
-                dropdownIndicator: (provided) => ({
-                  ...provided,
-                  color: "#071327",
-                }),
-              }}
-            />
-          </div>
-
-          {/* Gender */}
-          <div>
-            <Select
-              isMulti
-              options={genderOptions}
-              placeholder={getPlaceholder("Gender", "gender")}
-              onChange={(selected) => handleFilterChange(selected, "gender")}
-              value={null}
-              closeMenuOnSelect={false}
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  borderRadius: "30px",
-                  padding: "5px",
-                  backgroundColor: "#E7E7D6",
-                  color: "#071327",
-                  fontSize: "14px",
-                  fontWeight: "300",
-                  borderColor: state.isFocused ? "#809309" : "#071327",
-                  boxShadow: state.isFocused ? `0 0 0 1px #809309` : "none",
-                  outline: "none",
-                  cursor: "default",
-                  transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
-                }),
-                placeholder: (provided) => ({
-                  ...provided,
-                  color: "#071327",
-                  hover: "none",
-                }),
-                dropdownIndicator: (provided) => ({
-                  ...provided,
-                  color: "#071327",
-                }),
-              }}
-            />
-          </div>
-
-          {/* Age */}
-          <div>
-            <Select
-              isMulti
-              options={ageOptions}
-              placeholder={getPlaceholder("Age", "age")}
-              onChange={(selected) => handleFilterChange(selected, "age")}
-              value={null}
-              closeMenuOnSelect={false}
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  borderRadius: "30px",
-                  padding: "5px",
-                  backgroundColor: "#E7E7D6",
-                  color: "#071327",
-                  fontSize: "14px",
-                  fontWeight: "300",
-                  borderColor: state.isFocused ? "#809309" : "#071327",
-                  boxShadow: state.isFocused ? `0 0 0 1px #809309` : "none",
-                  outline: "none",
-                  cursor: "default",
-                  transition: "background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease",
-                }),
-                placeholder: (provided) => ({
-                  ...provided,
-                  color: "#071327",
-                  hover: "none",
-                }),
-                dropdownIndicator: (provided) => ({
-                  ...provided,
-                  color: "#071327",
-                }),
-              }}
-            />
-          </div>
+          <FilterSelect
+            options={petTypeOptions}
+            placeholder={getPlaceholder("Pet type", "petType")}
+            onChange={(selected) => handleFilterChange(selected, "petType")}
+          />
+          <FilterSelect
+            options={sizeOptions}
+            placeholder={getPlaceholder("Size", "size")}
+            onChange={(selected) => handleFilterChange(selected, "size")}
+          />
+          <FilterSelect
+            options={genderOptions}
+            placeholder={getPlaceholder("Gender", "gender")}
+            onChange={(selected) => handleFilterChange(selected, "gender")}
+          />
+          <FilterSelect
+            options={ageOptions}
+            placeholder={getPlaceholder("Age", "age")}
+            onChange={(selected) => handleFilterChange(selected, "age")}
+          />
         </div>
       </div>
 
-      {/* Chosen filters */}
-      <div className="mt-4 flex flex-wrap gap-2">
-        {Object.keys(filters).map((filterName) =>
-          filters[filterName].map((filterValue) => {
-            const option =
-              filterName === "size"
-                ? sizeOptions.find((opt) => opt.value === filterValue)
-                : filterName === "gender"
-                ? genderOptions.find((opt) => opt.value === filterValue)
-                : filterName === "age"
-                ? ageOptions.find((opt) => opt.value === filterValue)
-                : filterName === "location"
-                ? locationOptions.find((opt) => opt.value === filterValue)
-                : filterName === "petType"
-                ? petTypeOptions.find((opt) => opt.value === filterValue)
-                : null;
+      <SelectedFilters
+        filters={localFilters}
+        optionsMap={optionsMap}
+        onRemoveFilter={handleRemoveFilter}
+      />
 
-            return (
-              <div
-                key={`${filterName}-${filterValue}`}
-                className="bg-[#E6F3D5] text-[#809309] px-4 py-2 rounded-full flex items-center gap-2"
-              >
-                <span>{option?.label}</span>
-                <button
-                  className="text-red-500 hover:text-red-700"
-                  onClick={() => handleRemoveFilter(filterName, filterValue)}
-                >
-                  &#10005;
-                </button>
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      {/* btn */}
-      <div className="mt-4 flex justify-start gap-4">
-        <button className="bg-[#809309] text-white px-6 py-2 rounded-full hover:bg-[#6f7e28]">
+      <div className="mt-4 flex justify-start gap-4 mb-20">
+        <button
+          className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
+                    font-medium rounded-full hover:bg-[#8D9F19] transition"
+          onClick={handleApplyFilters}
+        >
           Apply Filter
         </button>
         <button
-          className="text-red-600 hover:underline"
+          className="text-dark text-[14px] hover:underline"
           onClick={() => {
-            setFilters({ size: [], gender: [], age: [], location: [], petType: [] });
+            setLocalFilters({ size: [], gender: [], age: [], location: [], petType: [] });
             localStorage.removeItem("filters");
           }}
         >
