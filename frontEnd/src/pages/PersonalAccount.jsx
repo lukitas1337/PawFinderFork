@@ -1,6 +1,6 @@
 import React from "react";
-import { Outlet } from "react-router-dom"; // Используем Outlet для рендеринга вложенных маршрутов
-import AccountSidebar from "../components/AccountSidebar"; // Импортируем боковую панель
+import { Outlet } from "react-router-dom"; 
+import AccountSidebar from "../components/AccountSidebar"; 
 
 export default function PersonalAccount() {
   return (
@@ -8,7 +8,6 @@ export default function PersonalAccount() {
       <div className="flex flex-col h-[650px] px-[200px] mt-20">
         <div className="flex flex-1">
           <AccountSidebar />
-          {/* Используем Outlet для рендеринга вложенных маршрутов */}
           <Outlet />
         </div>
       </div>

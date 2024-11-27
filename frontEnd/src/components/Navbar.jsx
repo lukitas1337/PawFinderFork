@@ -29,7 +29,7 @@ function Navbar() {
             <Link to="/pets">Find a pet</Link>
           </li>
           <li>
-            <Link to="/account">Get involved</Link>
+            <Link to="/">Get involved</Link>
           </li>
           <li>
             <Link to="/contact">Contact</Link>

@@ -72,10 +72,11 @@ export const login = async (req, res, next) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
     });
-
+    
     res.json({
       message: "Login successful",
       user: {
+        _id:user._id,
         email: user.email,
         fullName: user.fullName,
         userType: user.userType,
