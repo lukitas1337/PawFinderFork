@@ -8,7 +8,6 @@ import { CustomError } from '../utils/errorHandler.js';
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const MAX_TOKENS = 100000;
 
-// Your existing single match calculation
 export const calculateMatch = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
@@ -57,9 +56,9 @@ export const calculateMatch = async (req, res, next) => {
 
       Please provide:
       1. A matching score (0-100)
-      2. A detailed explanation for the potential adopter about why this score was given, mentioning specific matching points and potential concerns. Use the pet's name in the explanation.
-      3. A separate professional assessment for the shelter staff about this match, including any specific recommendations or concerns they should consider.
-
+      2. Limited to 600 characters. A detailed explanation for the potential adopter about why this score was given, mentioning specific matching points and potential concerns. Use the pet's name in the explanation.
+      3. Limited to 600 characters. A detailed explanation for the shelterabout why this score was given, mentioning specific matching points and potential concerns.
+      
       Format the response as a JSON object with these keys: "score", "adopterExplanation", "shelterAssessment"
     `;
 

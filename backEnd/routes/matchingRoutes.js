@@ -10,7 +10,7 @@ import auth from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/calculate-match/:userId/:petId', auth, calculateMatch);
+router.post('/calculate-match/:userId/:petId', calculateMatch);
 router.get('/result/:userId/:petId', auth, getMatchResult);
 router.get('/shelter/:shelterId', auth, getShelterMatches);
 router.post('/calculate-bulk-matches/:userId', calculateBulkMatches);
