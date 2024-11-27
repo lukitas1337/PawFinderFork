@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 const UserAuthContext = createContext();
 
@@ -64,11 +64,46 @@ function UserAuthProvider({ children }) {
         alert("Failed to log out. Please try again.");
       });
   }
-  console.log(user);
+  useEffect(() => {
+    if (user?.userId) {
+      (async function updateUser() {
+        try {
+          await axios.put(
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
+            user
+          );
+          console.log("User updated in the backend.");
+        } catch (error) {
+          console.error("Failed to update user:", error);
+        }
+      })();
+    }
+  }, [user]);
+
+  async function addQuestionnaireToUser(newQuestionnaire) {
+    dispatch({ type: "addQuestionnare", payload: newQuestionnaire });
+
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
+        { questionnare: newQuestionnaire }
+      );
+      console.log("Questionnaire added to user in the database.");
+    } catch (error) {
+      console.error("Failed to add questionnaire:", error);
+    }
+  }
 
   return (
     <UserAuthContext.Provider
-      value={{ user, isAuthenticated, handleLogin, handleLogout, dispatch }}
+      value={{
+        user,
+        isAuthenticated,
+        handleLogin,
+        handleLogout,
+        dispatch,
+        addQuestionnaireToUser,
+      }}
     >
       {children}
     </UserAuthContext.Provider>

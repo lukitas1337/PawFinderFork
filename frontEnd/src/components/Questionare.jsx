@@ -1,5 +1,6 @@
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import { useUserAuth } from "../contexts/UserAuthContext";
+import axios from "axios";
 
 const initialState = {
   housingSituation: "",
@@ -67,9 +68,9 @@ function Questionare() {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  const { dispatch } = useUserAuth();
+  const { dispatch, addQuestionnaireToUser } = useUserAuth();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const newQuestionare = {
       housingSituation,
@@ -84,7 +85,10 @@ function Questionare() {
       petSurrender,
       additionalInformation,
     };
+
     dispatch({ type: "addQuestionnare", payload: newQuestionare });
+
+    await addQuestionnaireToUser(newQuestionare);
   }
 
   return (
