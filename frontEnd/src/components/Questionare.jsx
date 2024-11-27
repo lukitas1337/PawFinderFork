@@ -86,8 +86,6 @@ function Questionare() {
       additionalInformation,
     };
 
-    dispatch({ type: "addQuestionnare", payload: newQuestionare });
-
     await addQuestionnaireToUser(newQuestionare);
   }
 

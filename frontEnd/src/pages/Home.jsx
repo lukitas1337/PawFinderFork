@@ -11,7 +11,7 @@ function Home() {
       <Hero />
       <ChoseSection />
       <AdoptSection />
-      {user && !user.questionnare && <Questionare />}
+      {user && !user.questionnaire && <Questionare />}
     </main>
   );
 }

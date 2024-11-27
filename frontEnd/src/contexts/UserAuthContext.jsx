@@ -13,7 +13,7 @@ function reducer(state, action) {
     case "addQuestionnare":
       return {
         ...state,
-        user: { ...state.user, questionnare: action.payload },
+        user: { ...state.user, questionnaire: action.payload },
       };
     default:
       return state;
@@ -72,7 +72,6 @@ function UserAuthProvider({ children }) {
             `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
             user
           );
-          console.log("User updated in the backend.");
         } catch (error) {
           console.error("Failed to update user:", error);
         }
@@ -86,9 +85,8 @@ function UserAuthProvider({ children }) {
     try {
       await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
-        { questionnare: newQuestionnaire }
+        { questionnaire: newQuestionnaire }
       );
-      console.log("Questionnaire added to user in the database.");
     } catch (error) {
       console.error("Failed to add questionnaire:", error);
     }
