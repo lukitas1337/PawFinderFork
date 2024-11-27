@@ -13,12 +13,16 @@ import Pet from "./pages/Pet";
 import Registration from "./pages/Registration";
 import { UserAuthProvider } from "./contexts/UserAuthContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
+import AccountMyFavorites from "./components/AccountMyFavorites";
+import AccountMyRecommendations from "./components/AccountMyRecommendations";
+import AccountMyApplications from "./components/AccountMyApplications";
 
 function App() {
   return (
     <UserAuthProvider>
       <FavoritesProvider>
       <BrowserRouter>
+      
         <Routes>
           <Route element={<AppLayout />}>
             <Route path="/" element={<Home />} />
@@ -30,9 +34,14 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />
             <Route path="/adoption" element={<Adoption />} />
-            <Route path="/account/*" element={<PersonalAccount />} />
+            <Route path="/account" element={<PersonalAccount />} >
+                <Route path="favorites" element={<AccountMyFavorites />} />
+                <Route path="recommendations" element={<AccountMyRecommendations />} />
+                <Route path="applications" element={<AccountMyApplications />} />
+              </Route>
           </Route>
         </Routes>
+        
       </BrowserRouter>
       </FavoritesProvider>
     </UserAuthProvider>

@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useFavorites } from "../contexts/FavoritesContext";
+import { useUserAuth } from "../contexts/UserAuthContext";
 
 function PetCard({ pet, index, getSvgForCard }) {
   const navigate = useNavigate();
-
-  const { addToFavorites } = useFavorites();
+  const { favorites, addToFavorites } = useFavorites();
+  const { user, isAuthenticated } = useUserAuth();
+  const isFavorite = favorites.some((fav) => fav.id === pet.id);
 
   const calculateAge = (birthDate) => { 
     const now = new Date();
@@ -13,24 +15,27 @@ function PetCard({ pet, index, getSvgForCard }) {
 
     let years = now.getFullYear() - birth.getFullYear();
     let months = now.getMonth() - birth.getMonth();
-
     if (months < 0) {
       years--;
       months += 12;
     }
-
     return years > 0
       ? `${years} year${years > 1 ? "s" : ""}`
       : `${months} month${months > 1 ? "s" : ""}`;
   };
-
+  
   const handleCardClick = () => {
     navigate(`/pets/${pet.id}`);
   };
 
   const handleAddToFavorites = (e) => {
     e.stopPropagation();
-    addToFavorites(pet);
+    if (isAuthenticated && user) {
+      addToFavorites(pet); 
+    } else {
+      alert("Please log in to add favorites.");
+      navigate("/login");
+    }
   };
 
   return (
@@ -76,11 +81,11 @@ function PetCard({ pet, index, getSvgForCard }) {
             </button>
             <div
               onClick={handleAddToFavorites}
-              className="w-16 h-16 flex items-center justify-center rounded-full border 
-                    border-dark group hover:bg-dark transition"
-            >
+              className={`w-16 h-16 flex items-center justify-center rounded-full border 
+              ${isFavorite ? "bg-red-500" : "border-dark group hover:bg-dark"} transition`}
+              >
               <img
-                src="/images/favorites.svg"
+                src={isFavorite ? "/images/favorites-filled.svg" : "/images/favorites.svg"}
                 alt="Favorite"
                 className="w-8 h-8 transition group-hover:invert"
               />

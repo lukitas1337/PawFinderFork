@@ -1,5 +1,6 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import axios from "axios";
+import { useUserAuth } from "./UserAuthContext";
 
 const FavoritesContext = createContext();
 
@@ -11,53 +12,102 @@ export const useFavorites = () => {
   return context;
 };
 
-export const FavoritesProvider = ({ children, userId }) => {
-  const [favorites, setFavorites] = useState([]);
+const initialState = {
+  favorites: [],
+  loading: false,
+  error: null,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "setFavorites":
+      return { ...state, favorites: action.payload, loading: false };
+    case "addToFavorites":
+      return { ...state, favorites: [...state.favorites, action.payload] };
+    case "removeFromFavorites":
+      return {
+        ...state,
+        favorites: state.favorites.filter((pet) => pet._id !== action.payload),
+      };
+    case "setLoading":
+      return { ...state, loading: true };
+    case "setError":
+      return { ...state, error: action.payload, loading: false };
+    default:
+      return state;
+  }
+}
+
+export const FavoritesProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { user, isAuthenticated } = useUserAuth();
+  const { favorites, loading, error } = state;
 
   useEffect(() => {
-    if (userId) {
-      fetchFavorites(userId);
+    if (isAuthenticated && user?._id) {
+      fetchFavorites();
     }
-  }, [userId]);
+  }, [user, isAuthenticated]);
 
-  const fetchFavorites = async (userId) => {
+  const fetchFavorites = async () => {
+    dispatch({ type: "setLoading" });
     try {
-      const response = await axios.get(`http://localhost:1337/api/users/${userId}`);
-      setFavorites(response.data.myFavorites || []);
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user._id}`,
+        { withCredentials: true }
+      );
+      dispatch({
+        type: "setFavorites",
+        payload: response.data.myFavorites || [],
+      });
     } catch (err) {
+      dispatch({ type: "setError", payload: "Error fetching favorites" });
       console.error("Error fetching favorites:", err);
     }
   };
 
-  const saveFavorites = async (favoritesList, userId) => {
+  const addToFavorites = async (pet) => {
+    console.log("isAuthenticated:", isAuthenticated);
+    console.log("user:", user);
+    
+    if (!isAuthenticated || !user?._id) {
+      console.error("User is not logged in");
+      return;
+    }
+  
     try {
-      await axios.put(`http://localhost:1337/api/users/${userId}`, { myFavorites: favoritesList });
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user._id}/favorites`,
+        { petId: pet._id },
+        { withCredentials: true }
+      );
+      dispatch({ type: "addToFavorites", payload: pet });
     } catch (err) {
-      console.error("Error saving favorites:", err);
+      console.error("Error adding to favorites:", err);
     }
   };
 
-  const addToFavorites = (pet) => {
-    setFavorites((prev) => {
-      if (!prev.find((item) => item.id === pet.id)) {
-        const updatedFavorites = [...prev, pet];
-        saveFavorites(updatedFavorites, userId); 
-        return updatedFavorites;
-      }
-      return prev;
-    });
-  };
+  const removeFromFavorites = async (petId) => {
+    if (!isAuthenticated || !user?._id) {
+      console.error("User is not logged in");
+      return;
+    }
 
-  const removeFromFavorites = (petId) => {
-    setFavorites((prev) => {
-      const updatedFavorites = prev.filter((item) => item.id !== petId);
-      saveFavorites(updatedFavorites, userId); 
-      return updatedFavorites;
-    });
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user._id}/favorites`,
+        { data: { petId }, withCredentials: true }
+      );
+      dispatch({ type: "removeFromFavorites", payload: petId });
+    } catch (err) {
+      console.error("Error removing from favorites:", err);
+    }
   };
 
   return (
-    <FavoritesContext.Provider value={{ favorites, addToFavorites, removeFromFavorites }}>
+    <FavoritesContext.Provider
+      value={{ favorites, addToFavorites, removeFromFavorites, loading, error }}
+    >
       {children}
     </FavoritesContext.Provider>
   );
