@@ -14,6 +14,7 @@ import { UserAuthProvider } from "./contexts/UserAuthContext";
 import AccountMyFavorites from "./components/AccountMyFavorites";
 import AccountMyRecommendations from "./components/AccountMyRecommendations";
 import AccountMyApplications from "./components/AccountMyApplications";
+import Questionare from "./components/Questionare";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/pets" element={<Pets />} />
             <Route path="/pets/:id" element={<Pet />} />
+            <Route path="/questionare" element={<Questionare />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />

@@ -34,6 +34,8 @@ function Pets() {
   const fetchPets = async () => {
     setLoading(true);
     try {
+
+
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/pets`, {
         params: {
           location: filters.location.length > 0 ? filters.location.join(",") : undefined,
@@ -41,6 +43,7 @@ function Pets() {
           size: filters.size.length > 0 ? filters.size.join(",") : undefined,
           gender: filters.gender.length > 0 ? filters.gender.join(",") : undefined,
           petType: filters.petType.length > 0 ? filters.petType.join(",") : undefined,
+
         },
       });
       setPets(response.data);
