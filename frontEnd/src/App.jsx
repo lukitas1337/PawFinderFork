@@ -13,6 +13,7 @@ import Pet from "./pages/Pet";
 import Registration from "./pages/Registration";
 import { UserAuthProvider } from "./contexts/UserAuthContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
+import ShelterFront from "./pages/ShelterFront";
 
 function App() {
   return (
