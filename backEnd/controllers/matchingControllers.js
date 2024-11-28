@@ -161,16 +161,6 @@ export const calculateBulkMatches = async (req, res, next) => {
   try {
     const { userId } = req.params;
 
-    // Validate userId
-    if (!userId || userId === 'undefined') {
-      throw new CustomError('Invalid user ID provided', 400);
-    }
-
-    // Validate that userId is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      throw new CustomError('Invalid user ID format', 400);
-    }
-
     const user = await User.findById(userId);
     if (!user) {
       throw new CustomError('User not found', 404);
@@ -201,17 +191,12 @@ export const calculateBulkMatches = async (req, res, next) => {
     }
 
     if (currentBatch.length > 0) {
-      console.log(`Processing final batch of ${currentBatch.length} pets`);
       const batchResults = await processBulkBatch(user, currentBatch);
       allResults.push(...batchResults);
     }
 
     res.json(allResults);
   } catch (error) {
-    console.error('Bulk matching error:', {
-      error: error.message,
-      userId: req.params.userId
-    });
     next(error);
   }
 };
@@ -307,10 +292,8 @@ function createBulkMatchingPrompt(user, pets) {
   `;
 }
 
-// Helper function to process a batch
 async function processBulkBatch(user, pets) {
   const prompt = createBulkMatchingPrompt(user, pets);
-  console.log('Prompt:', prompt); // Debug log
 
   const completion = await openai.chat.completions.create({
     messages: [{ role: "user", content: prompt }],
@@ -320,17 +303,14 @@ async function processBulkBatch(user, pets) {
   });
 
   const batchResults = JSON.parse(completion.choices[0].message.content);
-  console.log('AI Response:', batchResults); // Debug log
   
-  // Save basic scores to database
+  
   const results = await Promise.all(
     Object.entries(batchResults).map(async ([petId, result]) => {
-      // Remove any quotes from petId if present
       const cleanPetId = petId.replace(/"/g, '');
       const pet = pets.find(p => p._id.toString() === cleanPetId);
       
       if (!pet) {
-        console.log(`Pet not found for ID: ${cleanPetId}`); // Debug log
         return null;
       }
 
