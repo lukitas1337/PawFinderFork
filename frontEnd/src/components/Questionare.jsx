@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import axios from "axios";
 
@@ -29,7 +29,6 @@ function reducer(state, action) {
         ...state,
         hasPetExperience: action.payload === "true",
       };
-
     case "setCurrentPets":
       return {
         ...state,
@@ -53,6 +52,7 @@ function reducer(state, action) {
 }
 
 function Questionare() {
+  const { dispatch, addQuestionnaireToUser, user } = useUserAuth();
   const [
     {
       housingSituation,
@@ -68,25 +68,77 @@ function Questionare() {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  const { dispatch, addQuestionnaireToUser } = useUserAuth();
+  // Debug log at component mount
+  useEffect(() => {
+    console.log('Questionnaire mounted with user:', {
+      fullUser: user,
+      userId: user?.userId, // Use the correct path
+      userType: typeof user?.userId
+    });
+  }, [user]);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const newQuestionare = {
-      housingSituation,
-      dailyAloneHours,
-      workplaceAccommodation,
-      householdComposition,
-      hasPetExperience,
-      currentPets: hasPetExperience
-        ? currentPets
-        : { hasPets: false, petDetails: "" },
-      previousAdoption,
-      petSurrender,
-      additionalInformation,
-    };
+    try {
+      console.log('1. Starting questionnaire submission...');
 
-    await addQuestionnaireToUser(newQuestionare);
+      if (!user) {
+        console.error('No user in context');
+        alert('Please log in to submit the questionnaire');
+        return;
+      }
+
+      if (!user.userId) {
+        console.error('User object missing userId:', user);
+        alert('User ID not found. Please try logging in again');
+        return;
+      }
+
+      const newQuestionare = {
+        housingSituation,
+        dailyAloneHours,
+        workplaceAccommodation,
+        householdComposition,
+        hasPetExperience,
+        currentPets: hasPetExperience
+          ? currentPets
+          : { hasPets: false, petDetails: "" },
+        previousAdoption,
+        petSurrender,
+        additionalInformation,
+      };
+
+      console.log('2. Submitting questionnaire...');
+      await addQuestionnaireToUser(newQuestionare);
+      console.log('3. Questionnaire submitted successfully');
+
+      if (!import.meta.env.VITE_BACKEND_URL) {
+        throw new Error('Server URL is not defined in environment variables');
+      }
+
+      console.log('4. Starting bulk match calculation...');
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/matching/calculate-bulk-matches/${user.userId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+
+      console.log('5. Bulk matches response:', response.data);
+
+    } catch (error) {
+      console.error('Submission error:', {
+        error: error.message,
+        user: user,
+        userId: user?.userId, // Use the correct path
+        stack: error.stack
+      });
+      alert('There was an error submitting your questionnaire. Please try again.');
+    }
   }
 
   return (
