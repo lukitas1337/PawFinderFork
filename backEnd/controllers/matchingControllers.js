@@ -123,9 +123,21 @@ export const getShelterMatches = async (req, res, next) => {
 
 export const calculateBulkMatches = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.userId);
-    if (!user?.petPreferences || !user?.questionnaire) {
-      throw new CustomError('User preferences or questionnaire not completed', 400);
+    const { userId } = req.params;
+
+    // Validate userId
+    if (!userId || userId === 'undefined') {
+      throw new CustomError('Invalid user ID provided', 400);
+    }
+
+    // Validate that userId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw new CustomError('Invalid user ID format', 400);
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new CustomError('User not found', 404);
     }
 
     const pets = await Pet.find({ adopted: false });
@@ -160,7 +172,11 @@ export const calculateBulkMatches = async (req, res, next) => {
 
     res.json(allResults);
   } catch (error) {
-    next(new CustomError(error.message || 'Error calculating bulk matches', 500));
+    console.error('Bulk matching error:', {
+      error: error.message,
+      userId: req.params.userId
+    });
+    next(error);
   }
 };
 
