@@ -4,30 +4,38 @@ import { useParams } from "react-router-dom";
 
 function Pet() {
   const { id } = useParams();
-
   const [pet, setPet] = useState({});
   const [images, setImages] = useState([]);
   const [curImage, setCurImage] = useState(null);
-  useEffect(
-    function () {
-      async function getPet() {
-        try {
-          const res = await axios.get(` http://localhost:8000/api/pets/${id}`);
-          setPet(res.data);
-          setImages(res.data.pictures);
-          setCurImage(res.data.pictures[0]);
-        } catch (error) {
-          console.log(error);
-        }
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(function () {
+    async function getPet() {
+      try {
+        setLoading(true);
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`);
+        setPet(res.data);
+        setImages(res.data.pictures || []);
+        setCurImage(res.data.pictures?.[0]);
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
       }
-      getPet();
-    },
-    [id]
-  );
+    }
+    getPet();
+  }, [id]);
+
   function handleCurImage(img) {
     const index = images.indexOf(img.src);
     setCurImage(images[index]);
   }
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!pet) return <div>Pet not found</div>;
+
   return (
     <div className="flex w-[70%] my-[10rem] mx-auto gap-[5rem]">
       <div className="petImages w-[40%]">

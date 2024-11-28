@@ -69,7 +69,7 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
   };
 
   const handleCardClick = () => {
-    navigate(`/pets/${pet.id}`);
+    navigate(`/pets/${pet._id}`);
   };
 
   return (
