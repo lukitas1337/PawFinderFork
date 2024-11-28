@@ -93,7 +93,7 @@ export const calculateMatch = async (req, res, next) => {
   }
 };
 
-// Your existing route handlers
+
 export const getMatchResult = async (req, res, next) => {
   try {
     const result = await MatchResult.findOne({
@@ -120,7 +120,7 @@ export const getShelterMatches = async (req, res, next) => {
   }
 };
 
-// New bulk matching calculation
+
 export const calculateBulkMatches = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
@@ -164,7 +164,6 @@ export const calculateBulkMatches = async (req, res, next) => {
   }
 };
 
-// New detailed match result endpoint
 export const getMatchResultWithDetails = async (req, res, next) => {
   try {
     const result = await MatchResult.findOne({
@@ -176,7 +175,6 @@ export const getMatchResultWithDetails = async (req, res, next) => {
       throw new CustomError('Match result not found', 404);
     }
 
-    // Generate explanations if they don't exist
     if (!result.adopterExplanation || !result.shelterAssessment) {
       const user = await User.findById(req.params.userId);
       const pet = await Pet.findById(req.params.petId);
@@ -226,7 +224,6 @@ export const getMatchResultWithDetails = async (req, res, next) => {
   }
 };
 
-// Helper function for bulk matching
 function createBulkMatchingPrompt(user, pets) {
   return `
     As a pet adoption expert, provide numerical compatibility scores (0-100) for these matches.
