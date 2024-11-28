@@ -1,24 +1,68 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useFavorites } from "../contexts/FavoritesContext";
+import { useUserAuth } from "../contexts/UserAuthContext";
+import axios from "axios";
 
-function PetCard({ pet, index, getSvgForCard }) {
+function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavorites, isFavorite: propIsFavorite }) {
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useUserAuth();
+  const [isFavorite, setIsFavorite] = useState(propIsFavorite || false);
+  
+  useEffect(() => {
+    if (propIsFavorite !== undefined) {
+      setIsFavorite(propIsFavorite); 
+    }
+  }, [propIsFavorite]);
 
-  const { addToFavorites } = useFavorites();
+  const handleFavoriteClick = async (e) => {
+    e.stopPropagation();
 
-  const calculateAge = (birthDate) => { 
+    if (!isAuthenticated || !user?._id) {
+      alert("Please log in to manage favorites.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      if (context === "favorites") {
+        await axios.delete(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user._id}`,
+          { data: { petId: pet?._id }, withCredentials: true }
+        );
+        onRemoveFromFavorites(pet._id);
+      } else {
+        if (isFavorite) {
+          await axios.delete(
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user._id}`,
+            { data: { petId: pet?._id }, withCredentials: true }
+          );
+        } else {
+          
+          await axios.put(
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user._id}`,
+            { petId: pet?._id },
+            { withCredentials: true }
+          );
+        }
+
+        setIsFavorite((prev) => !prev);
+      }
+    } catch (error) {
+      console.error("Error updating favorites:", error);
+      alert("Failed to update favorites. Please try again.");
+    }
+  };
+
+  const calculateAge = (birthDate) => {
     const now = new Date();
     const birth = new Date(birthDate);
 
     let years = now.getFullYear() - birth.getFullYear();
     let months = now.getMonth() - birth.getMonth();
-
     if (months < 0) {
       years--;
       months += 12;
     }
-
     return years > 0
       ? `${years} year${years > 1 ? "s" : ""}`
       : `${months} month${months > 1 ? "s" : ""}`;
@@ -26,11 +70,6 @@ function PetCard({ pet, index, getSvgForCard }) {
 
   const handleCardClick = () => {
     navigate(`/pets/${pet.id}`);
-  };
-
-  const handleAddToFavorites = (e) => {
-    e.stopPropagation();
-    addToFavorites(pet);
   };
 
   return (
@@ -75,14 +114,15 @@ function PetCard({ pet, index, getSvgForCard }) {
               Adopt me
             </button>
             <div
-              onClick={handleAddToFavorites}
-              className="w-16 h-16 flex items-center justify-center rounded-full border 
-                    border-dark group hover:bg-dark transition"
+              onClick={handleFavoriteClick}
+              className={`w-16 h-16 flex items-center justify-center rounded-full transition 
+                ${isFavorite ? "bg-dark" : "border border-dark group hover:bg-dark"}`}
             >
               <img
                 src="/images/favorites.svg"
                 alt="Favorite"
-                className="w-8 h-8 transition group-hover:invert"
+                className={`w-8 h-8 transition 
+                  ${isFavorite ? "invert" : "group-hover:invert"}`}
               />
             </div>
           </div>

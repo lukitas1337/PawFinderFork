@@ -29,7 +29,7 @@ function Navbar() {
             <Link to="/pets">Find a pet</Link>
           </li>
           <li>
-            <Link to="/account">Get involved</Link>
+            <Link to="/">Get involved</Link>
           </li>
           <li>
             <Link to="/contact">Contact</Link>
@@ -54,7 +54,9 @@ function Navbar() {
       </nav>
       <div className="flex justify-between gap-[3.5rem] text-[1.6rem] font-semibold items-center">
         {isAuthenticated ? (
-          <h4>{user.fullName}</h4>
+          <Link to="/account">
+          <h4 className="cursor-pointer">{user.fullName}</h4>
+          </Link>
         ) : (
           <Link to="/login" className="login">
             Login

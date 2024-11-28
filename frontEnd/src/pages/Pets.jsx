@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useUserAuth } from "../contexts/UserAuthContext";
 import PetHeader from "../components/PetHeader";
 import PetFilter from "../components/PetFilter";
 import PetList from "../components/PetList";
 
 function Pets() {
+  const { user, isAuthenticated } = useUserAuth();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -94,7 +96,10 @@ function Pets() {
             </p>
           </div>
         ) : (
-          <PetList pets={pets} getSvgForCard={getSvgForCard} />
+          <PetList 
+          pets={pets} 
+          getSvgForCard={getSvgForCard}
+          userFavorites={user?.favorites || []} />
         )}
       </div>
     </div>

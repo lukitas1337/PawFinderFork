@@ -72,7 +72,7 @@ export const login = async (req, res, next) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
-
+    
     res.json({
       message: "Login successful",
       user: {
