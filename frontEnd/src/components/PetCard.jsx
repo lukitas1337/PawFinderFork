@@ -17,7 +17,7 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
   const handleFavoriteClick = async (e) => {
     e.stopPropagation();
 
-    if (!isAuthenticated || !user?._id) {
+    if (!isAuthenticated || !user?.userId) {
       alert("Please log in to manage favorites.");
       navigate("/login");
       return;
@@ -26,20 +26,20 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
     try {
       if (context === "favorites") {
         await axios.delete(
-          `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user._id}`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
           { data: { petId: pet?._id }, withCredentials: true }
         );
         onRemoveFromFavorites(pet._id);
       } else {
         if (isFavorite) {
           await axios.delete(
-            `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user._id}`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
             { data: { petId: pet?._id }, withCredentials: true }
           );
         } else {
           
           await axios.put(
-            `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user._id}`,
+            `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
             { petId: pet?._id },
             { withCredentials: true }
           );

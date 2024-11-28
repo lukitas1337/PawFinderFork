@@ -182,3 +182,73 @@ export const deleteFav = async (req, res, next) => {
     next(new CustomError(error.message || 'Failed to delete favorite', 400));
   }
 };
+
+// Get userApplications
+export const getApplication = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id).populate("myApplications");
+    if (!user) {
+      return next(new CustomError("User not found", 404));
+    }
+    res.status(200).json(user.myApplications);
+  } catch (error) {
+    next(new CustomError(error.message || "Failed to fetch applications", 400));
+  }
+};
+
+// Update userApplications
+export const updateApplication = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return next(new CustomError("User not found", 404));
+    }
+
+    const { petId, applicationDetails } = req.body;
+    if (petId) {
+      const existingApplication = user.myApplications.find(
+        (app) => app.petId.toString() === petId
+      );
+      if (existingApplication) {
+        existingApplication.details = applicationDetails;
+      } else {
+        user.myApplications.push({ petId, details: applicationDetails });
+      }
+    }
+    const updatedUser = await user.save();
+    const userResponse = updatedUser.toObject();
+    delete userResponse.password;
+
+    res.status(200).json(userResponse);
+  } catch (error) {
+    next(new CustomError(error.message || "Failed to update application", 400));
+  }
+};
+
+// Delete userApplications
+export const deleteApplication = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return next(new CustomError("User not found", 404));
+    }
+    const { petId } = req.body;
+    if (petId) {
+      const applicationIndex = user.myApplications.findIndex(
+        (app) => app.petId.toString() === petId
+      );
+      if (applicationIndex !== -1) {
+        user.myApplications.splice(applicationIndex, 1);
+      } else {
+        return next(new CustomError("Application not found", 404));
+      }
+    }
+    const updatedUser = await user.save();
+    const userResponse = updatedUser.toObject();
+    delete userResponse.password;
+
+    res.status(200).json(userResponse);
+  } catch (error) {
+    next(new CustomError(error.message || "Failed to delete application", 400));
+  }
+};
