@@ -32,6 +32,7 @@ function App() {
             <Route path="/register" element={<Registration />} />
             <Route path="/adoption" element={<Adoption />} />
             <Route path="/account/*" element={<PersonalAccount />} />
+            <Route path="/shelters/:id" element={<ShelterFront />} />
           </Route>
         </Routes>
       </BrowserRouter>
