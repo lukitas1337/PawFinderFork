@@ -30,25 +30,22 @@ function UserAuthProvider({ children }) {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
-        { email, password },
-        { withCredentials: true }
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
-  
+
       const userLoggedIn = res.data.user;
-      // Fix the logging to use the correct path
-      console.log('Login successful:', {
-        user: userLoggedIn,
-        userId: userLoggedIn.userId, // Use the correct path
-        token: res.data.token
-      });
-      
-      if (res.data.token) {
-        localStorage.setItem('token', res.data.token);
-      }
-  
+      console.log(userLoggedIn);
       dispatch({ type: "login", payload: userLoggedIn });
     } catch (error) {
-      console.error('Login error:', error);
       alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
     }
   }
