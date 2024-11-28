@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from "react-router-dom";
 
 const ShelterFront = () => {
   const [shelter, setShelter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { id } = useParams();
 
   useEffect(() => {
     // Fetch shelter data from the server
     const fetchShelterData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shelters/67409ed706c3958d971c411c`); // Adjust endpoint as needed
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shelters/${id}`); // Adjust endpoint as needed
         setShelter(response.data);
       } catch (err) {
         console.error(err);
@@ -21,7 +23,7 @@ const ShelterFront = () => {
     };
 
     fetchShelterData();
-  }, []);
+  }, [id]);
 
   if (loading) return <div className="text-center py-10 text-lg">Loading...</div>;
   if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
