@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import axios from "axios";
 
@@ -29,7 +29,6 @@ function reducer(state, action) {
         ...state,
         hasPetExperience: action.payload === "true",
       };
-
     case "setCurrentPets":
       return {
         ...state,
@@ -53,6 +52,7 @@ function reducer(state, action) {
 }
 
 function Questionare() {
+  const { dispatch, addQuestionnaireToUser, user } = useUserAuth();
   const [
     {
       housingSituation,
@@ -68,25 +68,44 @@ function Questionare() {
     localDispatch,
   ] = useReducer(reducer, initialState);
 
-  const { dispatch, addQuestionnaireToUser } = useUserAuth();
-
   async function handleSubmit(e) {
     e.preventDefault();
-    const newQuestionare = {
-      housingSituation,
-      dailyAloneHours,
-      workplaceAccommodation,
-      householdComposition,
-      hasPetExperience,
-      currentPets: hasPetExperience
-        ? currentPets
-        : { hasPets: false, petDetails: "" },
-      previousAdoption,
-      petSurrender,
-      additionalInformation,
-    };
+    try {
+      if (!user) {
+        alert('Please log in to submit the questionnaire');
+        return;
+      }
 
-    await addQuestionnaireToUser(newQuestionare);
+      const newQuestionare = {
+        housingSituation,
+        dailyAloneHours,
+        workplaceAccommodation,
+        householdComposition,
+        hasPetExperience,
+        currentPets: hasPetExperience
+          ? currentPets
+          : { hasPets: false, petDetails: "" },
+        previousAdoption,
+        petSurrender,
+        additionalInformation,
+      };
+
+      await addQuestionnaireToUser(newQuestionare);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/matching/calculate-bulk-matches/${user.userId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        }
+      );
+
+    } catch (error) {
+      alert('There was an error submitting your questionnaire. Please try again.');
+    }
   }
 
   return (
