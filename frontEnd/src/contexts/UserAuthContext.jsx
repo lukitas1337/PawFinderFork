@@ -49,6 +49,7 @@ function UserAuthProvider({ children }) {
       alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
     }
   }
+  
   function handleLogout() {
     axios
       .post(

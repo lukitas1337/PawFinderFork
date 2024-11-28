@@ -46,8 +46,36 @@ function Pets() {
 
         },
       });
-      setPets(response.data);
+
+      if (user?.userId) {
+        const matchesResponse = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${user.userId}/scores`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        );
+
+        const matchScores = matchesResponse.data.reduce((acc, match) => {
+          acc[match.petId] = match.score;
+          return acc;
+        }, {});
+  
+        const petsWithScores = response.data.map(pet => ({
+          ...pet,
+          matchScore: matchScores[pet._id] || null
+        }));
+  
+        setPets(petsWithScores);
+      } else {
+        setPets(response.data);
+      }
     } catch (err) {
+      console.error('Error in fetchPets:', {
+        message: err.message,
+        fullError: err
+      });
       setError(err.message);
     } finally {
       setLoading(false);
@@ -57,7 +85,7 @@ function Pets() {
   useEffect(() => {
     console.log("Filters applied in Pets:", filters);
     fetchPets();
-  }, [filters]);
+  }, [filters, user?.userId]);
 
   const applyFilters = (newFilters) => {
     setFilters(newFilters);
