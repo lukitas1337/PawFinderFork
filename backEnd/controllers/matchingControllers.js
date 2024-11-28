@@ -261,6 +261,20 @@ export const getMatchResultWithDetails = async (req, res, next) => {
   }
 };
 
+export const getUserMatchScores = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    
+    const matchResults = await MatchResult.find({ 
+      userId: userId 
+    }).select('petId score -_id');
+    
+    res.json(matchResults);
+  } catch (error) {
+    next(new CustomError('Error fetching user match scores', 500));
+  }
+};
+
 // - Type: ${user.petPreferences.petType}
 // - Age range: ${user.petPreferences.ageRange.min}-${user.petPreferences.ageRange.max} months
 // - Size: ${user.petPreferences.size.join(', ')}
