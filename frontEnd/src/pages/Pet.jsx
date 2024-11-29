@@ -11,7 +11,7 @@ function Pet() {
   const [images, setImages] = useState([]);
   const [curImage, setCurImage] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [matchLoading, setMatchLoading] = useState(false); // Separate loading state for match
+  const [matchLoading, setMatchLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ function Pet() {
         </div>
       </div>
       <div className="dogInfo flex flex-col gap-[5rem] w-[40%]">
-        {matchLoading ? (
+        {/* {matchLoading ? (
           <div>Calculating Match Analysis...</div>
         ) : matchDetails?.adopterExplanation ? (
           <div className="matchDetails">
@@ -89,7 +89,7 @@ function Pet() {
           </div>
         ) : (
           <div>No match details available.</div>
-        )}
+        )} */}
         <div className="flex flex-col gap-[1rem]">
           <h2 className="text-[4rem] font-bold">{pet.name}</h2>
           <p className="text-[2rem]">{pet.breed}</p>
