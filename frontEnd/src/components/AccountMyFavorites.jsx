@@ -37,7 +37,8 @@ function AccountMyFavorites() {
       const favoritesWithScores = response.data.map((pet) => ({
         ...pet,
         matchScore: matchScores[pet._id] || null,
-      }));
+      }))
+      .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
 
       setFavorites(favoritesWithScores);
     } catch (err) {
