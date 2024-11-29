@@ -69,10 +69,7 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
   };
 
   const handleCardClick = () => {
-    // Navigate immediately
     navigate(`/pets/${pet._id}`);
-    
-    // Then trigger match calculation in the background if needed
     if (user?.userId) {
       calculateMatchInBackground();
     }
