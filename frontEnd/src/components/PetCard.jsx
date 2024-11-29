@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import axios from "axios";
 
-function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavorites, isFavorite: propIsFavorite }) {
+function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFavorites, isFavorite: propIsFavorite }) {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useUserAuth();
   const [isFavorite, setIsFavorite] = useState(propIsFavorite || false);
-  
+
   useEffect(() => {
     if (propIsFavorite !== undefined) {
       setIsFavorite(propIsFavorite); 
@@ -36,8 +36,8 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
             `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
             { data: { petId: pet?._id }, withCredentials: true }
           );
+
         } else {
-          
           await axios.put(
             `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
             { petId: pet?._id },
@@ -56,7 +56,7 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
   const calculateAge = (birthDate) => {
     const now = new Date();
     const birth = new Date(birthDate);
-
+    
     let years = now.getFullYear() - birth.getFullYear();
     let months = now.getMonth() - birth.getMonth();
     if (months < 0) {
@@ -71,6 +71,8 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
   const handleCardClick = () => {
     navigate(`/pets/${pet._id}`);
   };
+
+  const { svg, color } = getStyleForCard(index);
 
   return (
     <div
@@ -87,13 +89,24 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
       </div>
       <div className="relative flex-grow bg-[#FFF] rounded-b-[36px]">
         <img
-          src={getSvgForCard(index)}
+          src={svg}
           alt="decorative SVG"
           className="absolute bottom-0 left-0 w-full h-auto object-cover"
         />
-
         <div className="absolute bottom-6 left-0 right-0 px-10 py-4 text-left">
           <div className="mb-6">
+            {/* Scorematch */}
+            {isAuthenticated && pet.matchScore !== null && (
+              <div className="absolute -top-2 right-6 w-[70px] h-[70px]">
+                <div
+                  className="absolute inset-0 rounded-full bg-[#FAFAF5] border-[6px]"
+                  style={{ borderColor: color }}
+                ></div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <p className="text-[17px] font-bold text-[#505865]">{`${pet.matchScore}%`}</p>
+                </div>
+              </div>
+            )}
             <h2 className="text-[18px] font-bold text-dark mb-2">
               {pet.name}, {calculateAge(pet.age)}
             </h2>
