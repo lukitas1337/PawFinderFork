@@ -15,13 +15,13 @@ function Navbar() {
           <img src="/images/LogoBlack.png" alt="logo" />
         </Link>
       </figure>
-      <nav className="relative navbar text-[1.6rem] font-semibold">
+      <nav className="relative navbar text-[1.6rem] lg:w-[30%] font-semibold">
         <div className="lg:hidden">
           <button onClick={toggleMenu}>
             <RxHamburgerMenu />
           </button>
         </div>
-        <ul className="navbar-list hidden lg:flex justify-between  gap-[3.5rem]">
+        <ul className="navbar-list hidden lg:flex justify-between">
           <li>
             <Link to="/about">About us</Link>
           </li>
@@ -55,7 +55,7 @@ function Navbar() {
       <div className="flex justify-between gap-[3.5rem] text-[1.6rem] font-semibold items-center">
         {isAuthenticated ? (
           <Link to="/account">
-          <h4 className="cursor-pointer">{user.fullName}</h4>
+            <h4 className="cursor-pointer">{user.fullName}</h4>
           </Link>
         ) : (
           <Link to="/login" className="login">

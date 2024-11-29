@@ -29,9 +29,12 @@ function Registration() {
 
   const navigate = useNavigate();
 
-async function registerUserToDataBase(user) {
+  async function registerUserToDataBase(user) {
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/register`, user);
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
+        user
+      );
       console.log("user is in the data base");
       alert("Registration successful! Please login to continue.");
       navigate("/login");
@@ -46,7 +49,7 @@ async function registerUserToDataBase(user) {
     registerUserToDataBase(newUser);
   }
 
-/*   async function registerUserToDataBase(user) {
+  /*   async function registerUserToDataBase(user) {
     try {
       await axios.post(`http://localhost:8000/api/auth/register`, user);
       console.log("user is in the data base");
@@ -61,7 +64,7 @@ async function registerUserToDataBase(user) {
     navigate("/");
   } */
 
-/*   const handleGoogleSignUp = async () => {
+  /*   const handleGoogleSignUp = async () => {
     try {
       await axios.get("http://localhost:8000/api/auth/google/callback");
     } catch (error) {
@@ -76,10 +79,10 @@ async function registerUserToDataBase(user) {
 
   return (
     <main>
-      <div className="bg-light w-[40%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
+      <div className="bg-light  w-[80%] md:w-[50%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
         <h2 className="text-[2.4rem] font-bold">Create your account</h2>
         <form
-          className="registerForm flex flex-col gap-[5rem] w-[50%] mx-auto text-[1.6rem]"
+          className="registerForm flex flex-col gap-[5rem] w-[70%] mx-auto text-[1.6rem]"
           onSubmit={handleSubmit}
         >
           <input

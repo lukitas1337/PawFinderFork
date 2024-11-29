@@ -51,10 +51,10 @@ function Login() {
 
   return (
     <main>
-      <div className="bg-light w-[40%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
+      <div className="bg-light w-[80%] md:w-[50%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
         <h2 className="text-[2.4rem] font-bold">Create your account</h2>
         <form
-          className="registerForm flex flex-col gap-[5rem] w-[50%] mx-auto text-[1.6rem]"
+          className="registerForm flex flex-col gap-[5rem] w-[70%] mx-auto text-[1.6rem]"
           onSubmit={handleSubmit}
         >
           <input

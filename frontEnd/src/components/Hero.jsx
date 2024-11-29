@@ -11,7 +11,7 @@ function Hero() {
             alt="Cat Paw"
           />
         </figure>
-        <h1 className="text-dark text-[7.5rem] md:text-[9rem] font-black text-center uppercase leading-tight">
+        <h1 className="text-dark text-[7rem] md:text-[9rem] font-black text-center uppercase leading-tight">
           Find Your Friend
         </h1>
         <Link className="btn bg-green text-white text-[1.8rem] px-[4rem] py-[1rem] w-[20rem] rounded-[5rem] hover:text-green hover:bg-dark text-center">
