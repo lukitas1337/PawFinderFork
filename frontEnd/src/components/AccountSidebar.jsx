@@ -7,8 +7,8 @@ export default function AccountSidebar() {
   const { user } = useUserAuth(); 
 
   const menuItems = [
-    { name: "My favorites", path: "favorites" },
     { name: "My recommendations", path: "recommendations" },
+    { name: "My favorites", path: "favorites" },
     { name: "My applications", path: "applications" },
   ];
 
