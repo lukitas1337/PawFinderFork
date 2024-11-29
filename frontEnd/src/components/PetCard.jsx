@@ -69,7 +69,37 @@ function PetCard({ pet, index, getSvgForCard, context = "Pets", onRemoveFromFavo
   };
 
   const handleCardClick = () => {
+    // Navigate immediately
     navigate(`/pets/${pet._id}`);
+    
+    // Then trigger match calculation in the background if needed
+    if (user?.userId) {
+      calculateMatchInBackground();
+    }
+  };
+  
+  const calculateMatchInBackground = async () => {
+    try {
+      console.log('Checking match details for:', {
+        userId: user.userId,
+        petId: pet._id
+      });
+  
+      const matchResponse = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/matching/result-with-details/${user.userId}/${pet._id}`
+      );
+      
+      console.log('Match response:', matchResponse.data);
+  
+      if (!matchResponse.data?.adopterExplanation) {
+        console.log('No explanation found, calculating match...');
+        await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/matching/calculate-match/${user.userId}/${pet._id}`
+        );
+      }
+    } catch (error) {
+      console.error("Error getting match details:", error.response || error);
+    }
   };
 
   return (

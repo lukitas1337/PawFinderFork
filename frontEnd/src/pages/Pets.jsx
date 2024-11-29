@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import PetHeader from "../components/PetHeader";
@@ -6,6 +7,8 @@ import PetFilter from "../components/PetFilter";
 import PetList from "../components/PetList";
 
 function Pets() {
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const { user, isAuthenticated } = useUserAuth();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,9 +19,13 @@ function Pets() {
     location: [],
     age: [],
     size: [],
-    petType: [],
+    petType: searchParams.get('type') ? [searchParams.get('type')] : [],
     gender: [],
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); 
 
   const getSvgForCard = (index) => {
     const svgFigures = [
@@ -95,6 +102,16 @@ function Pets() {
     (total, current) => total + current.length,
     0
   );
+
+  useEffect(() => {
+    const typeFromUrl = searchParams.get('type');
+    if (typeFromUrl) {
+      setFilters(prev => ({
+        ...prev,
+        petType: [typeFromUrl]
+      }));
+    }
+  }, [searchParams]);
 
   return (
     <div className="bg-[#FAFAF5] min-h-screen flex flex-col justify-between">
