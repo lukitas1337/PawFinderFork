@@ -1,16 +1,20 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUserAuth } from "../contexts/UserAuthContext";
 
-function Pet({ isFavorite }) {
+function Pet() {
   const { id } = useParams();
   const [pet, setPet] = useState({});
   const [images, setImages] = useState([]);
   const [curImage, setCurImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  function handleFavoriteClick() {}
+  const { user, isAuthenticated } = useUserAuth();
+  const [isFavorite, setIsFavorite] = useState(
+    user?.favorites.includes(id) || false
+  );
+  const navigate = useNavigate();
 
   useEffect(
     function () {
@@ -54,11 +58,38 @@ function Pet({ isFavorite }) {
     setCurImage(images[index]);
   }
 
+  const handleFavoriteClick = async (e) => {
+    e.stopPropagation();
+
+    if (!isAuthenticated || !user?.userId) {
+      alert("Please log in to manage favorites.");
+      navigate("/login");
+      return;
+    }
+    try {
+      if (isFavorite) {
+        await axios.delete(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
+          { data: { petId: id }, withCredentials: true }
+        );
+      } else {
+        await axios.put(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
+          { petId: id },
+          { withCredentials: true }
+        );
+      }
+      setIsFavorite((prev) => !prev);
+    } catch (error) {
+      console.error("Error updating favorites:", error);
+      alert("Failed to update favorites. Please try again.");
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!pet) return <div>Pet not found</div>;
 
-  console.log(Date(pet.age));
   return (
     <div className="flex w-full my-[10rem] px-[4rem] py-10 mx-auto gap-[15rem]">
       <div className="petImages w-[40%]">
