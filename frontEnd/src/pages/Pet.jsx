@@ -10,22 +10,42 @@ function Pet() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(function () {
-    async function getPet() {
-      try {
-        setLoading(true);
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`);
-        setPet(res.data);
-        setImages(res.data.pictures || []);
-        setCurImage(res.data.pictures?.[0]);
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
+  useEffect(
+    function () {
+      async function getPet() {
+        try {
+          setLoading(true);
+          const res = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`
+          );
+          setPet(res.data);
+          setImages(res.data.pictures || []);
+          setCurImage(res.data.pictures?.[0]);
+          setLoading(false);
+        } catch (error) {
+          setError(error.message);
+          setLoading(false);
+        }
       }
+      getPet();
+    },
+    [id]
+  );
+
+  const calculateAge = (birthDate) => {
+    const now = new Date();
+    const birth = new Date(birthDate);
+
+    let years = now.getFullYear() - birth.getFullYear();
+    let months = now.getMonth() - birth.getMonth();
+    if (months < 0) {
+      years--;
+      months += 12;
     }
-    getPet();
-  }, [id]);
+    return years > 0
+      ? `${years} year${years > 1 ? "s" : ""}`
+      : `${months} month${months > 1 ? "s" : ""}`;
+  };
 
   function handleCurImage(img) {
     const index = images.indexOf(img.src);
@@ -36,8 +56,9 @@ function Pet() {
   if (error) return <div>Error: {error}</div>;
   if (!pet) return <div>Pet not found</div>;
 
+  console.log(Date(pet.age));
   return (
-    <div className="flex w-[70%] my-[10rem] mx-auto gap-[5rem]">
+    <div className="flex w-full my-[10rem] px-[4rem] py-10 mx-auto gap-[15rem]">
       <div className="petImages w-[40%]">
         <figure className="w-full">
           <img src={curImage} alt="dog" className="w-full rounded-[5rem]" />
@@ -59,7 +80,7 @@ function Pet() {
           <h2 className="text-[4rem] font-bold">{pet.name}</h2>
           <p className="text-[2rem]">{pet.breed}</p>
           <p className="text-[2rem]">
-            {pet.gender}.{pet.age}.{pet.size}
+            {pet.gender}.{calculateAge(pet.age)}.{pet.size}
           </p>
           <p className="text-[2rem]">{pet.location}</p>
         </div>
