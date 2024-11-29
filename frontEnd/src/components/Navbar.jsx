@@ -9,7 +9,7 @@ function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   }
   return (
-    <header className="header flex justify-between  px-[4rem] py-10 items-center">
+    <header className="header flex justify-between bg-[#FAFAF5] px-[4rem] py-10 items-center">
       <figure className="logo w-[16rem]">
         <Link to="/">
           <img src="/images/LogoBlack.png" alt="logo" />
