@@ -18,8 +18,8 @@ import Questionare from "./components/Questionare";
 
 function App() {
   return (
-    <UserAuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <UserAuthProvider>
         <Routes>
           <Route element={<AppLayout />}>
             <Route path="/" element={<Home />} />
@@ -33,14 +33,17 @@ function App() {
             <Route path="/adoption" element={<Adoption />} />
             <Route path="/account" element={<PersonalAccount />}>
               <Route index element={<Navigate to="favorites" />} />
-                <Route path="favorites" element={<AccountMyFavorites />} />
-                <Route path="recommendations" element={<AccountMyRecommendations />} />
-                <Route path="applications" element={<AccountMyApplications />} />
-              </Route>
+              <Route path="favorites" element={<AccountMyFavorites />} />
+              <Route
+                path="recommendations"
+                element={<AccountMyRecommendations />}
+              />
+              <Route path="applications" element={<AccountMyApplications />} />
+            </Route>
           </Route>
         </Routes>
-      </BrowserRouter>
-    </UserAuthProvider>
+      </UserAuthProvider>
+    </BrowserRouter>
   );
 }
 

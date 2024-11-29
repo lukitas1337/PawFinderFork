@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useUserAuth } from "../contexts/UserAuthContext";
 
 function Pet() {
   const { id } = useParams();
@@ -9,40 +10,93 @@ function Pet() {
   const [curImage, setCurImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user, isAuthenticated } = useUserAuth();
+  const [isFavorite, setIsFavorite] = useState(
+    user?.favorites.includes(id) || false
+  );
+  const navigate = useNavigate();
 
-  useEffect(function () {
-    async function getPet() {
-      try {
-        setLoading(true);
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`);
-        setPet(res.data);
-        setImages(res.data.pictures || []);
-        setCurImage(res.data.pictures?.[0]);
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
+  useEffect(
+    function () {
+      async function getPet() {
+        try {
+          setLoading(true);
+          const res = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`
+          );
+          setPet(res.data);
+          setImages(res.data.pictures || []);
+          setCurImage(res.data.pictures?.[0]);
+          setLoading(false);
+        } catch (error) {
+          setError(error.message);
+          setLoading(false);
+        }
       }
+      getPet();
+    },
+    [id]
+  );
+
+  const calculateAge = (birthDate) => {
+    const now = new Date();
+    const birth = new Date(birthDate);
+
+    let years = now.getFullYear() - birth.getFullYear();
+    let months = now.getMonth() - birth.getMonth();
+    if (months < 0) {
+      years--;
+      months += 12;
     }
-    getPet();
-  }, [id]);
+    return years > 0
+      ? `${years} year${years > 1 ? "s" : ""}`
+      : `${months} month${months > 1 ? "s" : ""}`;
+  };
 
   function handleCurImage(img) {
     const index = images.indexOf(img.src);
     setCurImage(images[index]);
   }
 
+  const handleFavoriteClick = async (e) => {
+    e.stopPropagation();
+
+    if (!isAuthenticated || !user?.userId) {
+      alert("Please log in to manage favorites.");
+      navigate("/login");
+      return;
+    }
+    try {
+      if (isFavorite) {
+        await axios.delete(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
+          { data: { petId: id }, withCredentials: true }
+        );
+      } else {
+        await axios.put(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
+          { petId: id },
+          { withCredentials: true }
+        );
+      }
+      setIsFavorite((prev) => !prev);
+    } catch (error) {
+      console.error("Error updating favorites:", error);
+      alert("Failed to update favorites. Please try again.");
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
   if (!pet) return <div>Pet not found</div>;
 
   return (
-    <div className="flex w-[70%] my-[10rem] mx-auto gap-[5rem]">
+    <div className="flex w-full my-[10rem] px-[4rem] py-10 mx-auto gap-[15rem]">
       <div className="petImages w-[40%]">
         <figure className="w-full">
           <img src={curImage} alt="dog" className="w-full rounded-[5rem]" />
         </figure>
-        <div className="flex gap-[3rem] w-full">
+        <div className="flex justify-between w-full">
           {images.map((img) => (
             <img
               src={img}
@@ -54,12 +108,12 @@ function Pet() {
           ))}
         </div>
       </div>
-      <div className="dogInfo flex flex-col gap-[5rem] w-[40%]  ">
+      <div className="dogInfo flex flex-col justify-between w-[40%]  ">
         <div className="flex flex-col gap-[1rem] ">
           <h2 className="text-[4rem] font-bold">{pet.name}</h2>
           <p className="text-[2rem]">{pet.breed}</p>
           <p className="text-[2rem]">
-            {pet.gender}.{pet.age}.{pet.size}
+            {pet.gender}.{calculateAge(pet.age)}.{pet.size}
           </p>
           <p className="text-[2rem]">{pet.location}</p>
         </div>
@@ -88,6 +142,30 @@ function Pet() {
             {pet.petStory.split("<br/>")[0]} <br />{" "}
             {pet.petStory.split("<br/>")[1]}
           </p>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
+                    font-medium rounded-full hover:bg-[#8D9F19] transition"
+          >
+            Adopt me
+          </button>
+          <div
+            onClick={handleFavoriteClick}
+            className={`w-16 h-16 flex items-center justify-center rounded-full transition 
+                ${
+                  isFavorite
+                    ? "bg-dark"
+                    : "border border-dark group hover:bg-dark"
+                }`}
+          >
+            <img
+              src="/images/favorites.svg"
+              alt="Favorite"
+              className={`w-8 h-8 transition 
+                  ${isFavorite ? "invert" : "group-hover:invert"}`}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserAuthContext = createContext();
 
@@ -25,7 +26,7 @@ function UserAuthProvider({ children }) {
     reducer,
     initialState
   );
-
+  const navigate = useNavigate();
   async function handleLogin(email, password) {
     try {
       const res = await axios.post(
@@ -49,7 +50,7 @@ function UserAuthProvider({ children }) {
       alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
     }
   }
-  
+
   function handleLogout() {
     axios
       .post(
@@ -59,6 +60,7 @@ function UserAuthProvider({ children }) {
       )
       .then(() => {
         dispatch({ type: "logout" });
+        navigate("/");
       })
       .catch((error) => {
         console.error("Logout failed:", error);

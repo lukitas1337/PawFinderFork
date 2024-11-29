@@ -10,7 +10,7 @@ const AboutUsSection = () => (
         </h1>
         <p className="text-dark text-[14px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[18px] 
         mb-2 sm:mb-2 md:mb-6 lg:mb-6 xl:mb-6">
-          Lorem ipsum dolor sit amet, cons <br /> adipiscing elit, sed do eiusmod tempor
+          – your trusted platform for finding pets across shelters in Germany. Browse animals from various shelters, explore detailed profiles, and let our AI match you with the perfect companion. With PawFinder, you can easily apply for adoption and connect with shelters to give a pet a loving home!
         </p>
       </div>
   
