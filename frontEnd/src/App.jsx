@@ -15,6 +15,7 @@ import AccountMyFavorites from "./components/AccountMyFavorites";
 import AccountMyRecommendations from "./components/AccountMyRecommendations";
 import AccountMyApplications from "./components/AccountMyApplications";
 import Questionare from "./components/Questionare";
+import Shelters from "./pages/Shelters";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               />
               <Route path="applications" element={<AccountMyApplications />} />
             </Route>
+            <Route path="/shelters" element={<Shelters />} />
           </Route>
         </Routes>
       </UserAuthProvider>
