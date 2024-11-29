@@ -2,13 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-function Pet() {
+function Pet({ isFavorite }) {
   const { id } = useParams();
   const [pet, setPet] = useState({});
   const [images, setImages] = useState([]);
   const [curImage, setCurImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  function handleFavoriteClick() {}
 
   useEffect(
     function () {
@@ -63,7 +65,7 @@ function Pet() {
         <figure className="w-full">
           <img src={curImage} alt="dog" className="w-full rounded-[5rem]" />
         </figure>
-        <div className="flex gap-[3rem] w-full">
+        <div className="flex justify-between w-full">
           {images.map((img) => (
             <img
               src={img}
@@ -75,7 +77,7 @@ function Pet() {
           ))}
         </div>
       </div>
-      <div className="dogInfo flex flex-col gap-[5rem] w-[40%]  ">
+      <div className="dogInfo flex flex-col justify-between w-[40%]  ">
         <div className="flex flex-col gap-[1rem] ">
           <h2 className="text-[4rem] font-bold">{pet.name}</h2>
           <p className="text-[2rem]">{pet.breed}</p>
@@ -109,6 +111,30 @@ function Pet() {
             {pet.petStory.split("<br/>")[0]} <br />{" "}
             {pet.petStory.split("<br/>")[1]}
           </p>
+        </div>
+        <div className="flex items-center gap-4">
+          <button
+            className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
+                    font-medium rounded-full hover:bg-[#8D9F19] transition"
+          >
+            Adopt me
+          </button>
+          <div
+            onClick={handleFavoriteClick}
+            className={`w-16 h-16 flex items-center justify-center rounded-full transition 
+                ${
+                  isFavorite
+                    ? "bg-dark"
+                    : "border border-dark group hover:bg-dark"
+                }`}
+          >
+            <img
+              src="/images/favorites.svg"
+              alt="Favorite"
+              className={`w-8 h-8 transition 
+                  ${isFavorite ? "invert" : "group-hover:invert"}`}
+            />
+          </div>
         </div>
       </div>
     </div>
