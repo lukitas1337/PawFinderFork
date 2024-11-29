@@ -20,7 +20,7 @@ export default function AccountSidebar() {
         <div>
         <h4 className="text-[18px] font-semibold">
     Welcome, {user?.fullName?.split(" ")[0] || "User"}!</h4>
-          <p className="text-[12px] font-light ">Lorem ipsum Lorem</p>
+          <p className="text-[12px] font-light ">We hope you have a pleasant day!</p>
         </div>
         <img src="/images/paw_icon_green_main page.png" alt="Paw Icon" className="w-16 h-16" />
       </div>

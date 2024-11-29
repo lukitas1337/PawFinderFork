@@ -18,8 +18,7 @@ function AdoptSection() {
               <img src="/images/Check_circle_main page.png" alt="check" />
             </figure>
             <p className="text-[1.6rem]">
-              Lorem ipsum dolor sit amet, cons adipiscing elit, sed do eiusmod
-              tempor
+            Sign in to your account and complete a detailed questionnaire to help us match you with the right companion.
             </p>
           </div>
           <div className="bg-light py-[2rem] px-[2rem] flex items-center gap-[1rem] rounded-[1rem]">
@@ -27,8 +26,7 @@ function AdoptSection() {
               <img src="/images/Check_circle_main page.png" alt="check" />
             </figure>
             <p className="text-[1.6rem]">
-              Lorem ipsum dolor sit amet, cons adipiscing elit, sed do eiusmod
-              tempor
+            Find your perfect pet by reviewing profiles with photos, traits, and AI-powered compatibility recommendations.
             </p>
           </div>
           <div className="bg-light py-[2rem] px-[2rem] flex items-center gap-[1rem] rounded-[1rem]">
@@ -36,8 +34,7 @@ function AdoptSection() {
               <img src="/images/Check_circle_main page.png" alt="check" />
             </figure>
             <p className="text-[1.6rem]">
-              Lorem ipsum dolor sit amet, cons adipiscing elit, sed do eiusmod
-              tempor
+            Submit your adoption application on this site and wait to be contacted by the shelter for further steps.
             </p>
           </div>
         </div>

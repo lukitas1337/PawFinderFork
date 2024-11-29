@@ -13,7 +13,7 @@ const AboutMatchingSection = () => (
       </h2>
       <p className="text-dark text-[14px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[18px] 
       mb-2 sm:mb-2 md:mb-6 lg:mb-6 xl:mb-6">
-        Lorem ipsum dolor sit amet, cons <br /> adipiscing elit, sed do eiusmod tempor
+        Our advanced matching system ensures you find the ideal pet quickly and effortlessly. By analyzing your information and questionnaire responses, we use innovative technology to match you with pets whose needs and characteristics align perfectly with your preferences. With the detailed data provided by shelters, our system helps create meaningful connections, giving you and your future pet the best chance at a happy life together!
       </p>
     </div>
 
