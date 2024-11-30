@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const AboutMatchingSection = () => (
   <section
@@ -29,11 +30,13 @@ const AboutMatchingSection = () => (
     </div>
 
     <div className="flex-1 flex justify-center order-2 sm:order-2 md:order-1">
+      <Link to="/pets?type=cat">
       <img
         src="/images/cat_pic_about_us.png"
         alt="Cat"
         className="w-[300px] md:w-[400px] h-auto transform rotate-0 md:-rotate-6 lg:-rotate-6 xl:-rotate-6 xl:-ml-48"
       />
+      </Link>
     </div>
   </section>
 );
