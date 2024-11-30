@@ -1,3 +1,4 @@
+@import url("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @tailwind base;
 @tailwind components;
@@ -84,4 +85,35 @@ body {
 }
 .gifContainer6 {
   background-image: url("../gifs/really-are-you-sure.gif");
+}
+
+.sheltersList {
+  height: 55rem;
+  overflow: scroll;
+}
+
+.shelterInfo {
+  background-color: #e7e7d6;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.shelterInfo.active {
+  background-color: #8d9e29;
+  color: white;
+}
+.shelterInfo:hover {
+  background-color: #8d9e29;
+  color: white;
+}
+.leaflet-popup-tip {
+  background-color: #e7e7d6;
+}
+.leaflet-popup .leaflet-popup-content-wrapper {
+  background-color: #e7e7d6;
+  width: fit-content;
+}
+.leaflet-popup .leaflet-popup-content-wrapper .leaflet-popup-content {
+  width: fit-content;
+  font-size: 1.4rem;
 }
