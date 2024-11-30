@@ -4,7 +4,7 @@ import { useUserAuth } from "../contexts/UserAuthContext";
 
 export default function AccountSidebar() {
   const location = useLocation();
-  const { user } = useUserAuth(); 
+  const { user, handleLogout } = useUserAuth(); 
 
   const menuItems = [
     { name: "My recommendations", path: "recommendations" },
@@ -45,7 +45,7 @@ export default function AccountSidebar() {
       </ul>
 
       <div className="mt-auto">
-        <button className="block px-6 mt-40 py-4 text-[#FF6B6B] font-medium hover:underline transition">
+        <button onClick={handleLogout} className="block px-6 mt-40 py-4 text-[#FF6B6B] font-medium hover:underline transition">
           Log out
         </button>
       </div>
