@@ -16,6 +16,7 @@ import AccountMyRecommendations from "./components/AccountMyRecommendations";
 import AccountMyApplications from "./components/AccountMyApplications";
 import Questionare from "./components/Questionare";
 import ShelterFront from "./pages/ShelterFront";
+import Shelters from "./pages/Shelters";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
               <Route path="recommendations" element={<AccountMyRecommendations />}/>
               <Route path="applications" element={<AccountMyApplications />} />
             </Route>
+            <Route path="/shelters" element={<Shelters />} />
           </Route>
         </Routes>
       </UserAuthProvider>
