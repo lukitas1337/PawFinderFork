@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import PetCard from "./PetCard";
+import { useNavigate } from "react-router-dom";
 
 function AccountMyFavorites() {
   const { user, isAuthenticated } = useUserAuth();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchFavorites = async () => {
     if (!isAuthenticated || !user?.userId) {
@@ -88,21 +90,23 @@ function AccountMyFavorites() {
     );
   }
 
-  if (favorites.length === 0) {
-    return (
-      <main className="flex-1 p-16 mt-2">
-        <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
-        <p className="text-[16px] text-dark">No favorites added yet.</p>
-      </main>
-    );
-  }
-
   return (
     <main className="flex-1 p-16 mt-2">
-      <aside className="w-[700px]">
-        <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
-        <div className="h-auto">
-          {favorites.length > 0 ? (
+      <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
+      {favorites.length === 0 ? (
+        <div>
+          <p className="text-[16px] text-dark">You don’t have any new favorites added yet</p>
+          <button
+            onClick={() => navigate("/pets")}
+            className="mt-10 bg-dark text-white text-[14px] w-full max-w-[200px] py-4 font-medium 
+            rounded-full hover:bg-[#8D9F19] transition"
+          >
+            Choose a pet
+          </button>
+        </div>
+      ) : (
+        <aside className="w-[700px]">
+          <div className="h-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {favorites.map((pet, index) => (
                 <PetCard
@@ -116,11 +120,9 @@ function AccountMyFavorites() {
                 />
               ))}
             </div>
-          ) : (
-            <p>No favorites added yet.</p>
-          )}
-        </div>
-      </aside>
+          </div>
+        </aside>
+      )}
     </main>
   );
 }
