@@ -33,7 +33,7 @@ function App() {
             <Route path="/register" element={<Registration />} />
             <Route path="/adoption" element={<Adoption />} />
             <Route path="/account" element={<PersonalAccount />}>
-              <Route index element={<Navigate to="favorites" />} />
+              <Route index element={<Navigate to="recommendations" />} />
               <Route path="favorites" element={<AccountMyFavorites />} />
               <Route
                 path="recommendations"

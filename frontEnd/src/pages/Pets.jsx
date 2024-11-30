@@ -27,16 +27,18 @@ function Pets() {
     window.scrollTo(0, 0);
   }, []); 
 
-  const getSvgForCard = (index) => {
-    const svgFigures = [
-      "/images/card_figure_yellow.svg",
-      "/images/card_figure_red.svg",
-      "/images/card_figure_green.svg",
-    ];
-    const rowIndex = Math.floor(index / 3);
-    const columnIndex = index % 3;
-    return svgFigures[(rowIndex + columnIndex) % svgFigures.length];
-  };
+  const styleConfig = [
+  { svg: "/images/card_figure_yellow.svg", color: "#FEDB66" }, 
+  { svg: "/images/card_figure_red.svg", color: "#FD7E6F" },    
+  { svg: "/images/card_figure_green.svg", color: "#BFCF59" },  
+];
+
+const getStyleForCard = (index) => {
+  const rowIndex = Math.floor(index / 3); 
+  const columnIndex = index % 3; 
+  const styleIndex = (rowIndex + columnIndex) % styleConfig.length;
+  return styleConfig[styleIndex];
+};
 
   const fetchPets = async () => {
     setLoading(true);
@@ -72,7 +74,8 @@ function Pets() {
         const petsWithScores = response.data.map(pet => ({
           ...pet,
           matchScore: matchScores[pet._id] || null
-        }));
+        }))
+        .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0)); // sorting by matchScore
   
         setPets(petsWithScores);
       } else {
@@ -90,7 +93,7 @@ function Pets() {
   };
 
   useEffect(() => {
-    console.log("Filters applied in Pets:", filters);
+    // console.log("Filters applied in Pets:", filters);
     fetchPets();
   }, [filters, user?.userId]);
 
@@ -143,7 +146,7 @@ function Pets() {
         ) : (
           <PetList 
           pets={pets} 
-          getSvgForCard={getSvgForCard}
+          getStyleForCard={getStyleForCard}
           userFavorites={user?.favorites || []} />
         )}
       </div>

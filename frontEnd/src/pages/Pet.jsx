@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserAuth } from "../contexts/UserAuthContext";
+import ApplicationPopup from "../components/ApplicationPopup";
 
 function Pet() {
   const { id } = useParams();
@@ -10,6 +11,7 @@ function Pet() {
   const [curImage, setCurImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); //Inna: I added this line
   const { user, isAuthenticated } = useUserAuth();
   const [isFavorite, setIsFavorite] = useState(
     user?.favorites.includes(id) || false
@@ -90,6 +92,9 @@ function Pet() {
   if (error) return <div>Error: {error}</div>;
   if (!pet) return <div>Pet not found</div>;
 
+  const openPopup = () => setIsPopupOpen(true); //Inna: I added this line
+  const closePopup = () => setIsPopupOpen(false); //Inna: I added this line
+
   return (
     <div className="flex w-full my-[10rem] px-[4rem] py-10 mx-auto gap-[15rem]">
       <div className="petImages w-[40%]">
@@ -145,6 +150,7 @@ function Pet() {
         </div>
         <div className="flex items-center gap-4">
           <button
+          onClick={openPopup}
             className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
                     font-medium rounded-full hover:bg-[#8D9F19] transition"
           >
@@ -168,6 +174,7 @@ function Pet() {
           </div>
         </div>
       </div>
+      {isPopupOpen && <ApplicationPopup pet={pet} onClose={closePopup} />} {/*Inna: I added this line*/}
     </div>
   );
 }

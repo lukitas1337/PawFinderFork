@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import PetCard from "./PetCard";
+import { useNavigate } from "react-router-dom";
 
 function AccountMyFavorites() {
   const { user, isAuthenticated } = useUserAuth();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchFavorites = async () => {
     if (!isAuthenticated || !user?.userId) {
@@ -21,7 +23,26 @@ function AccountMyFavorites() {
         `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}/favorites`,
         { withCredentials: true }
       );
-      setFavorites(response.data);
+
+      // matchScore 
+      const matchesResponse = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${user.userId}/scores`,
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
+
+      const matchScores = matchesResponse.data.reduce((acc, match) => {
+        acc[match.petId] = match.score;
+        return acc;
+      }, {});
+
+      // matchScore 
+      const favoritesWithScores = response.data.map((pet) => ({
+        ...pet,
+        matchScore: matchScores[pet._id] || null,
+      }))
+      .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
+
+      setFavorites(favoritesWithScores);
     } catch (err) {
       setError("Failed to fetch favorites. Please try again later.");
       console.error(err);
@@ -38,15 +59,17 @@ function AccountMyFavorites() {
     setFavorites((prev) => prev.filter((pet) => pet._id !== petId));
   };
 
-  const getSvgForCard = (index) => {
-    const svgFigures = [
-      "/images/card_figure_yellow.svg",
-      "/images/card_figure_red.svg",
-      "/images/card_figure_green.svg",
-    ];
+  const styleConfig = [
+    { svg: "/images/card_figure_yellow.svg", color: "#FEDB66" }, 
+    { svg: "/images/card_figure_red.svg", color: "#FD7E6F" },    
+    { svg: "/images/card_figure_green.svg", color: "#BFCF59" },  
+  ];
+  
+  const getStyleForCard = (index) => {
     const rowIndex = Math.floor(index / 2); 
-    const columnIndex = index % 2;
-    return svgFigures[(rowIndex + columnIndex) % svgFigures.length];
+    const columnIndex = index % 2; 
+    const styleIndex = (rowIndex + columnIndex) % styleConfig.length;
+    return styleConfig[styleIndex];
   };
 
   if (loading) {
@@ -67,42 +90,40 @@ function AccountMyFavorites() {
     );
   }
 
-  if (favorites.length === 0) {
-    return (
-      <main className="flex-1 p-16 mt-2">
-        <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
-        <p className="text-[16px] text-dark">No favorites added yet.</p>
-      </main>
-    );
-  }
-
   return (
     <main className="flex-1 p-16 mt-2">
-  <aside className="w-[700px]">
-    <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
-    <div className="h-auto">
-      {favorites.length > 0 ? (
-        <div 
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-        >
-          {favorites.map((pet, index) => (
-            <PetCard
-              key={pet._id}
-              pet={pet}
-              index={index}
-              getSvgForCard={getSvgForCard}
-              context="favorites"
-              onRemoveFromFavorites={removeFromFavorites}
-              isFavorite={true}
-            />
-          ))}
+      <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
+      {favorites.length === 0 ? (
+        <div>
+          <p className="text-[16px] text-dark">You don’t have any new favorites added yet</p>
+          <button
+            onClick={() => navigate("/pets")}
+            className="mt-10 bg-dark text-white text-[14px] w-full max-w-[200px] py-4 font-medium 
+            rounded-full hover:bg-[#8D9F19] transition"
+          >
+            Choose a pet
+          </button>
         </div>
       ) : (
-        <p>No favorites added yet.</p>
+        <aside className="w-[700px]">
+          <div className="h-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {favorites.map((pet, index) => (
+                <PetCard
+                  key={pet._id}
+                  pet={pet}
+                  index={index}
+                  getStyleForCard={getStyleForCard}
+                  context="favorites"
+                  onRemoveFromFavorites={removeFromFavorites}
+                  isFavorite={true}
+                />
+              ))}
+            </div>
+          </div>
+        </aside>
       )}
-    </div>
-  </aside>
-</main>
+    </main>
   );
 }
 

@@ -89,7 +89,7 @@ const PetFilter = ({ onApplyFilters }) => {
   };
 
   const handleApplyFilters = () => {
-    console.log("Filters to be applied:", localFilters);
+    // console.log("Filters to be applied:", localFilters);
     onApplyFilters(localFilters);
     localStorage.setItem("filters", JSON.stringify(localFilters));
   };
