@@ -124,7 +124,7 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
               className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
                     font-medium rounded-full hover:bg-[#8D9F19] transition"
             >
-              Adopt me
+              More info
             </button>
             <div
               onClick={handleFavoriteClick}
