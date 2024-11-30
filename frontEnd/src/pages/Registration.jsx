@@ -35,7 +35,7 @@ function Registration() {
         `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
         user
       );
-      console.log("user is in the data base");
+      // console.log("user is in the data base");
       alert("Registration successful! Please login to continue.");
       navigate("/login");
     } catch (error) {

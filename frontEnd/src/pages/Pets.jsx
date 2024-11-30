@@ -93,7 +93,7 @@ const getStyleForCard = (index) => {
   };
 
   useEffect(() => {
-    console.log("Filters applied in Pets:", filters);
+    // console.log("Filters applied in Pets:", filters);
     fetchPets();
   }, [filters, user?.userId]);
 
