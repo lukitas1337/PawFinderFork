@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useUserAuth } from "../contexts/UserAuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function AccountMyApplications() {
   const { user, isAuthenticated } = useUserAuth();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  // GET-запрос для получения заявок
   const fetchApplications = async () => {
     if (!isAuthenticated || !user?.userId) {
       setError("You must be logged in to view applications.");
@@ -34,17 +35,30 @@ export default function AccountMyApplications() {
     fetchApplications();
   }, []);
 
-  // DELETE-запрос для удаления заявки
+  const calculateAge = (birthDate) => {
+    const now = new Date();
+    const birth = new Date(birthDate);
+
+    let years = now.getFullYear() - birth.getFullYear();
+    let months = now.getMonth() - birth.getMonth();
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+    return years > 0
+      ? `${years} year${years > 1 ? "s" : ""}`
+      : `${months} month${months > 1 ? "s" : ""}`;
+  };
+
   const handleCancelAdoption = async (petId) => {
     try {
       await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}/adoption-applications`,
         {
-          data: { petId }, // Передаем ID питомца в тело запроса
+          data: { petId },
           withCredentials: true,
         }
       );
-      // Удаляем заявку из локального состояния
       setApplications((prev) => prev.filter((app) => app._id !== petId));
     } catch (err) {
       console.error("Failed to cancel adoption:", err);
@@ -75,48 +89,59 @@ export default function AccountMyApplications() {
       <h1 className="text-[30px] font-black mb-6">MY APPLICATIONS</h1>
       {applications.length === 0 ? (
         <div>
-          <p className="text-[16px] text-dark">
-            You don’t have any new applications yet.
-          </p>
-          <button className="mt-10 bg-dark text-white text-[14px] w-full max-w-[200px] py-4 font-medium 
-          rounded-full hover:bg-[#8D9F19] transition">
-            Choose a pet
-          </button>
-        </div>
+        <p className="text-[16px] text-dark">
+          You don’t have any new applications yet
+        </p>
+        <button
+          onClick={() => navigate("/pets")}
+          className="mt-10 bg-dark text-white text-[14px] w-full max-w-[200px] py-4 font-medium 
+          rounded-full hover:bg-[#8D9F19] transition"
+        >
+          Choose a pet
+        </button>
+      </div>
       ) : (
         <div className="flex flex-col gap-8 mt-12">
-          {applications.map((app) => (
-            <div key={app._id} className="flex flex-col gap-6 items-start pb-6">
+          {applications.map((app) => {
+          const pet = app; 
+          return (
+            <div
+              key={pet._id}
+              className="bg-[#EEEEE3] rounded-[30px] mr-[160px]"
+            >
               <div className="flex flex-col md:flex-row gap-6 items-start">
                 <img
-                  src={app.pictures[0]}
-                  alt={app.name}
-                  className="w-[352px] h-[352px] object-cover rounded-[30px] shadow-md"
+                  src={pet.pictures[0]}
+                  alt={pet.name}
+                  className="w-[352px] h-[352px] object-cover rounded-tl-[30px] rounded-bl-[30px] rounded-br-none 
+                  rounded-tr-none"
                 />
-                <div className="flex flex-col ml-7 -mt-3 flex-1 gap-2">
+                <div className="flex flex-col ml-7 mt-8 flex-1 gap-2">
                   <h2 className="text-[24px] font-black text-dark uppercase">
-                    {app.name}
+                    {pet.name}
                   </h2>
                   <p className="text-[16px] text-dark">
-                    <strong>Gender:</strong> {app.gender}
+                    <strong>Gender:</strong> {pet.gender}
                   </p>
                   <p className="text-[16px] text-dark">
-                    <strong>Age:</strong> {app.age}
+                    <strong>Age:</strong> {calculateAge(pet.age)}
                   </p>
                   <p className="text-[16px] text-dark">
-                    <strong>Size:</strong> {app.size}
+                    <strong>Size:</strong> {pet.size}
                   </p>
                   <p className="text-[16px] text-dark">
-                    <strong>Location:</strong> {app.location}
+                    <strong>Location:</strong> {pet.location}
                   </p>
-
-                  <div className="flex flex-col gap-4 mt-32">
-                    <button className="bg-dark text-white text-[14px] w-full max-w-[200px] py-4 font-medium 
-                    rounded-full hover:bg-[#8D9F19] transition">
+                  <div className="flex flex-col gap-4 mt-24">
+                    <button
+                      onClick={() => navigate(`/pets/${pet._id}`)}
+                      className="bg-dark text-white text-[14px] w-full max-w-[200px] py-4 font-medium 
+                      rounded-full hover:bg-[#8D9F19] transition"
+                    >
                       More info
                     </button>
                     <button
-                      onClick={() => handleCancelAdoption(app._id)}
+                      onClick={() => handleCancelAdoption(pet._id)}
                       className="text-dark border border-dark text-[14px] max-w-[200px] py-4 
                       font-medium rounded-full hover:bg-red hover:text-white hover:border-red transition"
                     >
@@ -125,11 +150,11 @@ export default function AccountMyApplications() {
                   </div>
                 </div>
               </div>
-              <div className="w-full border-b border-gray-300 mt-14"></div>
             </div>
-          ))}
-        </div>
-      )}
-    </main>
+          );
+        })}
+      </div>
+    )}
+  </main>
   );
 }

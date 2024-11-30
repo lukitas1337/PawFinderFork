@@ -5,11 +5,10 @@ import axios from "axios";
 function ApplicationPopup({ pet, onClose }) {
   const { user, isAuthenticated } = useUserAuth();
   const [formData, setFormData] = useState({
-    name: user?.fullName || "", //Fake!!!
-    email: user?.email || "",  //Fake!!!
-    message: "",                //Fake!!!
+    name: user?.fullName || "",
+    email: user?.email || "",
+    message: "",
   });
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +22,7 @@ function ApplicationPopup({ pet, onClose }) {
       alert("Please log in to send an application.");
       return;
     }
-   
+
     try {
       await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}/adoption-applications`,
@@ -31,75 +30,64 @@ function ApplicationPopup({ pet, onClose }) {
         { withCredentials: true }
       );
 
-      setIsSubmitted(true);
+      // alert(`Your application for ${pet.name} was sent successfully!`);
+      onClose();
     } catch (error) {
       console.error("Error submitting application:", error);
+      alert("Something went wrong. Please try again later.");
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg p-8 w-[400px] text-center">
-        {!isSubmitted ? (
-          <>
-            <h2 className="text-2xl font-bold mb-4">Adoption Form</h2>
-            <p className="text-sm text-gray-600 mb-6">
-              Leave your information and we will contact you.
-            </p>
-            <p className="text-sm text-gray-600 mb-6">
-              You are applying for: <strong>{pet.name}</strong>
-            </p>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleChange}
-                className="border p-2 rounded"
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={handleChange}
-                className="border p-2 rounded"
-              />
-              <textarea
-                name="message"
-                placeholder="Leave a message"
-                value={formData.message}
-                onChange={handleChange}
-                className="border p-2 rounded"
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-              >
-                Send Application
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <img
-              src="/images/Check_circle_main_page.png"
-              alt="Success"
-              className="w-12 h-12 mx-auto mb-4"
-            />
-            <p className="text-lg font-semibold mb-2">
-              Your application for <strong>{pet.name}</strong> was sent
-              successfully!
-            </p>
-            <button
-              onClick={onClose}
-              className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-            >
-              Close
-            </button>
-          </>
-        )}
+    <div className="fixed inset-0 flex items-center justify-center bg-dark bg-opacity-50 z-50">
+      <div className="bg-light w-[80%] md:w-[40%] my-[5rem] mx-auto p-[4rem] flex flex-col items-center 
+      rounded-[5rem] shadow-2xl max-h-[90vh] overflow-y-auto">
+        <h2 className="text-[3rem] font-bold mb-4">Adoption Form</h2>
+        <p className="text-[14px] text-dark mb-16">
+          Leave your information and we will contact you
+        </p>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full items-center">
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="border-b-2 border-dark text-[16px] text-[#505865] bg-transparent border-dashed 
+            py-[1rem] max-w-[400px] min-w-[300px] focus:outline-none focus:border-red mb-4"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            value={formData.email}
+            onChange={handleChange}
+            className="border-b-2 border-dark text-[16px] text-[#505865] bg-transparent border-dashed 
+            py-[1rem] max-w-[400px] min-w-[300px] focus:outline-none focus:border-red mb-14"
+          />
+          <textarea
+            name="message"
+            placeholder="Leave a message"
+            value={formData.message}
+            onChange={handleChange}
+            className="border-2 border-dark text-[14px] text-[#505865] bg-transparent border-dashed px-4 py-4
+            h-[150px] mb-16 max-w-[400px] min-w-[300px] rounded-3xl focus:outline-none focus:border-red"
+          />
+          <button
+            type="submit"
+            className="text-white bg-red text-[14px] w-full max-w-[200px] py-3 font-medium rounded-full 
+            transition hover:bg-dark"
+          >
+            Send application
+          </button>
+          <button
+            onClick={onClose}
+            className="text-dark border border-dark text-[14px] w-full max-w-[200px] py-3 font-medium rounded-full 
+            transition hover:bg-dark hover:text-white"
+          >
+            Close
+          </button>
+        </form>
       </div>
     </div>
   );
