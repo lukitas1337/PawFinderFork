@@ -15,6 +15,7 @@ import AccountMyFavorites from "./components/AccountMyFavorites";
 import AccountMyRecommendations from "./components/AccountMyRecommendations";
 import AccountMyApplications from "./components/AccountMyApplications";
 import Questionare from "./components/Questionare";
+import ShelterFront from "./pages/ShelterFront";
 
 function App() {
   return (
@@ -31,13 +32,11 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />
             <Route path="/adoption" element={<Adoption />} />
+            <Route path="/shelters/:id" element={<ShelterFront />} />
             <Route path="/account" element={<PersonalAccount />}>
               <Route index element={<Navigate to="recommendations" />} />
               <Route path="favorites" element={<AccountMyFavorites />} />
-              <Route
-                path="recommendations"
-                element={<AccountMyRecommendations />}
-              />
+              <Route path="recommendations" element={<AccountMyRecommendations />}/>
               <Route path="applications" element={<AccountMyApplications />} />
             </Route>
           </Route>

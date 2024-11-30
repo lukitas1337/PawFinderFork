@@ -40,8 +40,17 @@ function ApplicationPopup({ pet, onClose }) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-dark bg-opacity-50 z-50">
-      <div className="bg-light w-[80%] md:w-[40%] my-[5rem] mx-auto p-[4rem] flex flex-col items-center 
+      <div className="relative bg-light w-[80%] md:w-[40%] my-[5rem] mx-auto p-[4rem] flex flex-col items-center 
       rounded-[5rem] shadow-2xl max-h-[90vh] overflow-y-auto">
+        {/* Кнопка Close в правом верхнем углу */}
+        <button
+          onClick={onClose}
+          className="absolute top-12 right-14 text-dark text-[16px] font-bold rounded-full p-2 
+          transition hover:bg-gray-200"
+        >
+          ✕
+        </button>
+  
         <h2 className="text-[3rem] font-bold mb-4">Adoption Form</h2>
         <p className="text-[14px] text-dark mb-16">
           Leave your information and we will contact you
@@ -53,8 +62,8 @@ function ApplicationPopup({ pet, onClose }) {
             placeholder="Your Name"
             value={formData.name}
             onChange={handleChange}
-            className="border-b-2 border-dark text-[16px] text-[#505865] bg-transparent border-dashed 
-            py-[1rem] max-w-[400px] min-w-[300px] focus:outline-none focus:border-red mb-4"
+            className="border-b-2 border-dark text-[16px] text-dark bg-transparent border-dashed 
+            py-[1rem] max-w-[400px] min-w-[300px] focus:outline-none focus:border-red mb-6"
           />
           <input
             type="email"
@@ -62,7 +71,7 @@ function ApplicationPopup({ pet, onClose }) {
             placeholder="Your Email"
             value={formData.email}
             onChange={handleChange}
-            className="border-b-2 border-dark text-[16px] text-[#505865] bg-transparent border-dashed 
+            className="border-b-2 border-dark text-[16px] text-dark bg-transparent border-dashed 
             py-[1rem] max-w-[400px] min-w-[300px] focus:outline-none focus:border-red mb-14"
           />
           <textarea
@@ -70,22 +79,15 @@ function ApplicationPopup({ pet, onClose }) {
             placeholder="Leave a message"
             value={formData.message}
             onChange={handleChange}
-            className="border-2 border-dark text-[14px] text-[#505865] bg-transparent border-dashed px-4 py-4
-            h-[150px] mb-16 max-w-[400px] min-w-[300px] rounded-3xl focus:outline-none focus:border-red"
+            className="border-2 border-dark text-[16px] text-[#505865] bg-transparent border-dashed px-4 py-4
+            h-[150px] mb-10 max-w-[400px] min-w-[300px] rounded-3xl focus:outline-none focus:border-red"
           />
           <button
             type="submit"
             className="text-white bg-red text-[14px] w-full max-w-[200px] py-3 font-medium rounded-full 
-            transition hover:bg-dark"
+            transition hover:bg-dark mb-8"
           >
             Send application
-          </button>
-          <button
-            onClick={onClose}
-            className="text-dark border border-dark text-[14px] w-full max-w-[200px] py-3 font-medium rounded-full 
-            transition hover:bg-dark hover:text-white"
-          >
-            Close
           </button>
         </form>
       </div>
