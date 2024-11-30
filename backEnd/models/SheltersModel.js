@@ -14,7 +14,7 @@ const shelterSchema = new mongoose.Schema(
     contactPerson: {
       type: String,
       required: true,
-      },
+    },
     companyName: {
       type: String,
       required: true,
@@ -25,8 +25,8 @@ const shelterSchema = new mongoose.Schema(
     },
     userType: {
       type: String,
-      enum: ['user', 'admin', 'shelter'],
-      default: 'shelter',
+      enum: ["user", "admin", "shelter"],
+      default: "shelter",
       required: true,
     },
     address: {
@@ -59,6 +59,14 @@ const shelterSchema = new mongoose.Schema(
     },
     companyImage: {
       type: String,
+    },
+    position: {
+      type: {
+        type: String,
+        default: "Point",
+        enum: ["Point"],
+      },
+      coordinates: [Number],
     },
   },
   {

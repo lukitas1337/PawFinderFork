@@ -52,7 +52,9 @@ function Login() {
   return (
     <main>
       <div className="bg-light w-[80%] md:w-[50%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
-        <h2 className="text-[2.4rem] font-bold">Create your account</h2>
+        <h2 className="text-[2.4rem] font-bold">
+          Please enter your credentials
+        </h2>
         <form
           className="registerForm flex flex-col gap-[5rem] w-[70%] mx-auto text-[1.6rem]"
           onSubmit={handleSubmit}
@@ -98,7 +100,7 @@ function Login() {
         <h3 className="text-[1.4rem]">
           Not a member yet?
           <Link to="/Sign up" className="font-semibold">
-            Login
+            Sign up
           </Link>
         </h3>
       </div>
