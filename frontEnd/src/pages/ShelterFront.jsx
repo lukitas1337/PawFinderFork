@@ -87,25 +87,25 @@ const ShelterFront = () => {
             className="absolute top-0 right-0 w-[150px] transform"
           />
           <div className="ml-6">
-            <h2 className="text-[30px] font-black uppercase text-dark break-words">
+            <h2 className="text-[36px] font-black uppercase text-dark break-words">
               {shelter.companyName}
             </h2>
-            <p className="text-dark text-[14px] break-words mb-6">{shelter.address}</p>
+            <p className="text-dark text-[16px] break-words mb-6">{shelter.address}</p>
             <div className="flex flex-col md:flex-row mt-4">
               <div className="flex items-start gap-16">
                 <div className="flex-1 space-y-2">
-                  <p className="text-dark text-[14px]">
+                  <p className="text-dark text-[16px]">
                     <strong>Contact Person:</strong> {shelter.contactPerson}
                   </p>
-                  <p className="text-dark text-[14px] flex items-center gap-2 whitespace-nowrap">
+                  <p className="text-dark text-[16px] flex items-center gap-2 whitespace-nowrap">
                     <strong>Email:</strong> {shelter.email}
                   </p>
                 </div>
                 <div className=" flex-1 space-y-2">
-                <p className="text-dark text-[14px] break-words">
+                <p className="text-dark text-[16px] break-words">
                     <strong>Phone:</strong> {shelter.phone}
                   </p>
-                  <p className="text-dark text-[14px] flex items-center gap-2 whitespace-nowrap">
+                  <p className="text-dark text-[16px] flex items-center gap-2 whitespace-nowrap">
                     <strong>Website:</strong>{" "}
                     <a
                       href={shelter.website}
