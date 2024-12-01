@@ -5,6 +5,8 @@ import { useUserAuth } from "../contexts/UserAuthContext";
 import PetHeader from "../components/PetHeader";
 import PetFilter from "../components/PetFilter";
 import PetList from "../components/PetList";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 function Pets() {
   const location = useLocation();
@@ -12,57 +14,66 @@ function Pets() {
   const { user, isAuthenticated } = useUserAuth();
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState({
     location: [],
     age: [],
     size: [],
-    petType: searchParams.get('type') ? [searchParams.get('type')] : [],
+    petType: searchParams.get("type") ? [searchParams.get("type")] : [],
     gender: [],
   });
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []); 
+  }, []);
 
   const styleConfig = [
-  { svg: "/images/card_figure_yellow.svg", color: "#FEDB66" }, 
-  { svg: "/images/card_figure_red.svg", color: "#FD7E6F" },    
-  { svg: "/images/card_figure_green.svg", color: "#BFCF59" },  
-];
+    { svg: "/images/card_figure_yellow.svg", color: "#FEDB66" },
+    { svg: "/images/card_figure_red.svg", color: "#FD7E6F" },
+    { svg: "/images/card_figure_green.svg", color: "#BFCF59" },
+  ];
 
-const getStyleForCard = (index) => {
-  const rowIndex = Math.floor(index / 3); 
-  const columnIndex = index % 3; 
-  const styleIndex = (rowIndex + columnIndex) % styleConfig.length;
-  return styleConfig[styleIndex];
-};
+  const getStyleForCard = (index) => {
+    const rowIndex = Math.floor(index / 3);
+    const columnIndex = index % 3;
+    const styleIndex = (rowIndex + columnIndex) % styleConfig.length;
+    return styleConfig[styleIndex];
+  };
 
   const fetchPets = async () => {
     setLoading(true);
     try {
-
-
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/pets`, {
-        params: {
-          location: filters.location.length > 0 ? filters.location.join(",") : undefined,
-          age: filters.age.length > 0 ? filters.age : undefined,
-          size: filters.size.length > 0 ? filters.size.join(",") : undefined,
-          gender: filters.gender.length > 0 ? filters.gender.join(",") : undefined,
-          petType: filters.petType.length > 0 ? filters.petType.join(",") : undefined,
-
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/pets`,
+        {
+          params: {
+            location:
+              filters.location.length > 0
+                ? filters.location.join(",")
+                : undefined,
+            age: filters.age.length > 0 ? filters.age : undefined,
+            size: filters.size.length > 0 ? filters.size.join(",") : undefined,
+            gender:
+              filters.gender.length > 0 ? filters.gender.join(",") : undefined,
+            petType:
+              filters.petType.length > 0
+                ? filters.petType.join(",")
+                : undefined,
+          },
+        }
+      );
 
       if (user?.userId) {
         const matchesResponse = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${user.userId}/scores`,
+          `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${
+            user.userId
+          }/scores`,
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
         );
 
@@ -70,23 +81,24 @@ const getStyleForCard = (index) => {
           acc[match.petId] = match.score;
           return acc;
         }, {});
-  
-        const petsWithScores = response.data.map(pet => ({
-          ...pet,
-          matchScore: matchScores[pet._id] || null
-        }))
-        .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0)); // sorting by matchScore
-  
+
+        const petsWithScores = response.data
+          .map((pet) => ({
+            ...pet,
+            matchScore: matchScores[pet._id] || null,
+          }))
+          .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0)); // sorting by matchScore
+
         setPets(petsWithScores);
       } else {
         setPets(response.data);
       }
     } catch (err) {
-      console.error('Error in fetchPets:', {
+      console.error("Error in fetchPets:", {
         message: err.message,
-        fullError: err
+        fullError: err,
       });
-      setError(err.message);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -107,11 +119,11 @@ const getStyleForCard = (index) => {
   );
 
   useEffect(() => {
-    const typeFromUrl = searchParams.get('type');
+    const typeFromUrl = searchParams.get("type");
     if (typeFromUrl) {
-      setFilters(prev => ({
+      setFilters((prev) => ({
         ...prev,
-        petType: [typeFromUrl]
+        petType: [typeFromUrl],
       }));
     }
   }, [searchParams]);
@@ -126,9 +138,9 @@ const getStyleForCard = (index) => {
         />
         {showFilters && <PetFilter onApplyFilters={applyFilters} />}
         {loading ? (
-          <p>Loading...</p>
+          <Loading />
         ) : error ? (
-          <p>Error: {error}</p>
+          <Error />
         ) : pets.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh] mt-20">
             <img
@@ -144,10 +156,11 @@ const getStyleForCard = (index) => {
             </p>
           </div>
         ) : (
-          <PetList 
-          pets={pets} 
-          getStyleForCard={getStyleForCard}
-          userFavorites={user?.favorites || []} />
+          <PetList
+            pets={pets}
+            getStyleForCard={getStyleForCard}
+            userFavorites={user?.favorites || []}
+          />
         )}
       </div>
     </div>

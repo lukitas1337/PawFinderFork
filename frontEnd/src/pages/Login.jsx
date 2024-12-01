@@ -2,6 +2,7 @@ import { useEffect, useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useUserAuth } from "../contexts/UserAuthContext";
+import { ToastContainer } from "react-toastify";
 
 const localInitialState = { email: "", password: "" };
 function reducer(state, action) {
@@ -32,30 +33,12 @@ function Login() {
     },
     [isAuthenticated, navigate]
   );
-  /*   async function handleSubmit(e) {
-    e.preventDefault();
-    try {
-      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login`, {
-        email,
-        password,
-      });
-      const userLoggedIn = res.data.user;
-      setUser(userLoggedIn);
-    } catch (error) {
-      alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
-    } finally {
-      navigate("/");
-    }
-  } */
-  function handleGoogleLogin() {}
 
   return (
     <main>
       <div className="bg-light w-[80%] md:w-[50%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
         <h2 className="text-[2.4rem] font-bold">
-
           Please enter your credentials
-
         </h2>
         <form
           className="registerForm flex flex-col gap-[5rem] w-[70%] mx-auto text-[1.6rem]"
@@ -90,10 +73,7 @@ function Login() {
           </button>
         </form>
         <h2 className="text-[2.4rem] font-bold">Or</h2>
-        <button
-          className="btn flex items-center gap-[1rem] bg-white py-[1rem] px-[2rem] text-[1.6rem] rounded-[1.5rem] hover:bg-light hover:border-2 hover:border-dark"
-          onClick={handleGoogleLogin}
-        >
+        <button className="btn flex items-center gap-[1rem] bg-white py-[1rem] px-[2rem] text-[1.6rem] rounded-[1.5rem] hover:bg-light hover:border-2 hover:border-dark">
           <span>
             <FcGoogle className="text-[2.4rem]" />
           </span>
@@ -106,6 +86,7 @@ function Login() {
           </Link>
         </h3>
       </div>
+      <ToastContainer className="text-[1.4rem] w-[30%]" />
     </main>
   );
 }

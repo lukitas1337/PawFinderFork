@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import ApplicationPopup from "../components/ApplicationPopup";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 function Pet() {
   const { id } = useParams();
@@ -10,7 +12,7 @@ function Pet() {
   const [images, setImages] = useState([]);
   const [curImage, setCurImage] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false); //Inna: I added this line
   const { user, isAuthenticated } = useUserAuth();
   const [isFavorite, setIsFavorite] = useState(
@@ -31,7 +33,9 @@ function Pet() {
           setCurImage(res.data.pictures?.[0]);
           setLoading(false);
         } catch (error) {
-          setError(error.message);
+          setError(true);
+          throw new Error(error);
+        } finally {
           setLoading(false);
         }
       }
@@ -88,8 +92,18 @@ function Pet() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading)
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  if (error)
+    return (
+      <div>
+        <Error />
+      </div>
+    );
   if (!pet) return <div>Pet not found</div>;
 
   const openPopup = () => setIsPopupOpen(true); //Inna: I added this line
@@ -150,7 +164,7 @@ function Pet() {
         </div>
         <div className="flex items-center gap-4">
           <button
-          onClick={openPopup}
+            onClick={openPopup}
             className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
                     font-medium rounded-full hover:bg-[#8D9F19] transition"
           >
@@ -174,7 +188,8 @@ function Pet() {
           </div>
         </div>
       </div>
-      {isPopupOpen && <ApplicationPopup pet={pet} onClose={closePopup} />} {/*Inna: I added this line*/}
+      {isPopupOpen && <ApplicationPopup pet={pet} onClose={closePopup} />}{" "}
+      {/*Inna: I added this line*/}
     </div>
   );
 }
