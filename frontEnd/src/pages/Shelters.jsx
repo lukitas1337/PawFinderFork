@@ -42,6 +42,9 @@ function Shelters() {
 
   return (
     <main className="my-[10rem] px-[4rem] py-10">
+      <h2 className="text-[5rem] font-bold mb-[3rem] uppercase">
+        Which Shelter is best for you?
+      </h2>
       <div className="sheltersContainer flex justify-between">
         {loading ? (
           <Loading />

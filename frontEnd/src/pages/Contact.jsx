@@ -4,7 +4,11 @@ import SendMessageAlert from "../components/SendMessageAlert";
 import ContactForm from "../components/ContactForm";
 
 function Contact() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
   const [successMessage, setSuccessMessage] = useState("");
 
   const handleInputChange = (event) => {
