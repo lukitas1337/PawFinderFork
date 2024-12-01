@@ -6,6 +6,7 @@ import passport from "passport";
 import authRoutes from "./routes/authRoutes.js";
 import "./config/passport.js";
 import petRoutes from "./routes/petsRoutes.js";
+import adPetRoutes from "./routes/adPetsRoutes.js";
 import matchingRoutes from "./routes/matchingRoutes.js";
 import { errorHandler } from "./utils/errorHandler.js";
 import connectDB from "./db/mongoDB.js";
@@ -27,6 +28,7 @@ app.use(passport.initialize());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRouter);
+app.use("/api/adPets", adPetRoutes);
 app.use("/api/pets", petRoutes);
 app.use("/api/shelters", shelterRoutes);
 app.use("/api/matching", matchingRoutes);
