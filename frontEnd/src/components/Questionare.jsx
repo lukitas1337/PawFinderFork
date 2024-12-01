@@ -4,13 +4,13 @@ import axios from "axios";
 
 const initialState = {
   housingSituation: "",
-  dailyAloneHours: null,
+  dailyAloneHours: "",
   workplaceAccommodation: "",
   householdComposition: "",
-  hasPetExperience: null,
+  hasPetExperience: "",
   currentPets: { hasPets: true, petDetails: "" },
-  previousAdoption: { hasAdopted: null },
-  petSurrender: { hasSurrendered: null },
+  previousAdoption: { hasAdopted: "" },
+  petSurrender: { hasSurrendered: "" },
   additionalInformation: "",
 };
 
@@ -19,7 +19,7 @@ function reducer(state, action) {
     case "setHousing":
       return { ...state, housingSituation: action.payload };
     case "setAloneHours":
-      return { ...state, dailyAloneHours: Number(action.payload) };
+      return { ...state, dailyAloneHours: (action.payload) };
     case "setWorkPlace":
       return { ...state, workplaceAccommodation: action.payload };
     case "setHouseHold":
@@ -75,10 +75,10 @@ function Questionare() {
         alert('Please log in to submit the questionnaire');
         return;
       }
-
+  
       const newQuestionare = {
         housingSituation,
-        dailyAloneHours,
+        dailyAloneHours: Number(dailyAloneHours),
         workplaceAccommodation,
         householdComposition,
         hasPetExperience,
@@ -89,12 +89,20 @@ function Questionare() {
         petSurrender,
         additionalInformation,
       };
+  
+      console.log('Submitting questionnaire:', newQuestionare);
 
       await addQuestionnaireToUser(newQuestionare);
-
-      const response = await axios.post(
+      console.log('Questionnaire saved successfully');
+  
+      
+      const questionnaireResponse = await addQuestionnaireToUser(newQuestionare);
+      console.log('Questionnaire response:', questionnaireResponse);
+  
+      
+      const matchResponse = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/matching/calculate-bulk-matches/${user.userId}`,
-        {},
+        newQuestionare,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -102,9 +110,13 @@ function Questionare() {
           }
         }
       );
+      console.log('Match calculation response:', matchResponse.data);
 
+      alert('Questionnaire submitted successfully!');
+  
     } catch (error) {
-      alert('There was an error submitting your questionnaire. Please try again.');
+      console.error('Error submitting questionnaire:', error.response || error);
+      alert(error.response?.data?.message || 'There was an error submitting your questionnaire. Please try again.');
     }
   }
 
@@ -203,8 +215,7 @@ function Questionare() {
           </label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={hasPetExperience}
-            onChange={(e) =>
+            value={hasPetExperience || ""}            onChange={(e) =>
               localDispatch({
                 type: "setHasPetExperience",
                 payload: e.target.value,
@@ -212,9 +223,9 @@ function Questionare() {
             }
             id="hasPetExperience"
           >
-            <option>Please Select An Option</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
+           <option value="">Please Select An Option</option>
+  <option value="true">Yes</option>
+            <option value="false">No</option>
           </select>
         </div>
         {hasPetExperience && (
@@ -260,7 +271,7 @@ function Questionare() {
           <label htmlFor="previousAdoption">Have you ever adopt any pet?</label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={previousAdoption.hasAdopted}
+            value={previousAdoption.hasAdopted || ""}
             onChange={(e) =>
               localDispatch({
                 type: "setAdoption",
@@ -280,7 +291,7 @@ function Questionare() {
           </label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={petSurrender.hasSurrendered}
+            value={petSurrender.hasSurrendered || ""}
             onChange={(e) =>
               localDispatch({
                 type: "setPetSurrender",
