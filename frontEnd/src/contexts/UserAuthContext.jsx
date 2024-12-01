@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 const UserAuthContext = createContext();
 
 const initialState = { user: null, isAuthenticated: false };
@@ -47,7 +47,16 @@ function UserAuthProvider({ children }) {
       console.log(userLoggedIn);
       dispatch({ type: "login", payload: userLoggedIn });
     } catch (error) {
-      alert("🛑EMAIL OR PASSWORD IS INCORRECT🛑");
+      toast.error("EMAIL OR PASSWORD IS INCORRECT", {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 

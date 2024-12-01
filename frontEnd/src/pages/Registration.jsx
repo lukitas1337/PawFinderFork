@@ -3,6 +3,7 @@ import { useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const initialState = {
   fullName: "",
@@ -36,8 +37,17 @@ function Registration() {
         user
       );
       // console.log("user is in the data base");
-      alert("Registration successful! Please login to continue.");
-      navigate("/login");
+      toast.success("Wow you are a paw finder!", {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
+      setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
       console.log(error);
     }
@@ -141,6 +151,7 @@ function Registration() {
           </Link>
         </h3>
       </div>
+      <ToastContainer className="text-[1.4rem]" />
     </main>
   );
 }

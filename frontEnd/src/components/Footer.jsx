@@ -17,7 +17,7 @@ function Footer() {
             <Link to="/pets">Find a pet</Link>
           </li>
           <li>
-            <Link to="">Get involved</Link>
+            <Link to="/shelters">Get involved</Link>
           </li>
           <li>
             <Link to="/contact">Contact</Link>

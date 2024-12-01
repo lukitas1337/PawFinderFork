@@ -3,31 +3,39 @@ import axios from "axios";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import PetCard from "./PetCard";
 import { useNavigate } from "react-router-dom";
+import Loading from "./Loading";
+import Error from "./Error";
 
 function AccountMyFavorites() {
   const { user, isAuthenticated } = useUserAuth();
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const fetchFavorites = async () => {
     if (!isAuthenticated || !user?.userId) {
-      setError("You must be logged in to view favorites.");
+      setError(true);
       setLoading(false);
       return;
     }
 
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}/favorites`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${
+          user.userId
+        }/favorites`,
         { withCredentials: true }
       );
 
-      // matchScore 
+      // matchScore
       const matchesResponse = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${user.userId}/scores`,
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${
+          user.userId
+        }/scores`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
 
       const matchScores = matchesResponse.data.reduce((acc, match) => {
@@ -35,16 +43,17 @@ function AccountMyFavorites() {
         return acc;
       }, {});
 
-      // matchScore 
-      const favoritesWithScores = response.data.map((pet) => ({
-        ...pet,
-        matchScore: matchScores[pet._id] || null,
-      }))
-      .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
+      // matchScore
+      const favoritesWithScores = response.data
+        .map((pet) => ({
+          ...pet,
+          matchScore: matchScores[pet._id] || null,
+        }))
+        .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
 
       setFavorites(favoritesWithScores);
     } catch (err) {
-      setError("Failed to fetch favorites. Please try again later.");
+      setError(true);
       console.error(err);
     } finally {
       setLoading(false);
@@ -60,14 +69,14 @@ function AccountMyFavorites() {
   };
 
   const styleConfig = [
-    { svg: "/images/card_figure_yellow.svg", color: "#FEDB66" }, 
-    { svg: "/images/card_figure_red.svg", color: "#FD7E6F" },    
-    { svg: "/images/card_figure_green.svg", color: "#BFCF59" },  
+    { svg: "/images/card_figure_yellow.svg", color: "#FEDB66" },
+    { svg: "/images/card_figure_red.svg", color: "#FD7E6F" },
+    { svg: "/images/card_figure_green.svg", color: "#BFCF59" },
   ];
-  
+
   const getStyleForCard = (index) => {
-    const rowIndex = Math.floor(index / 2); 
-    const columnIndex = index % 2; 
+    const rowIndex = Math.floor(index / 2);
+    const columnIndex = index % 2;
     const styleIndex = (rowIndex + columnIndex) % styleConfig.length;
     return styleConfig[styleIndex];
   };
@@ -76,7 +85,9 @@ function AccountMyFavorites() {
     return (
       <main className="flex-1 p-16 mt-2">
         <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
-        <p className="text-[16px] text-dark">Loading...</p>
+        <p className="text-[16px] text-dark">
+          <Loading />
+        </p>
       </main>
     );
   }
@@ -85,7 +96,9 @@ function AccountMyFavorites() {
     return (
       <main className="flex-1 p-16 mt-2">
         <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
-        <p className="text-[16px] text-red-600">{error}</p>
+        <p className="text-[16px] text-red-600">
+          <Error />
+        </p>
       </main>
     );
   }
@@ -95,7 +108,9 @@ function AccountMyFavorites() {
       <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
       {favorites.length === 0 ? (
         <div>
-          <p className="text-[16px] text-dark">You don’t have any new favorites added yet</p>
+          <p className="text-[16px] text-dark">
+            You don’t have any new favorites added yet
+          </p>
           <button
             onClick={() => navigate("/pets")}
             className="mt-10 bg-dark text-white text-[14px] w-full max-w-[200px] py-4 font-medium 
