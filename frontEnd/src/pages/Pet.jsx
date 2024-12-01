@@ -46,42 +46,52 @@ function Pet() {
   //   [id]
   // );
 
-  useEffect(function () {
-    async function getPet() {
-      try {
-        setLoading(true);
-        // Only fetch pet details first
-        const petRes = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`);
-        setPet(petRes.data);
-        setImages(petRes.data.pictures || []);
-        setCurImage(petRes.data.pictures?.[0]);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+  useEffect(
+    function () {
+      async function getPet() {
+        try {
+          setLoading(true);
+          // Only fetch pet details first
+          const petRes = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`
+          );
+          setPet(petRes.data);
+          setImages(petRes.data.pictures || []);
+          setCurImage(petRes.data.pictures?.[0]);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
       }
-    }
-    getPet();
-  }, [id]);
+      getPet();
+    },
+    [id]
+  );
 
-  useEffect(function () {
-    async function getMatchDetails() {
-      if (!user?.userId) return;
-      
-      try {
-        setMatchLoading(true);
-        const matchRes = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/matching/result-with-details/${user.userId}/${id}`
-        );
-        setMatchDetails(matchRes.data);
-      } catch (error) {
-        console.error("Error fetching match details:", error);
-      } finally {
-        setMatchLoading(false);
+  useEffect(
+    function () {
+      async function getMatchDetails() {
+        if (!user?.userId) return;
+
+        try {
+          setMatchLoading(true);
+          const matchRes = await axios.get(
+            `${
+              import.meta.env.VITE_BACKEND_URL
+            }/api/matching/result-with-details/${user.userId}/${id}`
+          );
+          setMatchDetails(matchRes.data);
+        } catch (error) {
+          console.error("Error fetching match details:", error);
+        } finally {
+          setMatchLoading(false);
+        }
       }
-    }
-    getMatchDetails();
-  }, [id, user?.userId]);
+      getMatchDetails();
+    },
+    [id, user?.userId]
+  );
 
   const calculateAge = (birthDate) => {
     const now = new Date();
@@ -149,64 +159,100 @@ function Pet() {
   const closePopup = () => setIsPopupOpen(false); //Inna: I added this line
 
   return (
-    <div className="flex w-full my-[10rem] px-[4rem] py-10 mx-auto gap-[15rem]">
-      <div className="petImages w-[40%]">
-        <figure className="w-full">
-          <img src={curImage} alt="dog" className="w-full rounded-[5rem]" />
-        </figure>
-        <div className="flex justify-between w-full">
-          {images.map((img) => (
-            <img
-              src={img}
-              alt={pet.name}
-              key={img}
-              className="w-[10rem] h-[10rem] mt-[8rem] rounded-[1.5rem]"
-              onClick={(e) => handleCurImage(e.target)}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="dogInfo flex flex-col justify-between w-[40%]  ">
-        <div className="flex flex-col gap-[1rem] ">
-          <h2 className="text-[4rem] font-bold">{pet.name}</h2>
-          <p className="text-[2rem]">{pet.breed}</p>
-          <p className="text-[2rem]">
-            {pet.gender}.{calculateAge(pet.age)}.{pet.size}
-          </p>
-          <p className="text-[2rem]">{pet.location}</p>
-        </div>
-        <div className="w-full h-[1px] bg-slate-700"></div>
-        <div className="flex flex-col gap-[1rem]">
-          <h3 className="text-[2rem] font-bold uppercase">About Me</h3>
-          <div className="text-[2rem] flex flex-col gap-[1rem]">
-            <p className="flex gap-[5rem]">
-              <span>{pet.vaccinated ? "✔️ Vaccinated" : "❌ Vaccinated"}</span>
-              <span>{pet.neutured ? "✔️ Neutured" : "❌ Neutuered"}</span>
-            </p>
-            <p className="flex gap-[6.7rem]">
-              <span>{pet.microchipped ? "✔️ Microchip" : "❌ Microchip"}</span>
-              <span>
-                {pet.sociableWithOtherPets
-                  ? "✔️ Friendly with other pets"
-                  : "❌ Friendly with other pets"}
-              </span>
-            </p>
+    <main className="my-[10rem] px-[4rem] py-10 flex flex-col gap-[3rem]">
+      <div className="flex w-full  mx-auto gap-[15rem]">
+        <div className="petImages w-[40%]">
+          <figure className="w-full">
+            <img src={curImage} alt="dog" className="w-full rounded-[5rem]" />
+          </figure>
+          <div className="flex justify-between w-full">
+            {images.map((img) => (
+              <img
+                src={img}
+                alt={pet.name}
+                key={img}
+                className="w-[10rem] h-[10rem] mt-[8rem] rounded-[1.5rem]"
+                onClick={(e) => handleCurImage(e.target)}
+              />
+            ))}
           </div>
         </div>
-        <div className="w-full h-[1px] bg-slate-700"></div>
-        <div className="dogStory">
-          <h3 className="text-[2rem] font-bold uppercase">My Story</h3>
-          <p className="text-justify text-[1.6rem]">
-            {pet.petStory.split("<br/>")[0]} <br />{" "}
-            {pet.petStory.split("<br/>")[1]}
-          </p>
-        </div>
+        <div className="dogInfo flex flex-col justify-between w-[40%]  ">
+          <div className="flex flex-col gap-[1rem] ">
+            <h2 className="text-[4rem] font-bold">{pet.name}</h2>
+            <p className="text-[2rem]">{pet.breed}</p>
+            <p className="text-[2rem]">
+              {pet.gender}.{calculateAge(pet.age)}.{pet.size}
+            </p>
+            <p className="text-[2rem]">{pet.location}</p>
+          </div>
+          <div className="w-full h-[1px] bg-slate-700"></div>
+          <div className="flex flex-col gap-[1rem]">
+            <h3 className="text-[2rem] font-bold uppercase">About Me</h3>
+            <div className="text-[2rem] flex flex-col gap-[1rem]">
+              <p className="flex gap-[5rem]">
+                <span>
+                  {pet.vaccinated ? "✔️ Vaccinated" : "❌ Vaccinated"}
+                </span>
+                <span>{pet.neutured ? "✔️ Neutured" : "❌ Neutuered"}</span>
+              </p>
+              <p className="flex gap-[6.7rem]">
+                <span>
+                  {pet.microchipped ? "✔️ Microchip" : "❌ Microchip"}
+                </span>
+                <span>
+                  {pet.sociableWithOtherPets
+                    ? "✔️ Friendly with other pets"
+                    : "❌ Friendly with other pets"}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="w-full h-[1px] bg-slate-700"></div>
+          <div className="dogStory">
+            <h3 className="text-[2rem] font-bold uppercase">My Story</h3>
+            <p className="text-justify text-[1.6rem]">
+              {pet.petStory.split("<br/>")[0]} <br />{" "}
+              {pet.petStory.split("<br/>")[1]}
+            </p>
+          </div>
 
-        {user?.userId && (
-        <div className="matchDetails">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={openPopup}
+              className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
+                    font-medium rounded-full hover:bg-[#8D9F19] transition"
+            >
+              Adopt me
+            </button>
+            <div
+              onClick={handleFavoriteClick}
+              className={`w-16 h-16 flex items-center justify-center rounded-full transition 
+                ${
+                  isFavorite
+                    ? "bg-dark"
+                    : "border border-dark group hover:bg-dark"
+                }`}
+            >
+              <img
+                src="/images/favorites.svg"
+                alt="Favorite"
+                className={`w-8 h-8 transition 
+                  ${isFavorite ? "invert" : "group-hover:invert"}`}
+              />
+            </div>
+          </div>
+        </div>
+        {isPopupOpen && <ApplicationPopup pet={pet} onClose={closePopup} />}{" "}
+        {/*Inna: I added this line*/}
+      </div>
+      {user?.userId && (
+        <div className="matchDetails w-full rounded-[5rem] bg-[#E7E7D6] py-[3rem] px-[5rem]">
           <h3 className="text-[2rem] font-bold uppercase">Match Details</h3>
           {matchLoading ? (
-            <p className="text-justify text-[1.6rem]">Calculating your match...</p>
+            <p className="text-justify text-[1.6rem]">
+              Calculating your match...
+            </p>
           ) : matchDetails?.adopterExplanation ? (
             <p className="text-justify text-[1.6rem]">
               {matchDetails.adopterExplanation}
@@ -214,36 +260,7 @@ function Pet() {
           ) : null}
         </div>
       )}
-
-        <div className="flex items-center gap-4">
-          <button
-            onClick={openPopup}
-            className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
-                    font-medium rounded-full hover:bg-[#8D9F19] transition"
-          >
-            Adopt me
-          </button>
-          <div
-            onClick={handleFavoriteClick}
-            className={`w-16 h-16 flex items-center justify-center rounded-full transition 
-                ${
-                  isFavorite
-                    ? "bg-dark"
-                    : "border border-dark group hover:bg-dark"
-                }`}
-          >
-            <img
-              src="/images/favorites.svg"
-              alt="Favorite"
-              className={`w-8 h-8 transition 
-                  ${isFavorite ? "invert" : "group-hover:invert"}`}
-            />
-          </div>
-        </div>
-      </div>
-      {isPopupOpen && <ApplicationPopup pet={pet} onClose={closePopup} />}{" "}
-      {/*Inna: I added this line*/}
-    </div>
+    </main>
   );
 }
 
