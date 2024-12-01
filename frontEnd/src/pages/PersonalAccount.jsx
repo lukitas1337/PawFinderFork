@@ -4,7 +4,7 @@ import AccountSidebar from "../components/AccountSidebar";
 
 export default function PersonalAccount() {
   return (
-    <div className="bg-[#FAFAF5] flex">
+    <div className="flex">
         <AccountSidebar />
       <div className="flex-1 flex flex-col">
         <Outlet />

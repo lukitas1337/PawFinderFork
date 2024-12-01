@@ -19,7 +19,7 @@ const AboutStatistics = () => {
         className="bg-red text-white py-[70px] mb-20 md:mb-44 lg:mb-44 xl:mb-44 sm:mb-20 rounded-[30px] 
         text-center flex flex-col md:flex-row justify-around items-center gap-6 md:gap-0">
         {[
-          { end: 350000, text: "New Animals in Animal Shelters Yearly in Germany" },
+          { end: 350000, text: "Annual Shelter Intakes in Germany" },
           { end: 240000, text: "Adopted Animals Yearly in Germany" },
           { end: 34300000, text: "Animals living in German Households" },
         ].map((stat, index) => (

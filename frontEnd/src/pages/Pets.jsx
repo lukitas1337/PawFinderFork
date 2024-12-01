@@ -129,8 +129,8 @@ function Pets() {
   }, [searchParams]);
 
   return (
-    <div className="bg-[#FAFAF5] min-h-screen flex flex-col justify-between">
-      <div className="px-8 sm:px-8 xl:px-[200px] lg:px-8 md:px-8 py-10">
+    <div className="min-h-screen flex flex-col justify-between">
+      <div className="px-8 sm:px-8 xl:px-[200px] 2xl:px-[250px] lg:px-8 md:px-8 py-10">
         <PetHeader
           toggleFilters={() => setShowFilters((prev) => !prev)}
           isFilterOpen={showFilters}
