@@ -26,7 +26,7 @@ function Contact() {
   };
 
   return (
-    <div className="bg-[#FAFAF5] min-h-screen flex flex-col items-center relative">
+    <div className="min-h-screen flex flex-col items-center relative">
       <SendMessageAlert message={successMessage} />
       <main className="container mx-auto flex flex-col items-center px-40 mt-28">
         <GetInTouchSection />

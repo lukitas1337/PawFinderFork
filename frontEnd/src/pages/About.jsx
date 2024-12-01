@@ -4,7 +4,7 @@ import AboutStatistics from "../components/AboutStatistics";
 import AboutMatchingSection from "../components/AboutMatchingSection";
 
 const About = () => (
-  <div className="bg-[#FAFAF5] min-h-screen flex flex-col justify-between">
+  <div className="min-h-screen flex flex-col justify-between">
     <main>
       <AboutUsSection />
       <AboutStatistics />
