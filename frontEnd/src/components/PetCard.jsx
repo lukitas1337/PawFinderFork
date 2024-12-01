@@ -16,13 +16,11 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
 
   const handleFavoriteClick = async (e) => {
     e.stopPropagation();
-
     if (!isAuthenticated || !user?.userId) {
       alert("Please log in to manage favorites.");
       navigate("/login");
       return;
     }
-
     try {
       if (context === "favorites") {
         await axios.delete(
@@ -36,7 +34,6 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
             `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
             { data: { petId: pet?._id }, withCredentials: true }
           );
-
         } else {
           await axios.put(
             `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
@@ -44,7 +41,6 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
             { withCredentials: true }
           );
         }
-
         setIsFavorite((prev) => !prev);
       }
     } catch (error) {
