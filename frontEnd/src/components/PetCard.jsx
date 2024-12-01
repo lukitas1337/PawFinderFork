@@ -64,8 +64,40 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
       : `${months} month${months > 1 ? "s" : ""}`;
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = async () => {
+
     navigate(`/pets/${pet._id}`);
+
+    if (user?.userId) {
+      try {
+        console.log('Checking match details for:', {
+          userId: user.userId,
+          petId: pet._id
+        });
+  
+        // First check if we already have a match result with explanation
+        const matchResponse = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/matching/result-with-details/${user.userId}/${pet._id}`
+        );
+        
+        console.log('Match response:', matchResponse.data);
+  
+        // If no explanation exists, calculate it
+        if (!matchResponse.data?.adopterExplanation) {
+          console.log('No explanation found, calculating match...');
+          await axios.post( // Changed from get to post to match your route
+            `${import.meta.env.VITE_BACKEND_URL}/api/matching/calculate-match/${user.userId}/${pet._id}`
+          );
+        }
+      } catch (error) {
+        console.error("Error getting match details:", error.response || error);
+      }
+    } else {
+      console.log('User not logged in, proceeding to pet details');
+    }
+    
+    // Always navigate, even if there's an error
+    
   };
 
   const { svg, color } = getStyleForCard(index);

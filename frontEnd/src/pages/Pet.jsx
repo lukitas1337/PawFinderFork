@@ -9,40 +9,79 @@ import Error from "../components/Error";
 function Pet() {
   const { id } = useParams();
   const [pet, setPet] = useState({});
+  const [matchDetails, setMatchDetails] = useState(null);
   const [images, setImages] = useState([]);
   const [curImage, setCurImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false); //Inna: I added this line
   const { user, isAuthenticated } = useUserAuth();
+  const [matchLoading, setMatchLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(
     user?.favorites.includes(id) || false
   );
   const navigate = useNavigate();
 
-  useEffect(
-    function () {
-      async function getPet() {
-        try {
-          setLoading(true);
-          const res = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`
-          );
-          setPet(res.data);
-          setImages(res.data.pictures || []);
-          setCurImage(res.data.pictures?.[0]);
-          setLoading(false);
-        } catch (error) {
-          setError(true);
-          throw new Error(error);
-        } finally {
-          setLoading(false);
-        }
+  // useEffect(
+  //   function () {
+  //     async function getPet() {
+  //       try {
+  //         setLoading(true);
+  //         const res = await axios.get(
+  //           `${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`
+  //         );
+  //         setPet(res.data);
+  //         setImages(res.data.pictures || []);
+  //         setCurImage(res.data.pictures?.[0]);
+  //         setLoading(false);
+  //       } catch (error) {
+  //         setError(true);
+  //         throw new Error(error);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     }
+  //     getPet();
+  //   },
+  //   [id]
+  // );
+
+  useEffect(function () {
+    async function getPet() {
+      try {
+        setLoading(true);
+        // Only fetch pet details first
+        const petRes = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/pets/${id}`);
+        setPet(petRes.data);
+        setImages(petRes.data.pictures || []);
+        setCurImage(petRes.data.pictures?.[0]);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
       }
-      getPet();
-    },
-    [id]
-  );
+    }
+    getPet();
+  }, [id]);
+
+  useEffect(function () {
+    async function getMatchDetails() {
+      if (!user?.userId) return;
+      
+      try {
+        setMatchLoading(true);
+        const matchRes = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/matching/result-with-details/${user.userId}/${id}`
+        );
+        setMatchDetails(matchRes.data);
+      } catch (error) {
+        console.error("Error fetching match details:", error);
+      } finally {
+        setMatchLoading(false);
+      }
+    }
+    getMatchDetails();
+  }, [id, user?.userId]);
 
   const calculateAge = (birthDate) => {
     const now = new Date();
@@ -162,6 +201,20 @@ function Pet() {
             {pet.petStory.split("<br/>")[1]}
           </p>
         </div>
+
+        {user?.userId && (
+        <div className="matchDetails">
+          <h3 className="text-[2rem] font-bold uppercase">Match Details</h3>
+          {matchLoading ? (
+            <p className="text-justify text-[1.6rem]">Calculating your match...</p>
+          ) : matchDetails?.adopterExplanation ? (
+            <p className="text-justify text-[1.6rem]">
+              {matchDetails.adopterExplanation}
+            </p>
+          ) : null}
+        </div>
+      )}
+
         <div className="flex items-center gap-4">
           <button
             onClick={openPopup}
