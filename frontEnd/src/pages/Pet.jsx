@@ -5,6 +5,7 @@ import { useUserAuth } from "../contexts/UserAuthContext";
 import ApplicationPopup from "../components/ApplicationPopup";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
+import { ToastContainer, toast } from "react-toastify";
 
 function Pet() {
   const { id } = useParams();
@@ -117,7 +118,16 @@ function Pet() {
     e.stopPropagation();
 
     if (!isAuthenticated || !user?.userId) {
-      alert("Please log in to manage favorites.");
+      toast.warn("Please log in to manage favorites.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
       navigate("/login");
       return;
     }
@@ -137,7 +147,16 @@ function Pet() {
       setIsFavorite((prev) => !prev);
     } catch (error) {
       console.error("Error updating favorites:", error);
-      alert("Failed to update favorites. Please try again.");
+      toast.error("Failed to update favorites. Please try again.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
@@ -260,6 +279,7 @@ function Pet() {
           ) : null}
         </div>
       )}
+      <ToastContainer className="text-[1.4rem w-[30%]" />
     </main>
   );
 }
