@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useState } from "react";
 import { useUserAuth } from "../contexts/UserAuthContext";
@@ -23,16 +23,16 @@ function Navbar() {
         </div>
         <ul className="navbar-list hidden lg:flex justify-between w-full">
           <li>
-            <Link to="/about">About us</Link>
+            <NavLink to="/about">About us</NavLink>
           </li>
           <li>
-            <Link to="/pets">Find a pet</Link>
+            <NavLink to="/pets">Find a pet</NavLink>
           </li>
           <li>
-            <Link to="/shelters">Get involved</Link>
+            <NavLink to="/shelters">Partners</NavLink>
           </li>
           <li>
-            <Link to="/contact">Contact</Link>
+            <NavLink to="/contact">Contact</NavLink>
           </li>
         </ul>
         {isMenuOpen && (
@@ -50,7 +50,7 @@ function Navbar() {
               <Link to="/pets">Find a pet</Link>
             </li>
             <li>
-              <Link to="/shelters">Get involved</Link>
+              <Link to="/shelters">Partners</Link>
             </li>
             <li>
               <Link to="/contact">Contact</Link>

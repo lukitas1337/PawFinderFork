@@ -40,6 +40,10 @@ body {
   color: #bfcf59;
 }
 
+.navbar-list li a.active {
+  color: #bfcf59;
+}
+
 .signup:hover {
   background-color: #bfcf59;
   color: #071327;
@@ -103,9 +107,16 @@ body {
   background-color: #8d9e29;
   color: white;
 }
+
+.shelterInfo.active a {
+  border-color: white;
+}
 .shelterInfo:hover {
   background-color: #8d9e29;
   color: white;
+}
+.shelterInfo:hover a {
+  border-color: white;
 }
 .leaflet-popup-tip {
   background-color: #e7e7d6;

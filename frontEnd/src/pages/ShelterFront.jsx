@@ -1,27 +1,28 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import PetList from "../components/PetList";
 import { useUserAuth } from "../contexts/UserAuthContext";
-
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 const ShelterFront = () => {
   const [shelter, setShelter] = useState(null);
   const [loading, setLoading] = useState(true);
   const [pets, setPets] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
   const { id } = useParams();
   const { user, isAuthenticated } = useUserAuth();
 
   const styleConfig = [
-    { svg: "/images/card_figure_yellow.svg", color: "#FEDB66" }, 
-    { svg: "/images/card_figure_red.svg", color: "#FD7E6F" },    
-    { svg: "/images/card_figure_green.svg", color: "#BFCF59" },  
+    { svg: "/images/card_figure_yellow.svg", color: "#FEDB66" },
+    { svg: "/images/card_figure_red.svg", color: "#FD7E6F" },
+    { svg: "/images/card_figure_green.svg", color: "#BFCF59" },
   ];
-  
+
   const getStyleForCard = (index) => {
-    const rowIndex = Math.floor(index / 3); 
-    const columnIndex = index % 3; 
+    const rowIndex = Math.floor(index / 3);
+    const columnIndex = index % 3;
     const styleIndex = (rowIndex + columnIndex) % styleConfig.length;
     return styleConfig[styleIndex];
   };
@@ -34,7 +35,7 @@ const ShelterFront = () => {
           `${import.meta.env.VITE_BACKEND_URL}/api/shelters/${id}` // Adjust endpoint as needed
         );
         setShelter(shelterResponse.data);
-   // Fetch pets data from the server
+        // Fetch pets data from the server
         const petRequests = shelterResponse.data.availablePets.map((petId) =>
           axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/pets/${petId}`)
         );
@@ -42,11 +43,17 @@ const ShelterFront = () => {
         const petResponses = await Promise.all(petRequests);
         const petsData = petResponses.map((res) => res.data);
 
-    // Fetch match score data from the server
+        // Fetch match score data from the server
         if (isAuthenticated) {
           const matchesResponse = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${user.userId}/scores`,
-            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+            `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${
+              user.userId
+            }/scores`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
           );
           const matchScores = matchesResponse.data.reduce((acc, match) => {
             acc[match.petId] = match.score;
@@ -60,11 +67,11 @@ const ShelterFront = () => {
 
           setPets(petsWithScores);
         } else {
-          setPets(petsData); 
+          setPets(petsData);
         }
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch shelter or pet data");
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -73,8 +80,18 @@ const ShelterFront = () => {
     fetchShelterData();
   }, [id, isAuthenticated, user]);
 
-  if (loading) return <div className="text-center py-10 text-lg">Loading...</div>;
-  if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
+  if (loading)
+    return (
+      <div className="text-center py-10 text-lg">
+        <Loading />
+      </div>
+    );
+  if (error)
+    return (
+      <div className="text-center py-10 text-red-500">
+        <Error />
+      </div>
+    );
 
   return (
     <div className="bg-[#FAFAF5] min-h-screen w-full">
@@ -90,7 +107,9 @@ const ShelterFront = () => {
             <h2 className="text-[36px] font-black uppercase text-dark break-words">
               {shelter.companyName}
             </h2>
-            <p className="text-dark text-[16px] break-words mb-10">{shelter.address}</p>
+            <p className="text-dark text-[16px] break-words mb-10">
+              {shelter.address}
+            </p>
             <div className="flex flex-col md:flex-row mt-4">
               <div className="flex items-start gap-16">
                 <div className="flex-1 space-y-2">
@@ -102,7 +121,7 @@ const ShelterFront = () => {
                   </p>
                 </div>
                 <div className=" flex-1 space-y-2">
-                <p className="text-dark text-[16px] break-words">
+                  <p className="text-dark text-[16px] break-words">
                     <strong>Phone:</strong> {shelter.phone}
                   </p>
                   <p className="text-dark text-[16px] flex items-center gap-2 whitespace-nowrap">
@@ -121,7 +140,7 @@ const ShelterFront = () => {
             </div>
           </div>
         </div>
-  
+
         {/* Available Pets Section */}
         <div className="mt-14">
           {pets.length > 0 ? (
@@ -139,7 +158,6 @@ const ShelterFront = () => {
       </div>
     </div>
   );
-  
 };
 
 export default ShelterFront;
