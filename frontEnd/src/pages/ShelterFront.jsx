@@ -90,7 +90,7 @@ const ShelterFront = () => {
             <h2 className="text-[36px] font-black uppercase text-dark break-words">
               {shelter.companyName}
             </h2>
-            <p className="text-dark text-[16px] break-words mb-6">{shelter.address}</p>
+            <p className="text-dark text-[16px] break-words mb-10">{shelter.address}</p>
             <div className="flex flex-col md:flex-row mt-4">
               <div className="flex items-start gap-16">
                 <div className="flex-1 space-y-2">
