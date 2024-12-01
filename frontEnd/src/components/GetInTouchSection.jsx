@@ -1,12 +1,13 @@
-import React from "react";
-
 const GetInTouchSection = () => {
   return (
-    <div className="relative flex flex-col-reverse lg:flex-col xl:flex-row xl:justify-between w-full items-center 
-    lg:space-y-20 md:space-y-10 sm:space-y-10">
+    <div className="relative flex flex-col-reverse lg:flex-col xl:flex-row xl:justify-between w-full items-center lg:space-y-20 md:space-y-10 sm:space-y-10">
       <div className="text-center xl:text-left xl:w-1/2 xl:pl-56 order-2 lg:order-none">
-        <h1 className="text-dark font-poppins font-black text-[30px] sm:text-[40px] lg:text-[50px] xl:mt-36 
-        xl:text-[70px] leading-[40px] xl:leading-[80px] whitespace-nowrap lg:whitespace-nowrap xl:whitespace-normal relative">
+      <h1
+  className="
+    text-dark font-poppins font-black text-[30px] sm:text-[40px] md:text-[50px] lg:text-[50px] xl:mt-36 
+    xl:text-[80px] leading-[40px] xl:leading-[80px] whitespace-nowrap lg:whitespace-normal xl:break-words relative 
+    ml-0 sm:ml-0 md:ml-0 lg:ml-0 xl:ml-0 2xl:ml-48"
+>
           GET IN TOUCH
           <img
             src="/images/paw_icon_green_main page.png"
@@ -17,7 +18,7 @@ const GetInTouchSection = () => {
           />
         </h1>
       </div>
-      <div className="lg:w-1/2 flex justify-center lg:pr-[40px] xl:pr-[140px] order-1 lg:order-none">
+      <div className="lg:w-1/2 flex justify-center lg:pr-[40px] xl:pr-[200px] order-1 lg:order-none">
         <img
           src="/images/Cat_contact_form.png"
           alt="Cat with mustache"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GetInTouchSection from "../components/GetInTouchSection";
 import SendMessageAlert from "../components/SendMessageAlert";
 import ContactForm from "../components/ContactForm";
@@ -10,6 +10,7 @@ function Contact() {
     message: "",
   });
   const [successMessage, setSuccessMessage] = useState("");
+  const [scale, setScale] = useState(1); // Resize the page
 
   const handleInputChange = (event) => {
     const { id, value } = event.target;
@@ -18,15 +19,39 @@ function Contact() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // console.log("Form submitted!");
-
     setSuccessMessage("Message sent successfully!");
     setFormData({ name: "", email: "", message: "" });
     setTimeout(() => setSuccessMessage(""), 3000);
   };
 
+  // Resize the page
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth > 1920) {
+        setScale(1.5); 
+      } else if (screenWidth > 1440) {
+        setScale(1.2); 
+      } else {
+        setScale(1); 
+      }
+    };
+
+    handleResize(); 
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div className="bg-[#FAFAF5] min-h-screen flex flex-col items-center relative">
+    // Resize the page
+    <div
+      className="bg-[#FAFAF5] min-h-screen flex flex-col items-center relative"
+      style={{
+        transform: `scale(${scale})`, 
+        transformOrigin: "top center", 
+        transition: "transform 0.3s ease", 
+      }}
+    >
       <SendMessageAlert message={successMessage} />
       <main className="container mx-auto flex flex-col items-center px-40 mt-28">
         <GetInTouchSection />

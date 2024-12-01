@@ -6,15 +6,15 @@ const AboutUsSection = () => (
     flex-col md:flex-row items-center mt-20 sm:mt-20 lg:mt-40 md:mt-40 xl:mt-40 mb-16 md:mb-40 lg:mb-40 
     xl:mb-40 sm:mb-16 gap-8"
   >
-    <div className="flex-1 order-1 md:order-none text-center md:text-left">
+    <div className="flex-1 order-1 md:order-none text-center md:text-left xl:max-w-[450px] 2xl:max-w-[600px]">
       <h1
-        className="text-dark font-black font-poppins leading-[30px] sm:leading-[30px] md:leading-[50px] 
-        lg:leading-[60px] xl:leading-[60px] text-[3rem] sm:text-[30px] md:text-[40px] lg:text-[50px] xl:text-[50px] mb-4"
+        className="text-dark font-black font-poppins uppercase leading-[20px] sm:leading-[20px] md:leading-[40px] 
+        lg:leading-[50px] xl:leading-[50px] 2xl:leading-[60px] text-[3rem] sm:text-[30px] md:text-[40px] lg:text-[40px] xl:text-[40px] 2xl:text-[50px] mb-8"
       >
-        PAWFINDER - A PLACE TO FIND YOUR PET
+        PawFinder - <br /> Your Pet Awaits
       </h1>
       <p
-        className="text-dark text-[14px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[18px] 
+        className="text-dark text-[12px] sm:text-[12px] md:text-[14px] lg:text-[18px] xl:text-[18px] 
         mb-2 sm:mb-2 md:mb-6 lg:mb-6 xl:mb-6 text-justify"
       >
         Your trusted platform for finding pets across shelters in Germany.
@@ -30,7 +30,7 @@ const AboutUsSection = () => (
       <img
         src="/images/dog_pic_about_us.png"
         alt="Dog"
-        className="w-[300px] md:w-[400px] h-auto transform rotate-0 md:rotate-6 lg:rotate-6 xl:rotate-6 xl:-mr-48"
+        className="w-[400px] md:w-[400px] lg:w-[400px] xl:w-[400px] 2xl:w-[450px] h-auto transform rotate-0 md:rotate-6 lg:rotate-6 xl:rotate-6 ml-56"
       />
       </Link>
     </div>

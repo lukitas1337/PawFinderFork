@@ -16,6 +16,7 @@ function Pets() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [scale, setScale] = useState(1); // Resize the page
 
   const [filters, setFilters] = useState({
     location: [],
@@ -41,6 +42,23 @@ function Pets() {
     const styleIndex = (rowIndex + columnIndex) % styleConfig.length;
     return styleConfig[styleIndex];
   };
+  // Resize the page
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth > 1920) {
+        setScale(1.5); 
+      } else if (screenWidth > 1440) {
+        setScale(1.2); 
+      } else {
+        setScale(1); 
+      }
+    };
+
+    handleResize(); 
+    window.addEventListener("resize", handleResize); 
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const fetchPets = async () => {
     setLoading(true);
@@ -129,8 +147,16 @@ function Pets() {
   }, [searchParams]);
 
   return (
-    <div className="bg-[#FAFAF5] min-h-screen flex flex-col justify-between">
-      <div className="px-8 sm:px-8 xl:px-[200px] lg:px-8 md:px-8 py-10">
+    // Resize the page 
+    <div
+      className="bg-[#FAFAF5] min-h-screen flex flex-col justify-between"
+      style={{
+        transform: `scale(${scale})`,
+        transformOrigin: "center", 
+        transition: "transform 0.3s ease-in-out",
+      }}
+    >
+      <div className="px-8 sm:px-8 xl:px-[200px] 2xl:px-[300px] lg:px-8 md:px-8 py-10">
         <PetHeader
           toggleFilters={() => setShowFilters((prev) => !prev)}
           isFilterOpen={showFilters}

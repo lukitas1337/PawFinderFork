@@ -1,9 +1,14 @@
 import React from "react";
 import PetCard from "./PetCard";
 
-const PetList = ({ pets, getStyleForCard, userFavorites = [], gridCols = "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" }) => {
+const PetList = ({ pets, getStyleForCard, userFavorites = []}) => {
   return (
-    <div className={`grid ${gridCols} gap-6 mb-20`}>
+    <div className={`grid mb-20 grid-cols-[repeat(auto-fill,_minmax(300px,_1fr))] gap-[20px] mb-20"`}
+
+      style={{
+        gap: "20px",
+      }}
+    >
       {pets.map((pet, index) => (
         <PetCard
         key={pet._id}
