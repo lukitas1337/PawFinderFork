@@ -142,13 +142,13 @@ export default function AccountMyApplications() {
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-8 mt-12">
+        <div className="flex flex-col gap-8 mt-6">
           {applications.map((app) => {
             const pet = app;
             return (
               <div
                 key={pet._id}
-                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem] xl:w-[68rem] w-[64rem] h-[35.3rem] flex flex-col"
+                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem] xl:w-[67rem] w-[64rem] h-[35.3rem] flex flex-col"
               >
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   <img
