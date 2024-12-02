@@ -142,7 +142,7 @@ export default function AccountMyApplications() {
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-8 mt-12">
+        <div className="flex flex-col gap-8 mt-6">
           {applications.map((app) => {
             const pet = app;
             return (
