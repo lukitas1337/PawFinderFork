@@ -14,7 +14,7 @@ export default function AccountSidebar() {
 
   return (
     <aside
-      className="lg:ml-[20rem] lg:px-10 mt-20 w-[80%] lg:w-[30rem] bg-[#E7E7D6] h-[470px] text-[16px] font-medium 
+      className="lg:ml-[20rem] xl:ml-[20rem] 2xl:ml-[75rem] lg:px-10 mt-20 w-[80%] lg:w-[30rem] bg-[#E7E7D6] h-[470px] text-[16px] font-medium 
     p-8 py-20 rounded-[30px] flex flex-col justify-between  lg:sticky lg:top-10 mb-10"
     >
       <div

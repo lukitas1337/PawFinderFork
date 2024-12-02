@@ -53,7 +53,6 @@ function ApplicationPopup({ pet, onClose }) {
         closeOnClick: true,
         pauseOnHover: false,
         draggable: false,
-        progress: undefined,
         theme: "colored",
       });
     }
