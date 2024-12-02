@@ -28,6 +28,7 @@ html {
 
 body {
   color: #071327;
+  background-color: #FAFAF5
 }
 
 .header a,
@@ -59,7 +60,14 @@ body {
   outline: none;
   border-bottom-color: #ed6656;
 }
-
+.queContainer {
+  overflow: scroll;
+  height: 80vh;
+  box-shadow: 5rem 5rem 100rem rgba(0, 0, 0, 0.3);
+}
+.sectionBlur {
+  filter: blur(5px);
+}
 .gifContainer {
   background-size: cover;
   background-position: center;

@@ -94,25 +94,25 @@ const ShelterFront = () => {
     );
 
   return (
-    <div className="bg-[#FAFAF5] min-h-screen w-full">
-      <div className="container mx-auto px-[120px] p-6 relative">
+    <div className="min-h-screen w-full">
+      <div className="container w-full mx-auto px-[12rem] p-6 relative">
         {/* Shelter Info Section */}
-        <div className="bg-[#E7E7D6] mt-10 p-10 rounded-[30px] flex flex-col relative">
+        <div className="w-full bg-[#E7E7D6] mt-10 p-10 rounded-[30px] flex flex-col relative">
           <img
             src="/images/Paw_white.png"
             alt="Paw"
-            className="absolute top-0 right-0 w-[150px] transform"
+            className="absolute top-0 right-0 w-[9rem] lg:w-[15rem] transform"
           />
           <div className="ml-6">
-            <h2 className="text-[36px] font-black uppercase text-dark break-words">
+            <h2 className="text-[3.6rem] font-black uppercase text-dark break-words">
               {shelter.companyName}
             </h2>
-            <p className="text-dark text-[16px] break-words mb-10">
+            <p className="text-dark text-[1.6rem] break-words mb-10">
               {shelter.address}
             </p>
-            <div className="flex flex-col md:flex-row mt-4">
-              <div className="flex items-start gap-16">
-                <div className="flex-1 space-y-2">
+            <div className="flex flex-col lg:flex-row mt-4">
+              <div className="flex flex-col lg:flex-row items-start gap-16">
+                <div className="flex-1 space-y-2 flex-col">
                   <p className="text-dark text-[16px]">
                     <strong>Contact Person:</strong> {shelter.contactPerson}
                   </p>
@@ -146,7 +146,7 @@ const ShelterFront = () => {
           {pets.length > 0 ? (
             <PetList
               pets={pets}
-              gridCols="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+              gridCols="grid-cols-1 lg:grid-cols-3"
               getStyleForCard={getStyleForCard}
             />
           ) : (

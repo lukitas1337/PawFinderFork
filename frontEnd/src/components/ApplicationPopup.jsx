@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 function ApplicationPopup({ pet, onClose }) {
   const { user, isAuthenticated } = useUserAuth();
@@ -19,13 +20,24 @@ function ApplicationPopup({ pet, onClose }) {
     e.preventDefault();
 
     if (!isAuthenticated || !user?.userId) {
-      alert("Please log in to send an application.");
+      toast.warn("Please log in to send an application.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
       return;
     }
 
     try {
       await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}/adoption-applications`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${
+          user.userId
+        }/adoption-applications`,
         { petId: pet._id },
         { withCredentials: true }
       );
@@ -34,14 +46,25 @@ function ApplicationPopup({ pet, onClose }) {
       onClose();
     } catch (error) {
       console.error("Error submitting application:", error);
-      alert("Something went wrong. Please try again later.");
+      toast.error("Something went wrong. Please try again later.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-dark bg-opacity-50 z-50">
-      <div className="relative bg-light w-[80%] md:w-[40%] my-[5rem] mx-auto p-[4rem] flex flex-col items-center 
-      rounded-[5rem] shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div
+        className="relative bg-light w-[80%] md:w-[40%] my-[5rem] mx-auto p-[4rem] flex flex-col items-center 
+      rounded-[5rem] shadow-2xl max-h-[90vh] overflow-y-auto"
+      >
         {/* Кнопка Close в правом верхнем углу */}
         <button
           onClick={onClose}
@@ -50,12 +73,15 @@ function ApplicationPopup({ pet, onClose }) {
         >
           ✕
         </button>
-  
+
         <h2 className="text-[3rem] font-bold mb-4">Adoption Form</h2>
         <p className="text-[14px] text-dark mb-16">
           Leave your information and we will contact you
         </p>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full items-center">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4 w-full items-center"
+        >
           <input
             type="text"
             name="name"
@@ -91,6 +117,7 @@ function ApplicationPopup({ pet, onClose }) {
           </button>
         </form>
       </div>
+      <ToastContainer className="text-[1.4rem w-[30%]" />
     </div>
   );
 }

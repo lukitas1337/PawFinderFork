@@ -30,7 +30,6 @@ export default function AccountMyApplications() {
         `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}/adoption-applications`,
         { withCredentials: true }
       );
-      
       // shelter data 
       const shelterResponses = await Promise.all(
         response.data.map((app) =>

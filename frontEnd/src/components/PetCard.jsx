@@ -2,22 +2,39 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import axios from "axios";
-
-function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFavorites, isFavorite: propIsFavorite }) {
+import { ToastContainer, toast } from "react-toastify";
+function PetCard({
+  pet,
+  index,
+  getStyleForCard,
+  context = "Pets",
+  onRemoveFromFavorites,
+  isFavorite: propIsFavorite,
+}) {
   const navigate = useNavigate();
   const { user, isAuthenticated } = useUserAuth();
   const [isFavorite, setIsFavorite] = useState(propIsFavorite || false);
 
   useEffect(() => {
     if (propIsFavorite !== undefined) {
-      setIsFavorite(propIsFavorite); 
+      setIsFavorite(propIsFavorite);
     }
   }, [propIsFavorite]);
 
   const handleFavoriteClick = async (e) => {
     e.stopPropagation();
     if (!isAuthenticated || !user?.userId) {
-      alert("Please log in to manage favorites.");
+      toast.warn("Please log in to manage favorites.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
+
       navigate("/login");
       return;
     }
@@ -45,14 +62,23 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
       }
     } catch (error) {
       console.error("Error updating favorites:", error);
-      alert("Failed to update favorites. Please try again.");
+      toast.error("Failed to update favorites. Please try again.", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   };
 
   const calculateAge = (birthDate) => {
     const now = new Date();
     const birth = new Date(birthDate);
-    
+
     let years = now.getFullYear() - birth.getFullYear();
     let months = now.getMonth() - birth.getMonth();
     if (months < 0) {
@@ -64,15 +90,50 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
       : `${months} month${months > 1 ? "s" : ""}`;
   };
 
-  const handleCardClick = () => {
+  const handleCardClick = async () => {
     navigate(`/pets/${pet._id}`);
+
+    if (user?.userId) {
+      try {
+        console.log("Checking match details for:", {
+          userId: user.userId,
+          petId: pet._id,
+        });
+
+        // First check if we already have a match result with explanation
+        const matchResponse = await axios.get(
+          `${
+            import.meta.env.VITE_BACKEND_URL
+          }/api/matching/result-with-details/${user.userId}/${pet._id}`
+        );
+
+        console.log("Match response:", matchResponse.data);
+
+        // If no explanation exists, calculate it
+        if (!matchResponse.data?.adopterExplanation) {
+          console.log("No explanation found, calculating match...");
+          await axios.post(
+            // Changed from get to post to match your route
+            `${import.meta.env.VITE_BACKEND_URL}/api/matching/calculate-match/${
+              user.userId
+            }/${pet._id}`
+          );
+        }
+      } catch (error) {
+        console.error("Error getting match details:", error.response || error);
+      }
+    } else {
+      console.log("User not logged in, proceeding to pet details");
+    }
+
+    // Always navigate, even if there's an error
   };
 
   const { svg, color } = getStyleForCard(index);
 
   return (
     <div
-      className="w-[330px] relative rounded-[36px] shadow-lg overflow-hidden bg-white flex flex-col 
+      className="w-[50rem] sm:w-[33rem] relative rounded-[36px] shadow-lg overflow-hidden bg-white flex flex-col 
                 transform transition-transform duration-300 hover:scale-105 hover:rotate-2 cursor-pointer mb-2"
       onClick={handleCardClick}
     >
@@ -112,7 +173,9 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
                 alt="Location"
                 className="w-7 h-7"
               />
-              <p className="text-[16px] font-normal text-dark">{pet.location}</p>
+              <p className="text-[16px] font-normal text-dark">
+                {pet.location}
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -125,7 +188,11 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
             <div
               onClick={handleFavoriteClick}
               className={`w-16 h-16 flex items-center justify-center rounded-full transition 
-                ${isFavorite ? "bg-dark" : "border border-dark group hover:bg-dark"}`}
+                ${
+                  isFavorite
+                    ? "bg-dark"
+                    : "border border-dark group hover:bg-dark"
+                }`}
             >
               <img
                 src="/images/favorites.svg"
@@ -137,6 +204,7 @@ function PetCard({ pet, index, getStyleForCard, context = "Pets", onRemoveFromFa
           </div>
         </div>
       </div>
+      <ToastContainer className="text-[1.4rem] w-[30%]" />
     </div>
   );
 }
