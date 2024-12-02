@@ -190,7 +190,7 @@ function Pet() {
                 src={img}
                 alt={pet.name}
                 key={img}
-                className="w-[10rem] h-[10rem] mt-[8rem] rounded-[1.5rem]"
+                className="w-[7.5rem] h-[7.5rem] md:w-[10rem] md:h-[10rem] mt-[8rem] rounded-[1.5rem]"
                 onClick={(e) => handleCurImage(e.target)}
               />
             ))}
