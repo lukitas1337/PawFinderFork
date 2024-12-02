@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const AboutUsSection = () => (
   <section
-    className="container mx-auto px-[4rem] lg:px-[12rem] flex 
+    className="aboutSection  container mx-auto px-[4rem] lg:px-[12rem] flex 
     flex-col justify-center lg:flex-row items-center mt-20 sm:mt-20 lg:mt-40 md:mt-40 xl:mt-40 mb-16 md:mb-40 lg:mb-40 
     xl:mb-40 sm:mb-16 gap-8"
   >

@@ -13,7 +13,7 @@ const AboutStatistics = () => {
   });
 
   return (
-    <div className="container mx-auto px-[4rem] lg:px-[12rem]">
+    <div className="aboutSection container mx-auto px-[4rem] lg:px-[12rem]">
       <section
         ref={ref}
         className="bg-red text-white  py-[7rem] mb-20 md:mb-44 lg:mb-44 xl:mb-44 sm:mb-20 rounded-[30px] 
