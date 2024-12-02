@@ -80,7 +80,7 @@ function Login() {
           <span>Sign up with Google</span>
         </button>
         <h3 className="text-[1.4rem]">
-          Not a member yet?
+          Not a member yet?{" "}
           <Link to="/Sign up" className="font-semibold">
             Sign up
           </Link>

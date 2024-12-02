@@ -84,8 +84,8 @@ function AccountMyFavorites() {
   if (loading) {
     return (
       <main className="flex-1 p-16 mt-2">
-        <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
-        <p className="text-[16px] text-dark">
+        <h1 className="text-[3rem] font-black mb-6">MY FAVORITES</h1>
+        <p className="text-[1.6rem] text-dark">
           <Loading />
         </p>
       </main>
@@ -95,8 +95,8 @@ function AccountMyFavorites() {
   if (error) {
     return (
       <main className="flex-1 p-16 mt-2">
-        <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
-        <p className="text-[16px] text-red-600">
+        <h1 className="text-[3rem] font-black mb-6">MY FAVORITES</h1>
+        <p className="text-[1.6rem] text-red-600">
           <Error />
         </p>
       </main>
@@ -105,10 +105,10 @@ function AccountMyFavorites() {
 
   return (
     <main className="flex-1 p-16 mt-2">
-      <h1 className="text-[30px] font-black mb-6">MY FAVORITES</h1>
+      <h1 className="text-[3rem] font-black mb-6">MY FAVORITES</h1>
       {favorites.length === 0 ? (
         <div>
-          <p className="text-[16px] text-dark">
+          <p className="text-[1.6rem] text-dark">
             You don’t have any new favorites added yet
           </p>
           <button
@@ -120,7 +120,7 @@ function AccountMyFavorites() {
           </button>
         </div>
       ) : (
-        <aside className="w-[700px]">
+        <aside className="w-[80%] lg:w-[70rem]">
           <div className="h-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {favorites.map((pet, index) => (

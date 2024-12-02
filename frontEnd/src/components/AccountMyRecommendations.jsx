@@ -90,8 +90,8 @@ function AccountMyRecommendations() {
   if (error) {
     return (
       <main className="flex-1 p-16 mt-2">
-        <h1 className="text-[30px] font-black mb-6">MY RECOMMENDATIONS</h1>
-        <p className="text-[16px] text-red-600">
+        <h1 className="text-[3rem] font-black mb-6">MY RECOMMENDATIONS</h1>
+        <p className="text-[1.6rem] text-red-600">
           <Error />
         </p>
       </main>
@@ -101,16 +101,16 @@ function AccountMyRecommendations() {
   if (recommendations.length === 0) {
     return (
       <main className="flex-1 p-16 mt-2">
-        <h1 className="text-[30px] font-black mb-6">MY RECOMMENDATIONS</h1>
-        <p className="text-[16px] text-dark">No recommendations available</p>
+        <h1 className="text-[3rem] font-black mb-6">MY RECOMMENDATIONS</h1>
+        <p className="text-[1.6rem] text-dark">No recommendations available</p>
       </main>
     );
   }
 
   return (
     <main className="flex-1 p-16 mt-2">
-      <aside className="w-[700px]">
-        <h1 className="text-[30px] font-black mb-6">MY RECOMMENDATIONS</h1>
+      <aside className="w-[80%] lg:w-[70rem]">
+        <h1 className="text-[3rem] font-black mb-6">MY RECOMMENDATIONS</h1>
         <div className="h-auto">
           {recommendations.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

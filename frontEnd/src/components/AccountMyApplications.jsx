@@ -2,13 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useUserAuth } from "../contexts/UserAuthContext";
 
-
 import Loading from "./Loading";
 import Error from "./Error";
 import { ToastContainer, toast } from "react-toastify";
 
 import { Link, useNavigate } from "react-router-dom";
-
 
 export default function AccountMyApplications() {
   const { user, isAuthenticated } = useUserAuth();
@@ -27,15 +25,20 @@ export default function AccountMyApplications() {
 
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}/adoption-applications`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${
+          user.userId
+        }/adoption-applications`,
         { withCredentials: true }
       );
-      // shelter data 
+      // shelter data
       const shelterResponses = await Promise.all(
         response.data.map((app) =>
-          axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shelters/${app.ownerId}`, {
-            withCredentials: true,
-          })
+          axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/api/shelters/${app.ownerId}`,
+            {
+              withCredentials: true,
+            }
+          )
         )
       );
 
@@ -103,8 +106,8 @@ export default function AccountMyApplications() {
   if (loading) {
     return (
       <main className="flex-1 p-16 mt-2">
-        <h1 className="text-[30px] font-black mb-6">MY APPLICATIONS</h1>
-        <p className="text-[16px] text-dark">
+        <h1 className="text-[3rem] font-black mb-6">MY APPLICATIONS</h1>
+        <p className="text-[1.6rem] text-dark">
           <Loading />
         </p>
       </main>
@@ -114,8 +117,8 @@ export default function AccountMyApplications() {
   if (error) {
     return (
       <main className="flex-1 p-16 mt-2">
-        <h1 className="text-[30px] font-black mb-6">MY APPLICATIONS</h1>
-        <p className="text-[16px] text-red-600">
+        <h1 className="text-[3rem] font-black mb-6">MY APPLICATIONS</h1>
+        <p className="text-[1.6rem] text-red-600">
           <Error />
         </p>
       </main>
@@ -124,7 +127,7 @@ export default function AccountMyApplications() {
 
   return (
     <main className="flex-1 p-16 mt-2">
-      <h1 className="text-[30px] font-black mb-6">MY APPLICATIONS</h1>
+      <h1 className="text-[3rem] font-black mb-6">MY APPLICATIONS</h1>
       {applications.length === 0 ? (
         <div>
           <p className="text-[16px] text-dark">
@@ -145,7 +148,7 @@ export default function AccountMyApplications() {
             return (
               <div
                 key={pet._id}
-                className="bg-[#EEEEE3] rounded-[30px] mr-[160px]"
+                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem]"
               >
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   <img
