@@ -28,23 +28,25 @@ function reducer(state, action) {
     case "setHasPetExperience":
       return {
         ...state,
-        hasPetExperience: action.payload === "true",
+        hasPetExperience: action.payload === "yes", // Convert "yes"/"no" to boolean
       };
+    case "setAdoption":
+      return {
+        ...state,
+        previousAdoption: { hasAdopted: action.payload === "yes" }, // Convert "yes"/"no" to boolean
+      };
+    case "setPetSurrender":
+      return {
+        ...state,
+        petSurrender: { hasSurrendered: action.payload === "yes" }, // Convert "yes"/"no" to boolean
+      };
+
     case "setCurrentPets":
       return {
         ...state,
         currentPets: { ...state.currentPets, petDetails: action.payload },
       };
-    case "setAdoption":
-      return {
-        ...state,
-        previousAdoption: { hasAdopted: action.payload === "true" },
-      };
-    case "setPetSurrender":
-      return {
-        ...state,
-        petSurrender: { hasSurrendered: action.payload === "true" },
-      };
+
     case "setAdditionalInfo":
       return { ...state, additionalInformation: action.payload };
     default:
@@ -53,7 +55,7 @@ function reducer(state, action) {
 }
 
 function Questionare() {
-  const { dispatch, addQuestionnaireToUser, user } = useUserAuth();
+  const { addQuestionnaireToUser, user } = useUserAuth();
   const [
     {
       housingSituation,
@@ -247,7 +249,9 @@ function Questionare() {
           </label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={hasPetExperience || ""}
+            value={
+              hasPetExperience ? "yes" : hasPetExperience === false ? "no" : ""
+            }
             onChange={(e) =>
               localDispatch({
                 type: "setHasPetExperience",
@@ -257,8 +261,8 @@ function Questionare() {
             id="hasPetExperience"
           >
             <option value="">Please Select An Option</option>
-            <option value="true">Yes</option>
-            <option value="false">No</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
         {hasPetExperience && (
@@ -304,7 +308,13 @@ function Questionare() {
           <label htmlFor="previousAdoption">Have you ever adopt any pet?</label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={previousAdoption.hasAdopted || ""}
+            value={
+              previousAdoption.hasAdopted === true
+                ? "yes"
+                : previousAdoption.hasAdopted === false
+                ? "no"
+                : ""
+            }
             onChange={(e) =>
               localDispatch({
                 type: "setAdoption",
@@ -314,8 +324,8 @@ function Questionare() {
             id="previousAdoption"
           >
             <option value=""> Please Select An Option</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
         <div className="inputGroup flex flex-col gap-[1.5rem]">
@@ -324,7 +334,13 @@ function Questionare() {
           </label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={petSurrender.hasSurrendered || ""}
+            value={
+              petSurrender.hasSurrendered === true
+                ? "yes"
+                : petSurrender.hasSurrendered === false
+                ? "no"
+                : ""
+            }
             onChange={(e) =>
               localDispatch({
                 type: "setPetSurrender",
@@ -334,8 +350,8 @@ function Questionare() {
             id="petSurrender"
           >
             <option value="">Please Select An Option</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
         <div className="inputGroup flex flex-col gap-[1.5rem]">
@@ -384,7 +400,7 @@ function Questionare() {
           Submit
         </button>
       </form>
-      <ToastContainer className="text-[1.4rem w-[30%" />
+      <ToastContainer className="text-[1.4rem] w-[30%]" />
     </div>
   );
 }
