@@ -95,7 +95,7 @@ const ShelterFront = () => {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="container w-full mx-auto px-[12rem] p-6 relative">
+      <div className="max-w-[120rem] mx-auto 2xl:px-24 container w-full px-[8rem] p-6 relative">
         {/* Shelter Info Section */}
         <div className="w-full bg-[#E7E7D6] mt-10 p-10 rounded-[30px] flex flex-col relative">
           <img

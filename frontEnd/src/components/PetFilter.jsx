@@ -95,7 +95,7 @@ const PetFilter = ({ onApplyFilters }) => {
   };
 
   return (
-    <div>
+    <div className="max-w-[120rem] mx-auto 2xl:px-24">
       <div className="grid grid-cols-1 gap-4">
         <FilterSelect
           options={locationOptions}

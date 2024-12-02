@@ -2,7 +2,7 @@ import React from "react";
 
 function PetHeader({ toggleFilters, isFilterOpen, activeFilterCount }) {
   return (
-    <div className="flex justify-between items-center mb-6">
+    <div className="max-w-[120rem] mx-auto 2xl:px-24 flex justify-between items-center mb-6">
       <h1 className="text-left text-[3.5rem] font-black mt-10 mb-10">
         WHICH ONE IS YOUR BEST FRIEND?
       </h1>
