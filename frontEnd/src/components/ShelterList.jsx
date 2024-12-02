@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function ShelterList({ shelters, handleClick, activeStateIndex }) {
   console.log(activeStateIndex);
   return (
-    <div className="sheltersList flex flex-col w-[35%] gap-[3rem]">
+    <div className="sheltersList flex flex-col w-[80%] md:w-[35%] gap-[3rem]">
       {shelters.map((shelter, i) => (
         <div
           key={shelter._id}
@@ -15,7 +15,7 @@ function ShelterList({ shelters, handleClick, activeStateIndex }) {
           onClick={() => handleClick(shelter, i)}
         >
           <div>
-            <h2 className="text-[2.3rem] mb-[1rem] font-bold">
+            <h2 className="text-[1.8rem] lg:text-[2.3rem] mb-[1rem] font-bold">
               {shelter.companyName}
             </h2>
             <p className="flex items-baseline text-[1.4rem]">

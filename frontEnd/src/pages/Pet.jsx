@@ -190,7 +190,7 @@ function Pet() {
                 src={img}
                 alt={pet.name}
                 key={img}
-                className="w-[10rem] h-[10rem] mt-[8rem] rounded-[1.5rem]"
+                className="w-[7.5rem] h-[7.5rem] md:w-[10rem] md:h-[10rem] mt-[8rem] rounded-[1.5rem]"
                 onClick={(e) => handleCurImage(e.target)}
               />
             ))}
@@ -201,7 +201,7 @@ function Pet() {
             <h2 className="text-[4rem] font-bold">{pet.name}</h2>
             <p className="text-[2rem]">{pet.breed}</p>
             <p className="text-[2rem]">
-              {pet.gender}.{calculateAge(pet.age)}.{pet.size}
+              {pet.gender} 🐾 {calculateAge(pet.age)} 🐾 {pet.size}
             </p>
             <p className="text-[2rem]">{pet.location}</p>
           </div>
