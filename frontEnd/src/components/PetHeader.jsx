@@ -3,14 +3,16 @@ import React from "react";
 function PetHeader({ toggleFilters, isFilterOpen, activeFilterCount }) {
   return (
     <div className="flex justify-between items-center mb-6">
-      <h1 className="text-left text-[35px] font-black mt-10 mb-10">
+      <h1 className="text-left text-[3.5rem] font-black mt-10 mb-10">
         WHICH ONE IS YOUR BEST FRIEND?
       </h1>
       <div className="flex items-center gap-4">
         <p className="text-[16px] font-normal text-dark">Filter</p>
         <div
           className={`relative w-14 h-14 flex items-center justify-center rounded-full border border-dark group
-            ${isFilterOpen ? "bg-dark" : "hover:bg-dark"} transition cursor-pointer`}
+            ${
+              isFilterOpen ? "bg-dark" : "hover:bg-dark"
+            } transition cursor-pointer`}
           onClick={toggleFilters}
         >
           <img
