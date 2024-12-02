@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function ShelterList({ shelters, handleClick, activeStateIndex }) {
   console.log(activeStateIndex);
   return (
-    <div className="sheltersList flex flex-col w-[35%] gap-[3rem]">
+    <div className="sheltersList flex flex-col w-[80%] md:w-[35%] gap-[3rem]">
       {shelters.map((shelter, i) => (
         <div
           key={shelter._id}
