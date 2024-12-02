@@ -100,7 +100,6 @@ function PetCard({
           petId: pet._id,
         });
 
-        // First check if we already have a match result with explanation
         const matchResponse = await axios.get(
           `${
             import.meta.env.VITE_BACKEND_URL
@@ -109,11 +108,10 @@ function PetCard({
 
         console.log("Match response:", matchResponse.data);
 
-        // If no explanation exists, calculate it
         if (!matchResponse.data?.adopterExplanation) {
           console.log("No explanation found, calculating match...");
           await axios.post(
-            // Changed from get to post to match your route
+
             `${import.meta.env.VITE_BACKEND_URL}/api/matching/calculate-match/${
               user.userId
             }/${pet._id}`
@@ -126,7 +124,6 @@ function PetCard({
       console.log("User not logged in, proceeding to pet details");
     }
 
-    // Always navigate, even if there's an error
   };
 
   const { svg, color } = getStyleForCard(index);
@@ -153,7 +150,7 @@ function PetCard({
         <div className="absolute bottom-6 left-0 right-0 px-10 py-4 text-left">
           <div className="mb-6">
             {/* Scorematch */}
-            {isAuthenticated && pet.matchScore !== null && (
+            {/* {isAuthenticated && pet.matchScore !== null && (
               <div className="absolute -top-2 right-6 w-[70px] h-[70px]">
                 <div
                   className="absolute inset-0 rounded-full bg-[#FAFAF5] border-[6px]"
@@ -163,7 +160,18 @@ function PetCard({
                   <p className="text-[17px] font-bold text-[#505865]">{`${pet.matchScore}%`}</p>
                 </div>
               </div>
-            )}
+            )} */}
+            {isAuthenticated && pet.matchScore !== null && pet.matchScore !== undefined && (
+  <div className="absolute -top-2 right-6 w-[70px] h-[70px]">
+    <div
+      className="absolute inset-0 rounded-full bg-[#FAFAF5] border-[6px]"
+      style={{ borderColor: color }}
+    ></div>
+    <div className="absolute inset-0 flex items-center justify-center">
+      <p className="text-[17px] font-bold text-[#505865]">{`${pet.matchScore}%`}</p>
+    </div>
+  </div>
+)}
             <h2 className="text-[18px] font-bold text-dark mb-2">
               {pet.name}, {calculateAge(pet.age)}
             </h2>
