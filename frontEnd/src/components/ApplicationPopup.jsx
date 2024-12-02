@@ -53,7 +53,6 @@ function ApplicationPopup({ pet, onClose }) {
         closeOnClick: true,
         pauseOnHover: false,
         draggable: false,
-        progress: undefined,
         theme: "colored",
       });
     }
@@ -65,7 +64,6 @@ function ApplicationPopup({ pet, onClose }) {
         className="relative bg-light w-[80%] md:w-[40%] my-[5rem] mx-auto p-[4rem] flex flex-col items-center 
       rounded-[5rem] shadow-2xl max-h-[90vh] overflow-y-auto"
       >
-        {/* Кнопка Close в правом верхнем углу */}
         <button
           onClick={onClose}
           className="absolute top-12 right-14 text-dark text-[16px] font-bold rounded-full p-2 

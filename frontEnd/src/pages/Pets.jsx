@@ -77,35 +77,39 @@ function Pets() {
           }
         );
 
-        const matchScores = matchesResponse.data.reduce((acc, match) => {
-          acc[match.petId] = match.score;
-          return acc;
-        }, {});
+      const matchScores = matchesResponse.data.reduce((acc, match) => {
+        acc[match.petId] = typeof match.score === 'number' ? match.score : null;
+        return acc;
+      }, {});
 
-        const petsWithScores = response.data
-          .map((pet) => ({
-            ...pet,
-            matchScore: matchScores[pet._id] || null,
-          }))
-          .sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0)); // sorting by matchScore
+      const petsWithScores = response.data
+        .map((pet) => ({
+          ...pet,
+          matchScore: matchScores[pet._id] !== undefined ? matchScores[pet._id] : null,
+        }))
+        .sort((a, b) => {
+          const scoreA = typeof a.matchScore === 'number' ? a.matchScore : -1;
+          const scoreB = typeof b.matchScore === 'number' ? b.matchScore : -1;
+          return scoreB - scoreA;
+        });
 
-        setPets(petsWithScores);
-      } else {
-        setPets(response.data);
-      }
-    } catch (err) {
-      console.error("Error in fetchPets:", {
-        message: err.message,
-        fullError: err,
-      });
-      setError(true);
-    } finally {
-      setLoading(false);
+      console.log('Pets with scores:', petsWithScores);
+      setPets(petsWithScores);
+    } else {
+      setPets(response.data);
     }
-  };
+  } catch (err) {
+    console.error("Error in fetchPets:", {
+      message: err.message,
+      fullError: err,
+    });
+    setError(true);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
-    // console.log("Filters applied in Pets:", filters);
     fetchPets();
   }, [filters, user?.userId]);
 

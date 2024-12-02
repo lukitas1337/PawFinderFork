@@ -148,13 +148,13 @@ export default function AccountMyApplications() {
             return (
               <div
                 key={pet._id}
-                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem]"
+                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem] w-[64rem] h-[35.3rem] flex flex-col"
               >
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   <img
                     src={pet.pictures[0]}
                     alt={pet.name}
-                    className="w-[352px] h-[352px] object-cover rounded-tl-[30px] rounded-bl-[30px]"
+                    className="w-[300px] h-[352px] object-cover rounded-tl-[30px] rounded-bl-[30px]"
                   />
                   <div className="flex flex-col ml-7 mt-8 flex-1 gap-2">
                     <h2 className="text-[24px] font-black text-dark uppercase">
