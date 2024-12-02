@@ -148,7 +148,7 @@ export default function AccountMyApplications() {
             return (
               <div
                 key={pet._id}
-                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem] w-[64rem] h-[35.3rem] flex flex-col"
+                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem] xl:w-[68rem] w-[64rem] h-[35.3rem] flex flex-col"
               >
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   <img
@@ -185,7 +185,7 @@ export default function AccountMyApplications() {
                     <p className="text-[16px] text-dark">
                       <strong>Location:</strong> {pet.location}
                     </p>
-                    <div className="flex flex-col gap-4 mt-12">
+                    <div className="flex flex-col gap-4 mt-12 mb-2">
                       <button
                         onClick={() => navigate(`/pets/${pet._id}`)}
                         className="bg-dark text-white text-[14px] w-full max-w-[200px] py-4 font-medium rounded-full hover:bg-[#8D9F19] transition"
