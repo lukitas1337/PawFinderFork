@@ -201,7 +201,7 @@ function Pet() {
             <h2 className="text-[4rem] font-bold">{pet.name}</h2>
             <p className="text-[2rem]">{pet.breed}</p>
             <p className="text-[2rem]">
-              {pet.gender}.{calculateAge(pet.age)}.{pet.size}
+              {pet.gender} 🐾 {calculateAge(pet.age)} 🐾 {pet.size}
             </p>
             <p className="text-[2rem]">{pet.location}</p>
           </div>
