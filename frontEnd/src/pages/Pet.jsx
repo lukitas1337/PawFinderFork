@@ -179,8 +179,8 @@ function Pet() {
 
   return (
     <main className="my-[10rem] px-[4rem] py-10 flex flex-col gap-[3rem]">
-      <div className="flex w-full  mx-auto gap-[15rem]">
-        <div className="petImages w-[40%]">
+      <div className="flex flex-col items-center lg:flex-row lg:items-stretch w-full  mx-auto gap-[15rem]">
+        <div className="petImages  w-[80%] lg:w-[40%]">
           <figure className="w-full">
             <img src={curImage} alt="dog" className="w-full rounded-[5rem]" />
           </figure>
@@ -196,7 +196,7 @@ function Pet() {
             ))}
           </div>
         </div>
-        <div className="dogInfo flex flex-col justify-between w-[40%]  ">
+        <div className="dogInfo flex flex-col justify-between w-[80%] lg:w-[40%] gap-[3rem] lg:gap-0">
           <div className="flex flex-col gap-[1rem] ">
             <h2 className="text-[4rem] font-bold">{pet.name}</h2>
             <p className="text-[2rem]">{pet.breed}</p>
@@ -239,7 +239,7 @@ function Pet() {
           <div className="flex items-center gap-4">
             <button
               onClick={openPopup}
-              className="bg-dark text-white text-[14px] w-full max-w-[150px] py-4 
+              className="bg-dark text-white text-[14px] w-full max-w-[15rem] py-4 
                     font-medium rounded-full hover:bg-[#8D9F19] transition"
             >
               Adopt me
