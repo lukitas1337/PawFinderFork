@@ -95,7 +95,7 @@ const ShelterFront = () => {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="max-w-[120rem] mx-auto 2xl:px-24 container w-full px-[8rem] p-6 relative">
+      <div className="container w-full mx-auto px-[5rem] lg:px-[12rem] p-6 relative">
         {/* Shelter Info Section */}
         <div className="w-full bg-[#E7E7D6] mt-10 p-10 rounded-[30px] flex flex-col relative">
           <img
@@ -104,7 +104,7 @@ const ShelterFront = () => {
             className="absolute top-0 right-0 w-[9rem] lg:w-[15rem] transform"
           />
           <div className="ml-6">
-            <h2 className="text-[3.6rem] font-black uppercase text-dark break-words">
+            <h2 className="gext-[2.8rem] lg:text-[3.6rem] font-black uppercase text-dark break-words">
               {shelter.companyName}
             </h2>
             <p className="text-dark text-[1.6rem] break-words mb-10">
@@ -113,18 +113,18 @@ const ShelterFront = () => {
             <div className="flex flex-col lg:flex-row mt-4">
               <div className="flex flex-col lg:flex-row items-start gap-16">
                 <div className="flex-1 space-y-2 flex-col">
-                  <p className="text-dark text-[16px]">
+                  <p className="text-dark text-[1.6rem]">
                     <strong>Contact Person:</strong> {shelter.contactPerson}
                   </p>
-                  <p className="text-dark text-[16px] flex items-center gap-2 whitespace-nowrap">
+                  <p className="text-dark text-[1.6rem] flex items-center gap-2 whitespace-nowrap">
                     <strong>Email:</strong> {shelter.email}
                   </p>
                 </div>
                 <div className=" flex-1 space-y-2">
-                  <p className="text-dark text-[16px] break-words">
+                  <p className="text-dark text-[1.6rem] break-words">
                     <strong>Phone:</strong> {shelter.phone}
                   </p>
-                  <p className="text-dark text-[16px] flex items-center gap-2 whitespace-nowrap">
+                  <p className="text-dark text-[1.6rem] flex items-center gap-2 whitespace-nowrap">
                     <strong>Website:</strong>{" "}
                     <a
                       href={shelter.website}
