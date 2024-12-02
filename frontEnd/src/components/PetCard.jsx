@@ -133,7 +133,7 @@ function PetCard({
 
   return (
     <div
-      className="w-[330px] relative rounded-[36px] shadow-lg overflow-hidden bg-white flex flex-col 
+      className="w-[50rem] sm:w-[33rem] relative rounded-[36px] shadow-lg overflow-hidden bg-white flex flex-col 
                 transform transition-transform duration-300 hover:scale-105 hover:rotate-2 cursor-pointer mb-2"
       onClick={handleCardClick}
     >
