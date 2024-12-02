@@ -148,7 +148,7 @@ export default function AccountMyApplications() {
             return (
               <div
                 key={pet._id}
-                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem] xl:w-[68rem] w-[64rem] h-[35.3rem] flex flex-col"
+                className="bg-[#EEEEE3] rounded-[30px] lg:mr-[16rem] xl:w-[67rem] w-[64rem] h-[35.3rem] flex flex-col"
               >
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   <img
