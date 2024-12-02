@@ -77,9 +77,7 @@ function Pets() {
           }
         );
 
-      // Modified this part to handle 0 scores correctly
       const matchScores = matchesResponse.data.reduce((acc, match) => {
-        // Explicitly check if score is a number (including 0)
         acc[match.petId] = typeof match.score === 'number' ? match.score : null;
         return acc;
       }, {});
@@ -87,17 +85,15 @@ function Pets() {
       const petsWithScores = response.data
         .map((pet) => ({
           ...pet,
-          // Modified to explicitly handle the case where score might be 0
           matchScore: matchScores[pet._id] !== undefined ? matchScores[pet._id] : null,
         }))
         .sort((a, b) => {
-          // Modified sort to handle 0 scores correctly
           const scoreA = typeof a.matchScore === 'number' ? a.matchScore : -1;
           const scoreB = typeof b.matchScore === 'number' ? b.matchScore : -1;
           return scoreB - scoreA;
         });
 
-      console.log('Pets with scores:', petsWithScores); // Add this for debugging
+      console.log('Pets with scores:', petsWithScores);
       setPets(petsWithScores);
     } else {
       setPets(response.data);
@@ -114,7 +110,6 @@ function Pets() {
 };
 
   useEffect(() => {
-    // console.log("Filters applied in Pets:", filters);
     fetchPets();
   }, [filters, user?.userId]);
 

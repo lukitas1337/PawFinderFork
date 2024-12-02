@@ -94,10 +94,11 @@ function Questionare() {
         dailyAloneHours: Number(dailyAloneHours),
         workplaceAccommodation,
         householdComposition,
-        hasPetExperience,
-        currentPets: hasPetExperience
-          ? currentPets
-          : { hasPets: false, petDetails: "" },
+        hasPetExperience: hasPetExperience || previousAdoption.hasAdopted,
+        currentPets: { 
+          hasPets: hasPetExperience, 
+          petDetails: hasPetExperience ? currentPets.petDetails : "" 
+        },
         previousAdoption,
         petSurrender,
         additionalInformation,
