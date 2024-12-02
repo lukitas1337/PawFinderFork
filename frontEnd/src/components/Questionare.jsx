@@ -1,16 +1,17 @@
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 import { useUserAuth } from "../contexts/UserAuthContext";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const initialState = {
   housingSituation: "",
-  dailyAloneHours: null,
+  dailyAloneHours: "",
   workplaceAccommodation: "",
   householdComposition: "",
-  hasPetExperience: null,
+  hasPetExperience: "",
   currentPets: { hasPets: true, petDetails: "" },
-  previousAdoption: { hasAdopted: null },
-  petSurrender: { hasSurrendered: null },
+  previousAdoption: { hasAdopted: "" },
+  petSurrender: { hasSurrendered: "" },
   additionalInformation: "",
 };
 
@@ -19,7 +20,7 @@ function reducer(state, action) {
     case "setHousing":
       return { ...state, housingSituation: action.payload };
     case "setAloneHours":
-      return { ...state, dailyAloneHours: Number(action.payload) };
+      return { ...state, dailyAloneHours: action.payload };
     case "setWorkPlace":
       return { ...state, workplaceAccommodation: action.payload };
     case "setHouseHold":
@@ -27,23 +28,25 @@ function reducer(state, action) {
     case "setHasPetExperience":
       return {
         ...state,
-        hasPetExperience: action.payload === "true",
+        hasPetExperience: action.payload === "yes", // Convert "yes"/"no" to boolean
       };
+    case "setAdoption":
+      return {
+        ...state,
+        previousAdoption: { hasAdopted: action.payload === "yes" }, // Convert "yes"/"no" to boolean
+      };
+    case "setPetSurrender":
+      return {
+        ...state,
+        petSurrender: { hasSurrendered: action.payload === "yes" }, // Convert "yes"/"no" to boolean
+      };
+
     case "setCurrentPets":
       return {
         ...state,
         currentPets: { ...state.currentPets, petDetails: action.payload },
       };
-    case "setAdoption":
-      return {
-        ...state,
-        previousAdoption: { hasAdopted: action.payload === "true" },
-      };
-    case "setPetSurrender":
-      return {
-        ...state,
-        petSurrender: { hasSurrendered: action.payload === "true" },
-      };
+
     case "setAdditionalInfo":
       return { ...state, additionalInformation: action.payload };
     default:
@@ -52,7 +55,7 @@ function reducer(state, action) {
 }
 
 function Questionare() {
-  const { dispatch, addQuestionnaireToUser, user } = useUserAuth();
+  const { addQuestionnaireToUser, user } = useUserAuth();
   const [
     {
       housingSituation,
@@ -72,13 +75,23 @@ function Questionare() {
     e.preventDefault();
     try {
       if (!user) {
-        alert('Please log in to submit the questionnaire');
+        toast.warn('"Please log in to submit the questionnaire"', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "colored",
+        });
+
         return;
       }
 
       const newQuestionare = {
         housingSituation,
-        dailyAloneHours,
+        dailyAloneHours: Number(dailyAloneHours),
         workplaceAccommodation,
         householdComposition,
         hasPetExperience,
@@ -90,26 +103,59 @@ function Questionare() {
         additionalInformation,
       };
 
-      await addQuestionnaireToUser(newQuestionare);
+      console.log("Submitting questionnaire:", newQuestionare);
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/matching/calculate-bulk-matches/${user.userId}`,
-        {},
+      await addQuestionnaireToUser(newQuestionare);
+      console.log("Questionnaire saved successfully");
+
+      const questionnaireResponse = await addQuestionnaireToUser(
+        newQuestionare
+      );
+      console.log("Questionnaire response:", questionnaireResponse);
+
+      const matchResponse = await axios.post(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/api/matching/calculate-bulk-matches/${user.userId}`,
+        newQuestionare,
         {
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
-
+      console.log("Match calculation response:", matchResponse.data);
+      toast.success("Questionnaire submitted successfully!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
     } catch (error) {
-      alert('There was an error submitting your questionnaire. Please try again.');
+      console.error("Error submitting questionnaire:", error.response || error);
+      toast.error(
+        ` ${error.response?.data?.message} ||"There was an error submitting your questionnaire. Please try again."`,
+        {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
+          progress: undefined,
+          theme: "colored",
+        }
+      );
     }
   }
 
   return (
-    <div className="absolute top-0 left-[25%] bg-light w-[50%] my-[10rem] mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
+    <div className="queContainer absolute -top-[10rem] left-[25%] bg-light w-[50%]  mx-auto p-[8rem] flex flex-col gap-[5rem] items-center rounded-[10rem] shadow-2xl">
       {/* <button
         className="text-[1.6rem] absolute top-[5rem] right-[10rem]"
         onClick={handleClose}
@@ -203,7 +249,9 @@ function Questionare() {
           </label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={hasPetExperience}
+            value={
+              hasPetExperience ? "yes" : hasPetExperience === false ? "no" : ""
+            }
             onChange={(e) =>
               localDispatch({
                 type: "setHasPetExperience",
@@ -212,9 +260,9 @@ function Questionare() {
             }
             id="hasPetExperience"
           >
-            <option>Please Select An Option</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
+            <option value="">Please Select An Option</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
         {hasPetExperience && (
@@ -260,7 +308,13 @@ function Questionare() {
           <label htmlFor="previousAdoption">Have you ever adopt any pet?</label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={previousAdoption.hasAdopted}
+            value={
+              previousAdoption.hasAdopted === true
+                ? "yes"
+                : previousAdoption.hasAdopted === false
+                ? "no"
+                : ""
+            }
             onChange={(e) =>
               localDispatch({
                 type: "setAdoption",
@@ -270,8 +324,8 @@ function Questionare() {
             id="previousAdoption"
           >
             <option value=""> Please Select An Option</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
         <div className="inputGroup flex flex-col gap-[1.5rem]">
@@ -280,7 +334,13 @@ function Questionare() {
           </label>
           <select
             className="text-[1.4rem] border-b-2 border-dark text-dark bg-transparent border-dashed py-[1rem]"
-            value={petSurrender.hasSurrendered}
+            value={
+              petSurrender.hasSurrendered === true
+                ? "yes"
+                : petSurrender.hasSurrendered === false
+                ? "no"
+                : ""
+            }
             onChange={(e) =>
               localDispatch({
                 type: "setPetSurrender",
@@ -290,8 +350,8 @@ function Questionare() {
             id="petSurrender"
           >
             <option value="">Please Select An Option</option>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
         </div>
         <div className="inputGroup flex flex-col gap-[1.5rem]">
@@ -340,6 +400,7 @@ function Questionare() {
           Submit
         </button>
       </form>
+      <ToastContainer className="text-[1.4rem] w-[30%]" />
     </div>
   );
 }
