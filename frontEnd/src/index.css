@@ -28,7 +28,7 @@ html {
 
 body {
   color: #071327;
-  background-color: #FAFAF5
+  background-color: #fafaf5;
 }
 
 .header a,
@@ -48,6 +48,14 @@ body {
 .signup:hover {
   background-color: #bfcf59;
   color: #071327;
+}
+
+.chosePetSection a img {
+  transition: all 0.7s;
+}
+.chosePetSection a img:hover {
+  transform: scale(0.9);
+  box-shadow: 0.5rem 2rem 10rem rgba(0, 0, 0, 0.4);
 }
 
 .footer-icon {
