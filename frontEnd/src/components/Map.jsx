@@ -10,7 +10,7 @@ import {
 
 function Map({ shelters, mapPosition, setActiveStateIndex }) {
   return (
-    <div className="mapContainer w-[63%] h-[55rem] rounded-[2rem]">
+    <div className="mapContainer w-[80%] md:w-[63%] h-[55rem] rounded-[2rem]">
       <MapContainer
         center={mapPosition}
         zoom={5}

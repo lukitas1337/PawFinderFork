@@ -45,7 +45,7 @@ function Shelters() {
       <h2 className="text-[3.5rem] font-black mb-[3rem] uppercase">
         Which Shelter is best for you?
       </h2>
-      <div className="sheltersContainer flex justify-between">
+      <div className="sheltersContainer flex flex-col gap-[3rem] items-center md:items-stretch md:gap-0 md:flex-row justify-between">
         {loading ? (
           <Loading />
         ) : error ? (
