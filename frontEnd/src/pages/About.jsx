@@ -12,9 +12,9 @@ const About = () => (
       <AboutStatistics />
       <ScrollAnimation
         animateIn="fadeIn"
-        duration={2}
-        animateOut="fadeOut"
+        duration={3}
         initiallyVisible={true}
+        delay={150}
       >
         <AboutMatchingSection />
       </ScrollAnimation>
