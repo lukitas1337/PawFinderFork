@@ -1,14 +1,46 @@
-import { useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMap,
-  useMapEvent,
-} from "react-leaflet";
+import { useState, useEffect } from "react";
+import "leaflet/dist/leaflet.css";
 
 function Map({ shelters, mapPosition, setActiveStateIndex }) {
+  const [MapComponents, setMapComponents] = useState(null);
+
+  useEffect(() => {
+    const loadMap = async () => {
+      const { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent } = await import("react-leaflet");
+      setMapComponents({ MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent });
+    };
+    loadMap();
+  }, []);
+
+  if (!MapComponents) {
+    return <div>Loading map...</div>;
+  }
+
+  const { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent } = MapComponents;
+
+  function ChangeCenter({ position }) {
+    const map = useMap();
+    map.setView(position, 7);
+    return null;
+  }
+
+  function DetectClick({ shelters, setActiveStateIndex }) {
+    useMapEvent({
+      click: (e) => {
+        const mapLng = e.latlng.lng.toFixed(0);
+        const mapLat = e.latlng.lat.toFixed(0);
+        console.log(mapLng);
+        console.log(mapLat);
+        const shelter = shelters.filter(
+          (shelter) =>
+            shelter.position.coordinates[1].toFixed(0) == mapLat &&
+            shelter.position.coordinates[0].toFixed(0) == mapLng
+        );
+        setActiveStateIndex(shelters.indexOf(...shelter));
+      },
+    });
+  }
+
   return (
     <div className="mapContainer w-[80%] md:w-[63%] h-[55rem] rounded-[2rem]">
       <MapContainer
@@ -41,25 +73,5 @@ function Map({ shelters, mapPosition, setActiveStateIndex }) {
     </div>
   );
 }
-function ChangeCenter({ position }) {
-  const map = useMap();
-  map.setView(position, 7);
-  return null;
-}
-function DetectClick({ shelters, setActiveStateIndex }) {
-  useMapEvent({
-    click: (e) => {
-      const mapLng = e.latlng.lng.toFixed(0);
-      const mapLat = e.latlng.lat.toFixed(0);
-      console.log(mapLng);
-      console.log(mapLat);
-      const shelter = shelters.filter(
-        (shelter) =>
-          shelter.position.coordinates[1].toFixed(0) == mapLat &&
-          shelter.position.coordinates[0].toFixed(0) == mapLng
-      );
-      setActiveStateIndex(shelters.indexOf(...shelter));
-    },
-  });
-}
+
 export default Map;
