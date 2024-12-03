@@ -45,104 +45,65 @@ function Pets() {
   const fetchPets = async () => {
     setLoading(true);
     try {
-      console.log('Environment:', import.meta.env.MODE);
-      console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
-      
-      // Use window.location.origin if VITE_BACKEND_URL is not set
-      const baseUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
-      const apiUrl = `${baseUrl}/.netlify/functions/api/pets`;
-      console.log('Fetching pets from:', apiUrl);
-      
-      const response = await axios.get(apiUrl, {
-        params: {
-          location:
-            filters.location.length > 0
-              ? filters.location.join(",")
-              : undefined,
-          age: filters.age.length > 0 ? filters.age : undefined,
-          size: filters.size.length > 0 ? filters.size.join(",") : undefined,
-          gender:
-            filters.gender.length > 0 ? filters.gender.join(",") : undefined,
-          petType:
-            filters.petType.length > 0
-              ? filters.petType.join(",")
-              : undefined,
-        },
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
-          'Expires': '0',
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/pets`,
+        {
+          params: {
+            location:
+              filters.location.length > 0
+                ? filters.location.join(",")
+                : undefined,
+            age: filters.age.length > 0 ? filters.age : undefined,
+            size: filters.size.length > 0 ? filters.size.join(",") : undefined,
+            gender:
+              filters.gender.length > 0 ? filters.gender.join(",") : undefined,
+            petType:
+              filters.petType.length > 0
+                ? filters.petType.join(",")
+                : undefined,
+          },
         }
-      });
-
-      console.log('API Response:', response);
-      console.log('Response data:', response.data);
-
-      // Ensure response.data is an array
-      if (!Array.isArray(response.data)) {
-        console.error('Response data is not an array:', response.data);
-        setPets([]);
-        return;
-      }
-
-      const petsData = response.data;
+      );
 
       if (user?.userId) {
-        try {
-          console.log('Fetching match scores...');
-          const matchesResponse = await axios.get(
-            `${baseUrl}/.netlify/functions/api/matching/user/${
-              user.userId
-            }/scores`,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                'Cache-Control': 'no-cache',
-              },
-            }
-          );
-
-          console.log('Match scores response:', matchesResponse.data);
-
-          if (!Array.isArray(matchesResponse.data)) {
-            console.error('Match scores data is not an array:', matchesResponse.data);
-            setPets(petsData);
-            return;
+        const matchesResponse = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${
+            user.userId
+          }/scores`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
+        );
 
-          const matchScores = matchesResponse.data.reduce((acc, match) => {
-            acc[match.petId] = typeof match.score === 'number' ? match.score : null;
-            return acc;
-          }, {});
+        const matchScores = matchesResponse.data.reduce((acc, match) => {
+          acc[match.petId] = typeof match.score === 'number' ? match.score : null;
+          return acc;
+        }, {});
 
-          const petsWithScores = petsData
-            .map((pet) => ({
-              ...pet,
-              matchScore: matchScores[pet._id] !== undefined ? matchScores[pet._id] : null,
-            }))
-            .sort((a, b) => {
-              const scoreA = typeof a.matchScore === 'number' ? a.matchScore : -1;
-              const scoreB = typeof b.matchScore === 'number' ? b.matchScore : -1;
-              return scoreB - scoreA;
-            });
+        const petsWithScores = response.data
+          .map((pet) => ({
+            ...pet,
+            matchScore: matchScores[pet._id] !== undefined ? matchScores[pet._id] : null,
+          }))
+          .sort((a, b) => {
+            const scoreA = typeof a.matchScore === 'number' ? a.matchScore : -1;
+            const scoreB = typeof b.matchScore === 'number' ? b.matchScore : -1;
+            return scoreB - scoreA;
+          });
 
-          console.log('Final pets with scores:', petsWithScores);
-          setPets(petsWithScores);
-        } catch (matchError) {
-          console.error("Error fetching match scores:", matchError);
-          setPets(petsData);
-        }
+        console.log('Pets with scores:', petsWithScores);
+        setPets(petsWithScores);
       } else {
-        setPets(petsData);
+        setPets(response.data);
       }
     } catch (err) {
       console.error("Error in fetchPets:", {
         message: err.message,
-        response: err.response,
         fullError: err,
       });
       setError(true);
-      setPets([]);
     } finally {
       setLoading(false);
     }

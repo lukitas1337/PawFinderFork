@@ -1,6 +1,6 @@
 [build]
   command = "cd frontend && npm install && npx vite build && cd ../backend && npm install"
-  functions = "backend/netlify/functions"
+  functions = "netlify/functions"
   publish = "frontend/dist"
 
 [functions]
@@ -11,6 +11,7 @@
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/*"
