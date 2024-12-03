@@ -1,10 +1,21 @@
 [build]
   command = "cd frontend && npm install && npx vite build && cd ../backend && npm install"
-  functions = "netlify/functions"
+  functions = "backend/netlify/functions"
   publish = "frontend/dist"
 
 [functions]
-  external_node_modules = ["express"]
+  external_node_modules = [
+    "express",
+    "serverless-http",
+    "cookie-parser",
+    "cors",
+    "passport",
+    "mongoose",
+    "passport-jwt",
+    "jsonwebtoken",
+    "bcrypt",
+    "dotenv"
+  ]
   node_bundler = "esbuild"
 
 [[redirects]]
