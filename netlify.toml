@@ -15,4 +15,4 @@
 
 [dev]
   command = "npm run dev"
-  port = 1337
+  port = 1337 
