@@ -12,7 +12,7 @@ function PetCard({
   isFavorite: propIsFavorite,
 }) {
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useUserAuth();
+  const { user, isAuthenticated, updateFavorites } = useUserAuth();
   const [isFavorite, setIsFavorite] = useState(propIsFavorite || false);
 
   useEffect(() => {
@@ -46,7 +46,15 @@ function PetCard({
         );
         onRemoveFromFavorites(pet._id);
       } else {
-        if (isFavorite) {
+        // Check if pet is already in favorites
+        const userResponse = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
+          { withCredentials: true }
+        );
+        const currentFavorites = userResponse.data.favorites || [];
+        const isAlreadyFavorite = currentFavorites.includes(pet._id);
+
+        if (isAlreadyFavorite) {
           await axios.delete(
             `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
             { data: { petId: pet?._id }, withCredentials: true }
@@ -58,7 +66,7 @@ function PetCard({
             { withCredentials: true }
           );
         }
-        setIsFavorite((prev) => !prev);
+        setIsFavorite(!isAlreadyFavorite);
       }
     } catch (error) {
       console.error("Error updating favorites:", error);
