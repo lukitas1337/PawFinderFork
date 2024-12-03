@@ -7,14 +7,8 @@ import ScrollAnimation from "react-animate-on-scroll";
 const About = () => (
   <div className="min-h-screen flex flex-col justify-between">
     <main>
-      <ScrollAnimation
-        animateIn="fadeIn"
-        duration={2}
-        animateOut="fadeOut"
-        initiallyVisible={true}
-      >
-        <AboutUsSection />
-      </ScrollAnimation>
+      <AboutUsSection />
+
       <AboutStatistics />
       <ScrollAnimation
         animateIn="fadeIn"

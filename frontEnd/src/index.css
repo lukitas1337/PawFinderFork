@@ -8,23 +8,18 @@
 
 @keyframes comesLeft {
   0% {
-    transform: translateX(100px);
     opacity: 0;
   }
   30% {
-    transform: translateX(70px);
     opacity: 0.3;
   }
   50% {
-    transform: translateX(50px);
     opacity: 0.5;
   }
   70% {
-    transform: translateX(30px);
     opacity: 0.7;
   }
   100% {
-    transform: translateX(0);
     opacity: 1;
   }
 }
@@ -88,7 +83,7 @@ body {
 .aboutSection {
   animation-name: comesLeft;
   animation-timing-function: ease-in;
-  animation-duration: 0.5s;
+  animation-duration: 1.5s;
 }
 
 .registerForm input:focus,
