@@ -16,6 +16,11 @@ function reducer(state, action) {
         ...state,
         user: { ...state.user, questionnaire: action.payload },
       };
+    case "updateFavorites":
+      return {
+        ...state,
+        user: { ...state.user, favorites: action.payload }
+      };
     default:
       return state;
   }
@@ -104,6 +109,51 @@ function UserAuthProvider({ children }) {
     }
   }
 
+  async function updateFavorites(petId) {
+    try {
+      if (!user?.userId) return;
+
+      const currentFavorites = user.favorites || [];
+      
+      const isFavorite = currentFavorites.includes(petId);
+      
+      const newFavorites = isFavorite
+        ? currentFavorites.filter(id => id !== petId)
+        : [...currentFavorites, petId];
+
+      await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
+        { favorites: newFavorites },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      dispatch({ type: "updateFavorites", payload: newFavorites });
+    } catch (error) {
+      console.error("Failed to update favorites:", error);
+      toast.error("Failed to update favorites. Please try again.");
+    }
+  }
+
+  useEffect(() => {
+    if (user?.userId) {
+      axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then(response => {
+        dispatch({ type: "login", payload: response.data });
+      })
+      .catch(error => {
+        console.error("Failed to fetch user data:", error);
+      });
+    }
+  }, [user?.userId]);
+
   return (
     <UserAuthContext.Provider
       value={{
@@ -113,6 +163,7 @@ function UserAuthProvider({ children }) {
         handleLogout,
         dispatch,
         addQuestionnaireToUser,
+        updateFavorites,
       }}
     >
       {children}
