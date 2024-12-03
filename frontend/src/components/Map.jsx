@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "leaflet/dist/leaflet.css";
 
 function Map({ shelters, mapPosition, setActiveStateIndex }) {
   const [MapComponents, setMapComponents] = useState(null);
@@ -7,6 +6,7 @@ function Map({ shelters, mapPosition, setActiveStateIndex }) {
   useEffect(() => {
     const loadMap = async () => {
       const { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent } = await import("react-leaflet");
+      await import("leaflet/dist/leaflet.css");
       setMapComponents({ MapContainer, TileLayer, Marker, Popup, useMap, useMapEvent });
     };
     loadMap();
