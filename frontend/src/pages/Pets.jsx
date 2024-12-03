@@ -45,31 +45,35 @@ function Pets() {
   const fetchPets = async () => {
     setLoading(true);
     try {
-      console.log('Fetching pets...');
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/pets`,
-        {
-          params: {
-            location:
-              filters.location.length > 0
-                ? filters.location.join(",")
-                : undefined,
-            age: filters.age.length > 0 ? filters.age : undefined,
-            size: filters.size.length > 0 ? filters.size.join(",") : undefined,
-            gender:
-              filters.gender.length > 0 ? filters.gender.join(",") : undefined,
-            petType:
-              filters.petType.length > 0
-                ? filters.petType.join(",")
-                : undefined,
-          },
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache',
-            'Expires': '0',
-          }
+      console.log('Environment:', import.meta.env.MODE);
+      console.log('Backend URL:', import.meta.env.VITE_BACKEND_URL);
+      
+      // Use window.location.origin if VITE_BACKEND_URL is not set
+      const baseUrl = import.meta.env.VITE_BACKEND_URL || window.location.origin;
+      const apiUrl = `${baseUrl}/.netlify/functions/api/pets`;
+      console.log('Fetching pets from:', apiUrl);
+      
+      const response = await axios.get(apiUrl, {
+        params: {
+          location:
+            filters.location.length > 0
+              ? filters.location.join(",")
+              : undefined,
+          age: filters.age.length > 0 ? filters.age : undefined,
+          size: filters.size.length > 0 ? filters.size.join(",") : undefined,
+          gender:
+            filters.gender.length > 0 ? filters.gender.join(",") : undefined,
+          petType:
+            filters.petType.length > 0
+              ? filters.petType.join(",")
+              : undefined,
+        },
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+          'Expires': '0',
         }
-      );
+      });
 
       console.log('API Response:', response);
       console.log('Response data:', response.data);
@@ -87,7 +91,7 @@ function Pets() {
         try {
           console.log('Fetching match scores...');
           const matchesResponse = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${
+            `${baseUrl}/.netlify/functions/api/matching/user/${
               user.userId
             }/scores`,
             {
