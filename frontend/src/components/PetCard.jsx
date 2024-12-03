@@ -46,15 +46,7 @@ function PetCard({
         );
         onRemoveFromFavorites(pet._id);
       } else {
-        // Check if pet is already in favorites
-        const userResponse = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/users/${user.userId}`,
-          { withCredentials: true }
-        );
-        const currentFavorites = userResponse.data.favorites || [];
-        const isAlreadyFavorite = currentFavorites.includes(pet._id);
-
-        if (isAlreadyFavorite) {
+        if (isFavorite) {
           await axios.delete(
             `${import.meta.env.VITE_BACKEND_URL}/api/users/pets/${user.userId}`,
             { data: { petId: pet?._id }, withCredentials: true }
@@ -66,7 +58,7 @@ function PetCard({
             { withCredentials: true }
           );
         }
-        setIsFavorite(!isAlreadyFavorite);
+        setIsFavorite(!isFavorite);
       }
     } catch (error) {
       console.error("Error updating favorites:", error);
