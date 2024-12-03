@@ -2,6 +2,7 @@
   command = "npm install"
   functions = "netlify/functions"
   publish = "public"
+  base = "backEnd" 
 
 [functions]
   external_node_modules = ["express"]
