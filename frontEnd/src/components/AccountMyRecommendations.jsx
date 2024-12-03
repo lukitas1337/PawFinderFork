@@ -46,7 +46,7 @@ function AccountMyRecommendations() {
         }))
         .filter(
           (pet) =>
-            pet.matchScore && pet.matchScore >= 60 && pet.matchScore <= 100
+            pet.matchScore && pet.matchScore >= 70 && pet.matchScore <= 100
         )
         .sort((a, b) => b.matchScore - a.matchScore);
 

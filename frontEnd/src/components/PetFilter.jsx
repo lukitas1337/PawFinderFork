@@ -26,6 +26,9 @@ const PetFilter = ({ onApplyFilters }) => {
     { value: "Munich", label: "Munich" },
     { value: "Stuttgart", label: "Stuttgart" },
     { value: "Frankfurt", label: "Frankfurt" },
+    { value: "Dresden", label: "Dresden"},
+    { value: "Köln", label: "Köln"},
+    { value: "Hamburg", label: "Hamburg"},
   ];
 
   const sizeOptions = [
