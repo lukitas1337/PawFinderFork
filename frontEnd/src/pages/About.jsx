@@ -10,12 +10,7 @@ const About = () => (
       <AboutUsSection />
 
       <AboutStatistics />
-      <ScrollAnimation
-        animateIn="fadeIn"
-        duration={3}
-        initiallyVisible={true}
-        delay={150}
-      >
+      <ScrollAnimation animateIn="fadeIn" duration={3} delay={150}>
         <AboutMatchingSection />
       </ScrollAnimation>
     </main>
