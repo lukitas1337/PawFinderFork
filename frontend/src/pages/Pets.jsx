@@ -47,7 +47,7 @@ function Pets() {
     try {
       console.log('Fetching pets...');
       const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/.netlify/functions/api/pets`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/pets`,
         {
           params: {
             location:
@@ -87,7 +87,7 @@ function Pets() {
         try {
           console.log('Fetching match scores...');
           const matchesResponse = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/.netlify/functions/api/matching/user/${
+            `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${
               user.userId
             }/scores`,
             {
