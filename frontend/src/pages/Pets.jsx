@@ -45,6 +45,7 @@ function Pets() {
   const fetchPets = async () => {
     setLoading(true);
     try {
+      console.log('Fetching pets...');
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/pets`,
         {
@@ -62,52 +63,87 @@ function Pets() {
                 ? filters.petType.join(",")
                 : undefined,
           },
+          // Add headers to prevent 304
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          }
         }
       );
 
+      console.log('API Response:', response);
+      console.log('Response data:', response.data);
+
+      // Ensure response.data is an array
+      if (!Array.isArray(response.data)) {
+        console.error('Response data is not an array:', response.data);
+        setPets([]);
+        return;
+      }
+
+      const petsData = response.data;
+
       if (user?.userId) {
-        const matchesResponse = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${
-            user.userId
-          }/scores`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
+        try {
+          console.log('Fetching match scores...');
+          const matchesResponse = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URL}/api/matching/user/${
+              user.userId
+            }/scores`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                'Cache-Control': 'no-cache',
+              },
+            }
+          );
+
+          console.log('Match scores response:', matchesResponse.data);
+
+          if (!Array.isArray(matchesResponse.data)) {
+            console.error('Match scores data is not an array:', matchesResponse.data);
+            setPets(petsData);
+            return;
           }
-        );
 
-      const matchScores = matchesResponse.data.reduce((acc, match) => {
-        acc[match.petId] = typeof match.score === 'number' ? match.score : null;
-        return acc;
-      }, {});
+          const matchScores = matchesResponse.data.reduce((acc, match) => {
+            acc[match.petId] = typeof match.score === 'number' ? match.score : null;
+            return acc;
+          }, {});
 
-      const petsWithScores = response.data
-        .map((pet) => ({
-          ...pet,
-          matchScore: matchScores[pet._id] !== undefined ? matchScores[pet._id] : null,
-        }))
-        .sort((a, b) => {
-          const scoreA = typeof a.matchScore === 'number' ? a.matchScore : -1;
-          const scoreB = typeof b.matchScore === 'number' ? b.matchScore : -1;
-          return scoreB - scoreA;
-        });
+          const petsWithScores = petsData
+            .map((pet) => ({
+              ...pet,
+              matchScore: matchScores[pet._id] !== undefined ? matchScores[pet._id] : null,
+            }))
+            .sort((a, b) => {
+              const scoreA = typeof a.matchScore === 'number' ? a.matchScore : -1;
+              const scoreB = typeof b.matchScore === 'number' ? b.matchScore : -1;
+              return scoreB - scoreA;
+            });
 
-      console.log('Pets with scores:', petsWithScores);
-      setPets(petsWithScores);
-    } else {
-      setPets(response.data);
+          console.log('Final pets with scores:', petsWithScores);
+          setPets(petsWithScores);
+        } catch (matchError) {
+          console.error("Error fetching match scores:", matchError);
+          setPets(petsData);
+        }
+      } else {
+        setPets(petsData);
+      }
+    } catch (err) {
+      console.error("Error in fetchPets:", {
+        message: err.message,
+        response: err.response,
+        fullError: err,
+      });
+      setError(true);
+      setPets([]);
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    console.error("Error in fetchPets:", {
-      message: err.message,
-      fullError: err,
-    });
-    setError(true);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   useEffect(() => {
     fetchPets();
