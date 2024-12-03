@@ -34,7 +34,7 @@ const AboutMatchingSection = () => (
         <img
           src="/images/cat_pic_about_us.png"
           alt="Cat"
-          className="w-[400px] md:w-[400px] lg:w-[400px] xl:w-[400px] 2xl:w-[450px] h-auto transform rotate-0 md:-rotate-6 lg:-rotate-6 xl:-rotate-6 mr-56"
+          className="w-[400px] md:w-[400px] lg:w-[400px] xl:w-[430px] 2xl:w-[450px] h-auto transform rotate-0 md:-rotate-6 lg:-rotate-6 xl:-rotate-6 mr-56"
         />
       </Link>
     </div>
