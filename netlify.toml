@@ -1,8 +1,7 @@
 [build]
-  command = "npm install"
-  functions = "netlify/functions"
-  publish = "public"
-  base = "backend" 
+  command = "cd frontend && npm install && npm run build && cd ../backend && npm install"
+  functions = "backend/netlify/functions"
+  publish = "frontend/dist"
 
 [functions]
   external_node_modules = ["express"]
