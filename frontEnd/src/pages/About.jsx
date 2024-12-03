@@ -8,19 +8,18 @@ const About = () => (
   <div className="min-h-screen flex flex-col justify-between">
     <main>
       <ScrollAnimation
-        animateIn="bounceInRight"
-        duration={1.5}
-        animateOut="bounceOutLeft"
+        animateIn="fadeIn"
+        duration={2}
+        animateOut="fadeOut"
         initiallyVisible={true}
-        delay={1000}
       >
         <AboutUsSection />
       </ScrollAnimation>
       <AboutStatistics />
       <ScrollAnimation
-        animateIn="bounceInRight"
-        duration={1.5}
-        animateOut="bounceOutLeft"
+        animateIn="fadeIn"
+        duration={2}
+        animateOut="fadeOut"
         initiallyVisible={true}
       >
         <AboutMatchingSection />
