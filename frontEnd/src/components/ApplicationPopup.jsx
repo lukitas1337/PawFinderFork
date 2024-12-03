@@ -41,8 +41,17 @@ function ApplicationPopup({ pet, onClose }) {
         { petId: pet._id },
         { withCredentials: true }
       );
+      toast.success(`Your application for ${pet.name} was sent successfully!`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+        progress: undefined,
+        theme: "colored",
+      });
 
-      // alert(`Your application for ${pet.name} was sent successfully!`);
       onClose();
     } catch (error) {
       console.error("Error submitting application:", error);

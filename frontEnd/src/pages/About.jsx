@@ -2,13 +2,29 @@ import React from "react";
 import AboutUsSection from "../components/AboutUsSection";
 import AboutStatistics from "../components/AboutStatistics";
 import AboutMatchingSection from "../components/AboutMatchingSection";
+import ScrollAnimation from "react-animate-on-scroll";
 
 const About = () => (
   <div className="min-h-screen flex flex-col justify-between">
     <main>
-      <AboutUsSection />
+      <ScrollAnimation
+        animateIn="bounceInRight"
+        duration={1.5}
+        animateOut="bounceOutLeft"
+        initiallyVisible={true}
+        delay={1000}
+      >
+        <AboutUsSection />
+      </ScrollAnimation>
       <AboutStatistics />
-      <AboutMatchingSection />
+      <ScrollAnimation
+        animateIn="bounceInRight"
+        duration={1.5}
+        animateOut="bounceOutLeft"
+        initiallyVisible={true}
+      >
+        <AboutMatchingSection />
+      </ScrollAnimation>
     </main>
   </div>
 );
