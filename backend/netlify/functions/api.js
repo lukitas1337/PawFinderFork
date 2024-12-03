@@ -16,8 +16,10 @@ import "../../config/passport.js";
 
 const app = express();
 
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
+mongoose.connect(process.env.MONGODB_URI, {
+  dbName: process.env.DB_NAME
+})
+  .then(() => console.log('Connected to MongoDB -', process.env.DB_NAME))
   .catch(err => console.error('MongoDB connection error:', err));
 
 app.use(cors({
