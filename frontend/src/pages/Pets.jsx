@@ -45,6 +45,7 @@ function Pets() {
   const fetchPets = async () => {
     setLoading(true);
     try {
+      console.log('Fetching pets from:', `${import.meta.env.VITE_BACKEND_URL}/api/pets`);
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/pets`,
         {
@@ -62,8 +63,15 @@ function Pets() {
                 ? filters.petType.join(",")
                 : undefined,
           },
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
         }
       );
+
+      console.log('API Response:', response);
+      console.log('Response data:', response.data);
 
       if (user?.userId) {
         const matchesResponse = await axios.get(
@@ -73,6 +81,7 @@ function Pets() {
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
+              'Cache-Control': 'no-cache'
             },
           }
         );
